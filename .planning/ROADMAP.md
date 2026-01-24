@@ -29,12 +29,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User sees todos list from planning docs
   4. User can navigate between panels using Tab and arrow keys
   5. User can scroll content using Vim keybindings (hjkl, gg, G, Ctrl+d/u)
-  6. Each phase shows visual indicators (has plan ○/●, has context ○/●, needs verification ⚠, blocked ✗, etc.)
-**Plans**: TBD
+  6. Each phase shows visual indicators (has plan, has context, needs verification, blocked, etc.)
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md - Project setup, tooling, types, parser, and app shell
+- [ ] 01-02-PLAN.md - Roadmap/Phase/Todos views with Vim navigation
 
 ### Phase 2: Real-time Updates
 **Goal**: TUI automatically refreshes when planning docs change
