@@ -1,0 +1,36 @@
+{
+	"name": "gsd-tui",
+	"version": "0.1.0",
+	"description": "Terminal UI for viewing GSD project status",
+	"module": "src/cli.tsx",
+	"type": "module",
+	"private": true,
+	"bin": {
+		"gsd-tui": "./src/cli.tsx"
+	},
+	"scripts": {
+		"dev": "bun --watch src/cli.tsx",
+		"start": "bun src/cli.tsx",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"typecheck": "tsc --noEmit",
+		"test": "bun test",
+		"test:coverage": "bun test --coverage"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.12",
+		"@commitlint/cli": "^20.3.1",
+		"@commitlint/config-conventional": "^20.3.1",
+		"@types/bun": "latest",
+		"@types/node": "^25.0.10",
+		"@types/react": "^19.2.9",
+		"lefthook": "^2.0.15",
+		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"@inkjs/ui": "^2.0.0",
+		"gray-matter": "^4.0.3",
+		"ink": "^6.6.0",
+		"react": "^19.2.3"
+	}
+}
