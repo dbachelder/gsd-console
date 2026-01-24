@@ -10,6 +10,7 @@
 - [ ] **DISP-01**: User sees roadmap overview with phases and progress indicators
 - [ ] **DISP-02**: User sees current phase details (goal, requirements, success criteria)
 - [ ] **DISP-03**: User sees todos list from planning docs
+- [ ] **DISP-04**: User sees visual indicators per phase (has plan, has context, needs verification, blocked, etc.)
 
 ### Navigation
 
@@ -46,9 +47,9 @@
 
 ### Display
 
-- **DISP-04**: File tree view of all .planning/ contents
-- **DISP-05**: Rich markdown rendering with syntax highlighting
-- **DISP-06**: Diff highlighting showing what changed
+- **DISP-05**: File tree view of all .planning/ contents
+- **DISP-06**: Rich markdown rendering with syntax highlighting
+- **DISP-07**: Diff highlighting showing what changed
 
 ### Navigation
 
@@ -82,9 +83,13 @@
 | DISP-01 | Phase 1 | Pending |
 | DISP-02 | Phase 1 | Pending |
 | DISP-03 | Phase 1 | Pending |
+| DISP-04 | Phase 1 | Pending |
 | NAV-01 | Phase 1 | Pending |
 | NAV-02 | Phase 1 | Pending |
 | NAV-03 | Phase 1 | Pending |
+| TECH-01 | Phase 1 | Pending |
+| TECH-02 | Phase 1 | Pending |
+| TECH-03 | Phase 1 | Pending |
 | RT-01 | Phase 2 | Pending |
 | RT-02 | Phase 2 | Pending |
 | RT-03 | Phase 2 | Pending |
@@ -95,15 +100,12 @@
 | EDIT-02 | Phase 3 | Pending |
 | ACT-04 | Phase 4 | Pending |
 | ACT-05 | Phase 4 | Pending |
-| TECH-01 | Phase 1 | Pending |
-| TECH-02 | Phase 1 | Pending |
-| TECH-03 | Phase 1 | Pending |
 
 **Coverage:**
-- v1 requirements: 17 total
-- Mapped to phases: 17
+- v1 requirements: 18 total
+- Mapped to phases: 18
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2025-01-24*
-*Last updated: 2025-01-24 after initial definition*
+*Last updated: 2025-01-24 after roadmap creation*
