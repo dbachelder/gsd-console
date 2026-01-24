@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md - Project setup, tooling, types, parser, and app shell
+- [x] 01-01-PLAN.md - Project setup, tooling, types, parser, and app shell
 - [ ] 01-02-PLAN.md - Roadmap/Phase/Todos views with Vim navigation
 
 ### Phase 2: Real-time Updates
@@ -85,7 +85,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core TUI | 0/2 | Not started | - |
+| 1. Core TUI | 1/2 | In progress | - |
 | 2. Real-time Updates | 0/1 | Not started | - |
 | 3. Actions and Editing | 0/2 | Not started | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
