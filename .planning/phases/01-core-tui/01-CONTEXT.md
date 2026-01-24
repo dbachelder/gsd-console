@@ -42,12 +42,27 @@ Display GSD project status (roadmap, phases, todos) in a keyboard-navigable term
 - Footer hint bar always visible with common keybindings
 - Full help overlay on `?` key
 
+### Project setup
+- **Runtime:** Bun + Ink (React-like terminal UI components)
+- **Language:** TypeScript with strict mode (`strict: true`, no implicit any, null checks)
+- **Linting/Formatting:** Biome (all-in-one, Rust-based)
+- **Testing:** Bun's built-in test runner, >80% coverage requirement
+- **Pre-commit hooks:** Lefthook (fast, parallel execution)
+  - Run linting on staged files
+  - Run type checking
+  - Enforce Commitizen-formatted commit messages
+- **Hot reload:** Dev environment with watch mode for rapid iteration
+- **Documentation:** Comprehensive README
+
 ### Claude's Discretion
 - Exact emoji choices for each status
 - Progress bar character style
 - Footer hint bar content/layout
 - Specific keybindings beyond Vim basics (hjkl, gg, G, Ctrl+d/u)
 - Detail level toggle keybinding choice
+- Biome rule configuration details
+- Lefthook hook configuration specifics
+- README structure and sections
 
 </decisions>
 
