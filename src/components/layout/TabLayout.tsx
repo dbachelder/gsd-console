@@ -3,50 +3,58 @@
  * Manages tab navigation and renders active view.
  */
 
-import { Box, Text, useInput } from 'ink';
+import { Box, Text } from 'ink';
 import { useState } from 'react';
-import { getStatusColor, getStatusIcon } from '../../lib/icons.ts';
-import type { CliFlags, GsdData } from '../../lib/types.ts';
+import { useTabNav } from '../../hooks/useTabNav.ts';
+import type { CliFlags, GsdData, Todo } from '../../lib/types.ts';
+import { PhaseView } from '../phase/PhaseView.tsx';
+import { RoadmapView } from '../roadmap/RoadmapView.tsx';
 
 type TabId = 'roadmap' | 'phase' | 'todos';
 
 interface TabLayoutProps {
 	data: GsdData;
 	flags: CliFlags;
+	isActive?: boolean;
 }
 
-export function TabLayout({ data, flags }: TabLayoutProps) {
+export function TabLayout({ data, flags, isActive = true }: TabLayoutProps) {
 	const isOnlyMode = Boolean(flags.only);
 
-	// Tab state - always called unconditionally
-	const [activeTab, setActiveTab] = useState<TabId>(flags.only ?? 'roadmap');
+	// Track selected phase number (for Phase view navigation)
+	const [selectedPhaseNumber, setSelectedPhaseNumber] = useState<number>(flags.phase ?? 1);
 
-	// Tab navigation with number keys and Tab key - always called unconditionally
-	// but only active when not in --only mode
-	useInput(
-		(input, key) => {
-			if (isOnlyMode) return; // No-op in only mode
-			if (input === '1') setActiveTab('roadmap');
-			if (input === '2') setActiveTab('phase');
-			if (input === '3') setActiveTab('todos');
-			if (key.tab) {
-				setActiveTab((current) => {
-					if (current === 'roadmap') return 'phase';
-					if (current === 'phase') return 'todos';
-					return 'roadmap';
-				});
-			}
-		},
-		{ isActive: !isOnlyMode },
-	);
+	// Tab navigation using hook
+	const { activeTab, setActiveTab } = useTabNav<TabId>({
+		tabs: ['roadmap', 'phase', 'todos'],
+		initialTab: flags.only ?? 'roadmap',
+		isActive: isActive && !isOnlyMode,
+	});
+
+	// Get selected phase object
+	const selectedPhase =
+		data.phases.find((p) => p.number === selectedPhaseNumber) ?? data.phases[0] ?? null;
+
+	// Handle phase selection from roadmap
+	const handleSelectPhase = (phaseNumber: number) => {
+		setSelectedPhaseNumber(phaseNumber);
+		setActiveTab('phase');
+	};
 
 	// Single view mode (--only flag)
 	if (flags.only) {
 		return (
-			<Box flexDirection="column" paddingX={1}>
-				{flags.only === 'roadmap' && <RoadmapPlaceholder phases={data.phases} />}
+			<Box flexDirection="column">
+				{flags.only === 'roadmap' && (
+					<RoadmapView phases={data.phases} isActive={isActive} onSelectPhase={handleSelectPhase} />
+				)}
 				{flags.only === 'phase' && (
-					<PhasePlaceholder phases={data.phases} phaseNumber={flags.phase ?? 1} />
+					<PhaseView
+						phase={selectedPhase}
+						allPhases={data.phases}
+						isActive={isActive}
+						onPhaseChange={setSelectedPhaseNumber}
+					/>
 				)}
 				{flags.only === 'todos' && <TodosPlaceholder todos={data.todos} />}
 			</Box>
@@ -60,9 +68,18 @@ export function TabLayout({ data, flags }: TabLayoutProps) {
 			<TabBar activeTab={activeTab} />
 
 			{/* Active view content */}
-			<Box flexDirection="column" paddingX={1}>
-				{activeTab === 'roadmap' && <RoadmapPlaceholder phases={data.phases} />}
-				{activeTab === 'phase' && <PhasePlaceholder phases={data.phases} phaseNumber={1} />}
+			<Box flexDirection="column">
+				{activeTab === 'roadmap' && (
+					<RoadmapView phases={data.phases} isActive={isActive} onSelectPhase={handleSelectPhase} />
+				)}
+				{activeTab === 'phase' && (
+					<PhaseView
+						phase={selectedPhase}
+						allPhases={data.phases}
+						isActive={isActive}
+						onPhaseChange={setSelectedPhaseNumber}
+					/>
+				)}
 				{activeTab === 'todos' && <TodosPlaceholder todos={data.todos} />}
 			</Box>
 		</Box>
@@ -99,84 +116,14 @@ function TabBar({ activeTab }: TabBarProps) {
 	);
 }
 
-// Placeholder components - will be replaced with full views in Plan 02
-
-interface RoadmapPlaceholderProps {
-	phases: GsdData['phases'];
-}
-
-function RoadmapPlaceholder({ phases }: RoadmapPlaceholderProps) {
-	return (
-		<Box flexDirection="column" borderStyle="single" paddingX={1}>
-			<Text bold color="yellow">
-				Roadmap View
-			</Text>
-			<Text dimColor>{phases.length} phases loaded</Text>
-			<Box marginTop={1} flexDirection="column">
-				{phases.slice(0, 5).map((phase) => (
-					<Box key={phase.number}>
-						<Text color={getStatusColor(phase.status)}>{getStatusIcon(phase.status)} </Text>
-						<Text>
-							Phase {phase.number}: {phase.name}
-						</Text>
-						<Text dimColor>
-							{' '}
-							({phase.plansComplete}/{phase.plansTotal} plans)
-						</Text>
-					</Box>
-				))}
-				{phases.length > 5 && <Text dimColor>...and {phases.length - 5} more</Text>}
-			</Box>
-		</Box>
-	);
-}
-
-interface PhasePlaceholderProps {
-	phases: GsdData['phases'];
-	phaseNumber: number;
-}
-
-function PhasePlaceholder({ phases, phaseNumber }: PhasePlaceholderProps) {
-	const phase = phases.find((p) => p.number === phaseNumber) ?? phases[0];
-
-	if (!phase) {
-		return (
-			<Box flexDirection="column" borderStyle="single" paddingX={1}>
-				<Text color="red">No phases found</Text>
-			</Box>
-		);
-	}
-
-	return (
-		<Box flexDirection="column" borderStyle="single" paddingX={1}>
-			<Text bold color="yellow">
-				Phase {phase.number}: {phase.name}
-			</Text>
-			<Box marginTop={1}>
-				<Text color={getStatusColor(phase.status)}>
-					{getStatusIcon(phase.status)} {phase.status}
-				</Text>
-			</Box>
-			<Box marginTop={1} flexDirection="column">
-				<Text bold>Goal:</Text>
-				<Text>{phase.goal || '(No goal specified)'}</Text>
-			</Box>
-			<Box marginTop={1}>
-				<Text dimColor>
-					Plans: {phase.plansComplete}/{phase.plansTotal} complete
-				</Text>
-			</Box>
-		</Box>
-	);
-}
-
+// Temporary placeholder - will be replaced by full TodosView in Task 3
 interface TodosPlaceholderProps {
-	todos: GsdData['todos'];
+	todos: Todo[];
 }
 
 function TodosPlaceholder({ todos }: TodosPlaceholderProps) {
 	return (
-		<Box flexDirection="column" borderStyle="single" paddingX={1}>
+		<Box flexDirection="column" borderStyle="single" paddingX={1} marginX={1}>
 			<Text bold color="yellow">
 				Todos View
 			</Text>
