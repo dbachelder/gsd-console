@@ -1,0 +1,90 @@
+/**
+ * GSD TUI Icons and Colors
+ * Status indicators and color mappings for the terminal UI.
+ */
+
+import type { PhaseStatus } from './types.ts';
+
+// Status icons (using Unicode for terminal compatibility)
+export const icons = {
+	// Phase status
+	complete: '\u2713', // Check mark
+	inProgress: '\u25D0', // Half circle (◐)
+	notStarted: '\u25CB', // Empty circle (○)
+	blocked: '\u2717', // X mark
+
+	// Phase indicators
+	hasContext: '\uD83D\uDCCB', // Clipboard emoji
+	hasPlan: '\uD83D\uDCDD', // Memo emoji
+	hasResearch: '\uD83D\uDD2C', // Microscope emoji
+	needsVerification: '\u26A0', // Warning sign
+
+	// Navigation/UI
+	arrow: '\u25B6', // Right-pointing triangle
+	bullet: '\u2022', // Bullet point
+	dash: '\u2014', // Em dash
+} as const;
+
+// Color mappings for Ink Text component
+export const statusColors: Record<PhaseStatus, string> = {
+	complete: 'green',
+	'in-progress': 'yellow',
+	'not-started': 'gray',
+	blocked: 'red',
+};
+
+// Get icon for phase status
+export function getStatusIcon(status: PhaseStatus): string {
+	switch (status) {
+		case 'complete':
+			return icons.complete;
+		case 'in-progress':
+			return icons.inProgress;
+		case 'not-started':
+			return icons.notStarted;
+		case 'blocked':
+			return icons.blocked;
+		default:
+			return icons.notStarted;
+	}
+}
+
+// Get color for phase status
+export function getStatusColor(status: PhaseStatus): string {
+	return statusColors[status] ?? 'gray';
+}
+
+// Format progress as a visual bar
+export function formatProgressBar(
+	percent: number,
+	width = 10,
+): { filled: string; empty: string; text: string } {
+	const filledCount = Math.round((percent / 100) * width);
+	const emptyCount = width - filledCount;
+
+	const filledChar = '\u2588'; // Full block
+	const emptyChar = '\u2591'; // Light shade
+
+	return {
+		filled: filledChar.repeat(filledCount),
+		empty: emptyChar.repeat(emptyCount),
+		text: `${filledChar.repeat(filledCount)}${emptyChar.repeat(emptyCount)} ${percent}%`,
+	};
+}
+
+// Get indicator icons for a phase
+export function getIndicatorIcons(indicators: {
+	hasContext: boolean;
+	hasPlan: boolean;
+	hasResearch: boolean;
+	needsVerification: boolean;
+}): string {
+	const parts: string[] = [];
+
+	if (indicators.hasResearch) parts.push(icons.hasResearch);
+	if (indicators.hasContext) parts.push(icons.hasContext);
+	if (indicators.hasPlan) parts.push(icons.hasPlan);
+	if (indicators.needsVerification) parts.push(icons.needsVerification);
+
+	return parts.join(' ');
+}
