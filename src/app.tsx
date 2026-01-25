@@ -10,9 +10,14 @@ import { Footer } from './components/layout/Footer.tsx';
 import { Header } from './components/layout/Header.tsx';
 import { HelpOverlay } from './components/layout/HelpOverlay.tsx';
 import { TabLayout } from './components/layout/TabLayout.tsx';
+import { CommandPalette } from './components/palette/CommandPalette.tsx';
+import { ToastContainer } from './components/toast/ToastContainer.tsx';
 import { useChangeHighlight } from './hooks/useChangeHighlight.ts';
+import { useCommandPalette } from './hooks/useCommandPalette.ts';
 import { useFileWatcher } from './hooks/useFileWatcher.ts';
 import { useGsdData } from './hooks/useGsdData.ts';
+import { useToast } from './hooks/useToast.ts';
+import { commands } from './lib/commands.ts';
 import type { CliFlags, GsdData } from './lib/types.ts';
 
 interface AppProps {
@@ -107,16 +112,27 @@ export default function App({ flags }: AppProps) {
 		flags.only ?? 'roadmap',
 	);
 
+	// Toast notifications
+	const { toasts, show: showToast } = useToast();
+
+	// Command palette - need to track filtered count for navigation bounds
+	const [filteredCount, setFilteredCount] = useState(commands.length);
+	const palette = useCommandPalette({ commands, filteredCount });
+
 	// Global input handlers (q to quit, ? to toggle help)
-	useInput((input) => {
-		if (input === 'q') {
-			exit();
-			process.exit(0);
-		}
-		if (input === '?') {
-			setShowHelp((prev) => !prev);
-		}
-	});
+	// Disabled when command palette is open
+	useInput(
+		(input) => {
+			if (input === 'q') {
+				exit();
+				process.exit(0);
+			}
+			if (input === '?') {
+				setShowHelp((prev) => !prev);
+			}
+		},
+		{ isActive: palette.mode === 'closed' },
+	);
 
 	// Loading state
 	if (data.loading) {
@@ -165,7 +181,7 @@ export default function App({ flags }: AppProps) {
 			<TabLayout
 				data={data}
 				flags={flags}
-				isActive={!showHelp}
+				isActive={!showHelp && palette.mode === 'closed'}
 				onTabChange={setActiveTab}
 				isPhaseHighlighted={(num) => isHighlighted(`phase-${num}`)}
 				isPhaseFading={(num) => isFading(`phase-${num}`)}
@@ -173,6 +189,30 @@ export default function App({ flags }: AppProps) {
 				isTodoFading={(id) => isFading(`todo-${id}`)}
 			/>
 			<Footer activeTab={activeTab} onlyMode={flags.only} />
+
+			{/* Command palette overlay */}
+			{palette.mode === 'open' && (
+				<Box position="absolute" marginTop={3} marginLeft={2}>
+					<CommandPalette
+						commands={commands}
+						query={palette.query}
+						onQueryChange={(q) => {
+							palette.setQuery(q);
+						}}
+						selectedIndex={palette.selectedIndex}
+						onSelectedIndexChange={(idx) => {
+							palette.setSelectedIndex(idx);
+							setFilteredCount(commands.length); // Will be refined by palette
+						}}
+						onExecute={palette.execute}
+						showToast={showToast}
+						onClose={palette.close}
+					/>
+				</Box>
+			)}
+
+			{/* Toast notifications */}
+			<ToastContainer toasts={toasts} />
 		</Box>
 	);
 }
