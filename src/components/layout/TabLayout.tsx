@@ -160,17 +160,16 @@ function TabBar({ activeTab }: TabBarProps) {
 	];
 
 	return (
-		<Box marginBottom={1} paddingX={1}>
+		<Box marginBottom={1} paddingX={2}>
 			{tabs.map((tab, index) => (
 				<Box key={tab.id}>
-					{index > 0 && <Text dimColor> | </Text>}
+					{index > 0 && <Text dimColor> </Text>}
 					<Text
+						underline={activeTab === tab.id}
 						bold={activeTab === tab.id}
-						color={activeTab === tab.id ? 'cyan' : undefined}
-						backgroundColor={activeTab === tab.id ? 'gray' : undefined}
+						dimColor={activeTab !== tab.id}
 					>
-						{' '}
-						[{tab.key}] {tab.label}{' '}
+						[{tab.key}] {tab.label}
 					</Text>
 				</Box>
 			))}
