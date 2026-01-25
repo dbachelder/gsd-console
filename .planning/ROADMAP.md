@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Core TUI** - Display roadmap, phases, and todos with keyboard navigation
 - [x] **Phase 2: Real-time Updates** - Watch .planning/ files and refresh on changes
-- [x] **Phase 3: Actions and Editing** - Execute GSD commands and edit todos inline
+- [ ] **Phase 3: Actions and Editing** - Execute GSD commands and edit todos inline
 - [ ] **Phase 4: OpenCode Integration** - Spawn sessions and queue commands
 
 ## Phase Details
@@ -63,12 +63,13 @@ Plans:
   3. User can add/complete todos inline without leaving TUI
   4. User can reorder phases with keyboard shortcuts
   5. Command palette supports fuzzy search
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [x] 03-01-PLAN.md - Toast system and command palette with fuzzy search
 - [x] 03-02-PLAN.md - External editor integration and help/footer updates
 - [x] 03-03-PLAN.md - Inline editing stubs (todo toggle, reorder mode)
+- [ ] 03-04-PLAN.md - UAT gap closure (overlay backgrounds, editor context)
 
 ### Phase 03.1: UI polish (INSERTED)
 
@@ -103,6 +104,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Core TUI! | 4/4 | Complete | 2026-01-25 |
 | 2. Real-time Updates | 3/3 | Complete | 2026-01-24 |
-| 3. Actions and Editing | 3/3 | Complete | 2026-01-25 |
+| 3. Actions and Editing | 3/4 | In progress | - |
 | 03.1: UI polish (INSERTED) | 0/3 | Not started | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
