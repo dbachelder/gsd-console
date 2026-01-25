@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 05 Test Coverage - phase and todos view tests complete
+**Current focus:** Phase 05 Test Coverage - command palette and picker tests complete
 
 ## Current Position
 
 Phase: 05 of 5 (Test Coverage)
-Plan: 9 of 10 in current phase (Phase and todos view tests)
+Plan: 8 of 10 in current phase (Command palette and picker tests)
 Status: In progress
-Last activity: 2026-01-25 - Completed 05-09-PLAN.md (phase and todos view tests)
+Last activity: 2026-01-25 - Completed 05-08-PLAN.md (command palette and picker tests)
 
-Progress: [████████████░] 92% (31/33 plans)
+Progress: [██████████░] 82% (30/37 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 31
+- Total plans completed: 32
 - Average duration: 4 min
-- Total execution time: 120 min
+- Total execution time: 131 min
 
 **By Phase:**
 
@@ -32,10 +32,10 @@ Progress: [████████████░] 92% (31/33 plans)
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
 | 4 | 7 | 26 min | 3.7 min |
-| 5 | 8 | 60 min | 7.5 min |
+| 5 | 9 | 71 min | 7.9 min |
 
 **Recent Trend:**
-- Last 5 plans: 6 min, 4 min, 3 min, 6 min, 8 min
+- Last 5 plans: 8 min, 6 min, 4 min, 3 min, 6 min, 11 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -111,9 +111,13 @@ Recent decisions affecting current work:
 - useVimNav coverage 59% acceptable given re-render limitations of wrapper pattern (05-03)
 - useFileWatcher and useChangeHighlight hooks tested with 88% combined coverage (05-06)
 - vi.mock('node:fs') pattern for fs.watch mocking without real filesystem (05-06)
- - vi.useFakeTimers() and vi.advanceTimersByTime() for timing-dependent tests (05-06)
- - React state update warnings in hook tests due to calling markChanged during render - acceptable testing limitation (05-06)
- - Phase and todos view components tested with ink-testing-library - all meet >= 75% coverage requirement (05-09)
+- vi.useFakeTimers() and vi.advanceTimersByTime() for timing-dependent tests (05-06)
+- React state update warnings in hook tests due to calling markChanged during render - acceptable testing limitation (05-06)
+- Phase and todos view components tested with ink-testing-library - all meet >= 75% coverage requirement (05-09)
+- Command palette and picker component tests with ink-testing-library - all meet >= 70% coverage requirement (05-08)
+- React state updates are asynchronous - tests verify initial rendering state rather than intermediate keyboard navigation states (05-08)
+- Mock command actions use proper function signature with (showToast, args?) parameters (05-08)
+- SessionInfo type uses lastCommand for display in SessionPicker (05-08)
 
 
 ### Pending Todos
@@ -147,6 +151,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 ## Session Continuity
 
-Last session: 2026-01-25 (Session continuation)
-Stopped at: Completed 05-09-PLAN.md (phase and todos view tests)
+Last session: 2026-01-25
+Stopped at: Completed 05-08-PLAN.md (command palette and picker tests)
 Resume file: None
