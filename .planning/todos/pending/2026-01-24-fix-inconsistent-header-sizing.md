@@ -12,3 +12,4 @@ The header changes size based on the content of the main content area, creating 
 ## Solution
 
 TBD - Need to investigate layout and positioning. May require fixed header height or proper flex/grid layout configuration.
+

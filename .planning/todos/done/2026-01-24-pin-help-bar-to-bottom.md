@@ -17,3 +17,6 @@ Additionally, the footer styling could be improved for better visual hierarchy a
 - Use flexbox layout to push footer to bottom (marginTop: 'auto' or flex container with flexGrow on content area)
 - Review footer styling: consider border, background contrast, or spacing improvements
 - Test with varying content heights to ensure footer stays anchored
+
+
+
