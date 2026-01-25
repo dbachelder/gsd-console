@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 04 OpenCode Integration - gap closure complete
+**Current focus:** Phase 05 Test Coverage - testing infrastructure setup complete
 
 ## Current Position
 
-Phase: 04 of 5 (OpenCode Integration)
-Plan: 7 of 7 in current phase (gap closure - tab completion)
-Status: Phase 04 gap closure complete
-Last activity: 2026-01-25 - Completed 04-07-PLAN.md (tab completion with arguments)
+Phase: 05 of 5 (Test Coverage)
+Plan: 1 of 10 in current phase (testing dependencies and memfs setup)
+Status: In progress
+Last activity: 2026-01-25 - Completed 05-01-PLAN.md (testing dependencies and memfs setup)
 
-Progress: [██████████] 100% (23/23 plans)
+Progress: [██████████░] 92% (24/33 plans)
 
 ## Performance Metrics
 
@@ -101,16 +101,14 @@ Recent decisions affecting current work:
 - Normalize paths by removing trailing slashes for session detection (04-06)
 - Read sessions from local storage as SDK fallback (04-06)
 - Filter sessions to last 24h, limit to 10 most recent (04-06)
-- Replace @inkjs/ui TextInput with custom controlled input for Tab intercept (04-07)
-- Fuzzy search only on command name portion (before space) for args support (04-07)
-- Store pendingArgs alongside pendingCommand for deferred execution (04-07)
+ - Replace @inkjs/ui TextInput with custom controlled input for Tab intercept (04-07)
+ - Fuzzy search only on command name portion (before space) for args support (04-07)
+ - Store pendingArgs alongside pendingCommand for deferred execution (04-07)
+ - Bun's preload cannot import 'bun/test' - tests use vi.mock() inline per file (05-01)
 
 ### Pending Todos
 
-Phase 04 gaps - ALL CLOSED:
-1. ~~**Tab completion with arguments**~~ - Fixed in 04-07 (custom controlled input)
-2. ~~**Session detection not working**~~ - Fixed in 04-06 (path normalization)
-3. ~~**Footer missing 'c' hint**~~ - Fixed in 04-06 (added to commonHints)
+None
 
 ### Roadmap Evolution
 
@@ -125,10 +123,10 @@ Phase 04 gaps - ALL CLOSED:
 
 ### Blockers/Concerns
 
-Phase 04 complete - all gaps closed. Ready for Phase 05 (Test Coverage).
+None - testing infrastructure ready for parser and component tests.
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 04-07-PLAN.md (tab completion with arguments)
+Stopped at: Completed 05-01-PLAN.md (testing dependencies and memfs setup)
 Resume file: None
