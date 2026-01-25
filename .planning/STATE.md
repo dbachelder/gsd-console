@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 05 Test Coverage - layout components tests complete
+**Current focus:** Phase 05 Test Coverage - phase and todos view tests complete
 
 ## Current Position
 
 Phase: 05 of 5 (Test Coverage)
-Plan: 6 of 10 in current phase (File watcher and change highlight tests)
+Plan: 9 of 10 in current phase (Phase and todos view tests)
 Status: In progress
-Last activity: 2026-01-25 - Completed 05-06-PLAN.md (file watcher and change highlight tests)
+Last activity: 2026-01-25 - Completed 05-09-PLAN.md (phase and todos view tests)
 
-Progress: [████████████░] 91% (30/33 plans)
+Progress: [████████████░] 92% (31/33 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 28
+- Total plans completed: 31
 - Average duration: 4 min
-- Total execution time: 112 min
+- Total execution time: 120 min
 
 **By Phase:**
 
@@ -32,10 +32,10 @@ Progress: [████████████░] 91% (30/33 plans)
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
 | 4 | 7 | 26 min | 3.7 min |
-| 5 | 6 | 52 min | 8.7 min |
+| 5 | 8 | 60 min | 7.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 6 min, 4 min, 3 min, 6 min, 6 min
+- Last 5 plans: 6 min, 4 min, 3 min, 6 min, 8 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -111,8 +111,10 @@ Recent decisions affecting current work:
 - useVimNav coverage 59% acceptable given re-render limitations of wrapper pattern (05-03)
 - useFileWatcher and useChangeHighlight hooks tested with 88% combined coverage (05-06)
 - vi.mock('node:fs') pattern for fs.watch mocking without real filesystem (05-06)
-- vi.useFakeTimers() and vi.advanceTimersByTime() for timing-dependent tests (05-06)
-- React state update warnings in hook tests due to calling markChanged during render - acceptable testing limitation (05-06)
+ - vi.useFakeTimers() and vi.advanceTimersByTime() for timing-dependent tests (05-06)
+ - React state update warnings in hook tests due to calling markChanged during render - acceptable testing limitation (05-06)
+ - Phase and todos view components tested with ink-testing-library - all meet >= 75% coverage requirement (05-09)
+
 
 ### Pending Todos
 
@@ -141,10 +143,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
 | 4. OpenCode Integration | 7/7 | Complete | 2026-01-25 |
- | 5. Test Coverage | 3/10 | In progress | - |
+ | 5. Test Coverage | 9/10 | In progress | - |
 
 ## Session Continuity
 
 Last session: 2026-01-25 (Session continuation)
-Stopped at: Completed 05-06-PLAN.md (file watcher and change highlight tests)
+Stopped at: Completed 05-09-PLAN.md (phase and todos view tests)
 Resume file: None

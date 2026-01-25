@@ -125,7 +125,7 @@ Plans:
 - [ ] 05-06-PLAN.md — File watcher and change highlight tests (Wave 5, 2 tasks)
   - [x] 05-07-PLAN.md — OpenCode integration tests (Wave 5, 3 tasks)
 - [ ] 05-08-PLAN.md — Command palette and picker tests (Wave 6, 4 tasks)
-- [ ] 05-09-PLAN.md — Phase and todos view tests (Wave 6, 4 tasks)
+- [x] 05-09-PLAN.md — Phase and todos view tests (Wave 6, 4 tasks)
 - [ ] 05-10-PLAN.md — Coverage verification and flaky test removal (Wave 7, 3 tasks)
 
 ## Progress
@@ -140,4 +140,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
  | 4. OpenCode Integration | 7/7 | Complete | 2026-01-25 |
- | 5. Test Coverage | 5/10 | In progress | - |
+ | 5. Test Coverage | 9/10 | In progress | - |
