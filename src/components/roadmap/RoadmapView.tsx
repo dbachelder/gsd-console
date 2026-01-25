@@ -99,7 +99,7 @@ export function RoadmapView({ phases, isActive, onSelectPhase }: RoadmapViewProp
 	const overallPercent = totalPlans > 0 ? Math.round((completedPlans / totalPlans) * 100) : 0;
 
 	return (
-		<Box flexDirection="column" paddingX={1}>
+		<Box flexDirection="column" paddingX={1} flexGrow={1}>
 			{/* Overall progress header */}
 			<Box marginBottom={1}>
 				<Text bold>Project Progress: </Text>

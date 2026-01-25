@@ -58,7 +58,7 @@ export function TodosView({ todos, isActive }: TodosViewProps) {
 	);
 
 	return (
-		<Box flexDirection="column" paddingX={1}>
+		<Box flexDirection="column" paddingX={1} flexGrow={1}>
 			{/* Header */}
 			<Box marginBottom={1}>
 				<Text bold>Todos </Text>

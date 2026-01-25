@@ -96,7 +96,7 @@ export function PhaseView({ phase, allPhases, isActive, onPhaseChange }: PhaseVi
 	const hasActiveIndicators = indicators.some((ind) => ind.active);
 
 	return (
-		<Box flexDirection="column" paddingX={1}>
+		<Box flexDirection="column" paddingX={1} flexGrow={1}>
 			{/* Phase header */}
 			<Box flexDirection="column" marginBottom={1}>
 				<Box>

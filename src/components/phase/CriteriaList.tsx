@@ -23,11 +23,11 @@ export function CriteriaList({ criteria, label = 'Success Criteria:' }: Criteria
 			<Box flexDirection="column" marginLeft={2}>
 				{criteria.map((criterion, index) => (
 					// biome-ignore lint/suspicious/noArrayIndexKey: criteria are static content, order doesn't change
-					<Box key={index}>
+					<Text key={index} wrap="wrap">
 						<Text dimColor>{index + 1}. </Text>
 						<Text color="gray">[ ] </Text>
-						<Text wrap="wrap">{criterion}</Text>
-					</Box>
+						{criterion}
+					</Text>
 				))}
 			</Box>
 		</Box>
