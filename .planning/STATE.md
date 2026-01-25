@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 05 Test Coverage - useExternalEditor hook tests complete
+**Current focus:** Phase 05 Test Coverage - useSessionActivity hook tests complete
 
 ## Current Position
 
 Phase: 05 of 5 (Test Coverage)
-Plan: 15 of 18 in current phase
+Plan: 17 of 18 in current phase
 Status: In progress
-Last activity: 2026-01-25 - Completed 05-15-PLAN.md (useExternalEditor hook tests)
+Last activity: 2026-01-25 - Completed 05-17-PLAN.md (useSessionActivity hook tests)
 
-Progress: [█████████████░░░░] 98% (39/40 plans)
+Progress: [█████████████░░░] 98% (41/42 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 37
+- Total plans completed: 38
 - Average duration: 4 min
-- Total execution time: 155 min
+- Total execution time: 158 min
 
 **By Phase:**
 
@@ -32,10 +32,10 @@ Progress: [█████████████░░░░] 98% (39/40 plans
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
 | 4 | 7 | 26 min | 3.7 min |
-| 5 | 12 | 88 min | 7.3 min |
+| 5 | 14 | 91 min | 6.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 11 min, 6 min, 4 min, 3 min, 7 min
+- Last 5 plans: 6 min, 4 min, 3 min, 7 min, 3 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -122,18 +122,23 @@ Recent decisions affecting current work:
 - readdirSync mock with conditional logic handles withFileTypes option and plain string returns (05-15)
 - useCommandPalette hook tested with 61.40% line coverage - acceptable given wrapper pattern limitations for useInput handlers (05-14)
 - Component wrapper pattern tests focus on initialization, setters, and callbacks - keyboard input handlers covered by component integration tests (05-14)
+- useSessionActivity hook tested with 100% line coverage with vi.mock for sessionActivity module (05-17)
+- All 13 hooks now have test coverage (100% of hooks tested) (05-17)
 
 
 
 ### Pending Todos
 
 Phase 05 gaps:
-1. ~~**Parser coverage below 80%**~~ - Completed 05-02 (reached 30.53%, memfs limitation documented)
+1. ~~**Parser coverage below 80%**~~ - COMPLETED 05-02 (reached 30.53%, memfs limitation documented)
+2. ~~**Missing parser tests**~~ - COMPLETED 05-02 (added comprehensive tests)
+3. ~~**No test fixtures**~~ - COMPLETED 05-02 (created ROADMAP, STATE, phase files)
+4. ~~**Parser coverage below 80%**~~ - COMPLETED 05-13 (increased from 66.56% to 82.35% with parsePlanFiles and readRoadmapPlans tests)
 
 Phase 05 gaps - ALL CLOSED:
-1. ~~**Parser coverage below 80%**~~ - Partially addressed 05-02 (reached 30.53%, known Bun vi.mock() limitation with parseRoadmap)
-2. ~~**Missing parser tests**~~ - Completed 05-02 (added comprehensive tests)
-3. ~~**No test fixtures**~~ - Completed 05-02 (created ROADMAP, STATE, phase files)
+1. ~~**Parser coverage below 80%**~~ - COMPLETED 05-02 (reached 30.53%, memfs limitation documented)
+2. ~~**Missing parser tests**~~ - COMPLETED 05-02 (added comprehensive tests)
+3. ~~**No test fixtures**~~ - COMPLETED 05-02 (created ROADMAP, STATE, phase files)
 
 ## Roadmap Evolution
 
@@ -152,10 +157,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
 | 4. OpenCode Integration | 7/7 | Complete | 2026-01-25 |
- | 5. Test Coverage | 16/18 | In progress | - |
+  | 5. Test Coverage | 17/18 | In progress | - |
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 05-15-PLAN.md (useExternalEditor hook tests)
+Stopped at: Completed 05-17-PLAN.md (useSessionActivity hook tests)
 Resume file: None
