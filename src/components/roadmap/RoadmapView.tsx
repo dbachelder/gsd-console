@@ -66,14 +66,22 @@ export function RoadmapView({ phases, isActive, onSelectPhase }: RoadmapViewProp
 		isActive,
 		onSelect: () => {
 			toggleExpand(selectedIndex);
-			// Optionally navigate to phase view
-			const phase = phases[selectedIndex];
-			if (phase && expandedPhases.has(phase.number)) {
-				onSelectPhase?.(phase.number);
-			}
 		},
 		onBack: () => collapseSelected(selectedIndex),
 	});
+
+	// Handle Enter key for navigating to Phase tab
+	useInput(
+		(_input, key) => {
+			if (key.return) {
+				const phase = phases[selectedIndex];
+				if (phase && expandedPhases.has(phase.number)) {
+					onSelectPhase?.(phase.number);
+				}
+			}
+		},
+		{ isActive },
+	);
 
 	// Handle d key for detail toggle
 	useInput(
