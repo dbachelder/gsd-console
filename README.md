@@ -4,17 +4,55 @@ Terminal UI for viewing GSD project status. Displays roadmap progress, phase det
 
 ## Installation
 
+### Local Development
+
 ```bash
 bun install
+```
+
+### Global Installation
+
+To run `gsd-tui` from any directory:
+
+**Option 1: Install globally (recommended for production use)**
+
+```bash
+bun install -g .
+```
+
+Then run from anywhere:
+```bash
+gsd-tui
+```
+
+> **Note:** The package must not be marked as `private` in `package.json` for global installation. If installation fails, temporarily remove `"private": true` from package.json.
+
+**Option 2: Use `bun link` (for development)**
+
+```bash
+bun link
+```
+
+This creates a symlink so you can run `gsd-tui` from anywhere while still using the local source code.
+
+**To uninstall:**
+
+```bash
+bun uninstall -g gsd-tui
+# or
+bun unlink
 ```
 
 ## Usage
 
 ```bash
-# Run the TUI
+# Run the TUI (local)
 bun run dev
 
-# Or directly
+# Run globally
+gsd-tui
+
+# Or directly with bun
 bun start
 
 # Show help
@@ -34,16 +72,18 @@ bun start --help
 
 ```bash
 # Full TUI with tabs
+gsd-tui
+# or
 bun start
 
 # Roadmap view only (great for tmux panes)
-bun start --only roadmap
+gsd-tui --only roadmap
 
 # Phase 2 detail view
-bun start --only phase -p 2
+gsd-tui --only phase -p 2
 
 # Todos view only
-bun start --only todos
+gsd-tui --only todos
 ```
 
 ## Keyboard Navigation
