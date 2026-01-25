@@ -10,14 +10,25 @@ interface TodoItemProps {
 	todo: Todo;
 	isSelected: boolean;
 	showDetail?: boolean;
+	isHighlighted?: boolean;
+	isFading?: boolean;
 }
 
-export function TodoItem({ todo, isSelected, showDetail = false }: TodoItemProps) {
+export function TodoItem({
+	todo,
+	isSelected,
+	showDetail = false,
+	isHighlighted = false,
+	isFading = false,
+}: TodoItemProps) {
 	const checkbox = todo.completed ? '[x]' : '[ ]';
 	const checkboxColor = todo.completed ? 'green' : 'gray';
 
+	// Calculate highlight background color
+	const highlightBg = isHighlighted ? (isFading ? '#1e1e00' : '#3d3d00') : undefined;
+
 	return (
-		<Box flexDirection="column">
+		<Box flexDirection="column" backgroundColor={highlightBg}>
 			<Box>
 				<Text
 					backgroundColor={isSelected ? 'gray' : undefined}

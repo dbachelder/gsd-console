@@ -13,12 +13,24 @@ interface PhaseRowProps {
 	isSelected: boolean;
 	isExpanded: boolean;
 	showIndicators?: boolean;
+	isHighlighted?: boolean;
+	isFading?: boolean;
 }
 
-export function PhaseRow({ phase, isSelected, isExpanded, showIndicators = true }: PhaseRowProps) {
+export function PhaseRow({
+	phase,
+	isSelected,
+	isExpanded,
+	showIndicators = true,
+	isHighlighted = false,
+	isFading = false,
+}: PhaseRowProps) {
 	const chevron = isExpanded ? '\u25BC' : '\u25B6'; // Down or Right triangle
 	const statusIcon = getStatusIcon(phase.status);
 	const statusColor = getStatusColor(phase.status);
+
+	// Calculate highlight background color
+	const highlightBg = isHighlighted ? (isFading ? '#1e1e00' : '#3d3d00') : undefined;
 
 	// Calculate plan completion percentage
 	const planPercent =
@@ -28,7 +40,7 @@ export function PhaseRow({ phase, isSelected, isExpanded, showIndicators = true 
 	const indicators = getIndicatorIcons(phase.indicators);
 
 	return (
-		<Box flexDirection="column">
+		<Box flexDirection="column" backgroundColor={highlightBg}>
 			{/* Main phase row */}
 			<Box justifyContent="space-between">
 				{/* Left side: chevron, status, name */}
