@@ -13,6 +13,10 @@ export interface VimNavConfig {
 	isActive: boolean;
 	onSelect?: () => void;
 	onBack?: () => void;
+	/** Initial selected index (for state restoration) */
+	initialIndex?: number;
+	/** Callback when selected index changes (for controlled components) */
+	onIndexChange?: (index: number) => void;
 }
 
 export interface VimNavState {
@@ -30,9 +34,17 @@ interface LastKey {
 const DOUBLE_KEY_TIMEOUT = 300; // ms for double-key detection (gg)
 
 export function useVimNav(config: VimNavConfig): VimNavState {
-	const { itemCount, pageSize, isActive, onSelect, onBack } = config;
+	const {
+		itemCount,
+		pageSize,
+		isActive,
+		onSelect,
+		onBack,
+		initialIndex = 0,
+		onIndexChange,
+	} = config;
 
-	const [selectedIndex, setSelectedIndex] = useState(0);
+	const [selectedIndex, setSelectedIndex] = useState(initialIndex);
 	const [scrollOffset, setScrollOffset] = useState(0);
 	const [lastKey, setLastKey] = useState<LastKey>({ key: '', time: 0 });
 
@@ -42,6 +54,11 @@ export function useVimNav(config: VimNavConfig): VimNavState {
 			setSelectedIndex(itemCount - 1);
 		}
 	}, [itemCount, selectedIndex]);
+
+	// Notify parent of index changes
+	useEffect(() => {
+		onIndexChange?.(selectedIndex);
+	}, [selectedIndex, onIndexChange]);
 
 	// Auto-scroll to keep selection visible
 	const adjustScroll = useCallback(

@@ -24,6 +24,14 @@ interface RoadmapViewProps {
 	scrollOffset?: number;
 	/** Optional callback when scroll position changes */
 	onScrollOffsetChange?: (offset: number) => void;
+	/** Controlled expanded phases state */
+	expandedPhases?: number[];
+	/** Callback when expanded phases change */
+	onExpandedPhasesChange?: (phases: number[]) => void;
+	/** Controlled selected index state */
+	selectedIndex?: number;
+	/** Callback when selected index changes */
+	onSelectedIndexChange?: (index: number) => void;
 }
 
 export function RoadmapView({
@@ -37,9 +45,17 @@ export function RoadmapView({
 	selectedPhaseNumber: _selectedPhaseNumber,
 	scrollOffset: _scrollOffset,
 	onScrollOffsetChange: _onScrollOffsetChange,
+	expandedPhases: expandedPhasesProp,
+	onExpandedPhasesChange,
+	selectedIndex: selectedIndexProp,
+	onSelectedIndexChange,
 }: RoadmapViewProps) {
-	// Track which phases are expanded
-	const [expandedPhases, setExpandedPhases] = useState<Set<number>>(new Set());
+	// Track which phases are expanded (internal state if not controlled)
+	const [internalExpandedPhases, setInternalExpandedPhases] = useState<Set<number>>(new Set());
+
+	// Use controlled state if provided, else internal
+	const expandedSet =
+		expandedPhasesProp !== undefined ? new Set(expandedPhasesProp) : internalExpandedPhases;
 
 	// Toggle expansion for selected phase
 	const toggleExpand = useCallback(
@@ -47,17 +63,21 @@ export function RoadmapView({
 			const phase = phases[index];
 			if (!phase) return;
 
-			setExpandedPhases((prev) => {
-				const next = new Set(prev);
-				if (next.has(phase.number)) {
-					next.delete(phase.number);
-				} else {
-					next.add(phase.number);
-				}
-				return next;
-			});
+			const next = new Set(expandedSet);
+			if (next.has(phase.number)) {
+				next.delete(phase.number);
+			} else {
+				next.add(phase.number);
+			}
+
+			// Report to parent if controlled
+			onExpandedPhasesChange?.([...next]);
+			// Update internal if uncontrolled
+			if (expandedPhasesProp === undefined) {
+				setInternalExpandedPhases(next);
+			}
 		},
-		[phases],
+		[phases, expandedSet, expandedPhasesProp, onExpandedPhasesChange],
 	);
 
 	// Collapse selected phase
@@ -66,22 +86,28 @@ export function RoadmapView({
 			const phase = phases[index];
 			if (!phase) return;
 
-			if (expandedPhases.has(phase.number)) {
-				setExpandedPhases((prev) => {
-					const next = new Set(prev);
-					next.delete(phase.number);
-					return next;
-				});
+			if (expandedSet.has(phase.number)) {
+				const next = new Set(expandedSet);
+				next.delete(phase.number);
+
+				// Report to parent if controlled
+				onExpandedPhasesChange?.([...next]);
+				// Update internal if uncontrolled
+				if (expandedPhasesProp === undefined) {
+					setInternalExpandedPhases(next);
+				}
 			}
 		},
-		[phases, expandedPhases],
+		[phases, expandedSet, expandedPhasesProp, onExpandedPhasesChange],
 	);
 
-	// Vim navigation
+	// Vim navigation with controlled index support
 	const { selectedIndex } = useVimNav({
 		itemCount: phases.length,
 		pageSize: 10,
 		isActive,
+		initialIndex: selectedIndexProp ?? 0,
+		onIndexChange: onSelectedIndexChange,
 		onSelect: () => {
 			toggleExpand(selectedIndex);
 		},
@@ -101,7 +127,7 @@ export function RoadmapView({
 		(_input, key) => {
 			if (key.return) {
 				const phase = phases[selectedIndex];
-				if (phase && expandedPhases.has(phase.number)) {
+				if (phase && expandedSet.has(phase.number)) {
 					onSelectPhase?.(phase.number);
 				}
 			}
@@ -148,7 +174,7 @@ export function RoadmapView({
 							key={phase.number}
 							phase={phase}
 							isSelected={index === selectedIndex}
-							isExpanded={expandedPhases.has(phase.number)}
+							isExpanded={expandedSet.has(phase.number)}
 							showIndicators={true}
 							isHighlighted={isPhaseHighlighted?.(phase.number)}
 							isFading={isPhaseFading?.(phase.number)}
