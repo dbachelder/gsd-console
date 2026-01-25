@@ -30,11 +30,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. User can navigate between panels using Tab and arrow keys
   5. User can scroll content using Vim keybindings (hjkl, gg, G, Ctrl+d/u)
   6. Each phase shows visual indicators (has plan, has context, needs verification, blocked, etc.)
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
 - [x] 01-01-PLAN.md - Project setup, tooling, types, parser, and app shell
 - [x] 01-02-PLAN.md - Roadmap/Phase/Todos views with Vim navigation
+- [ ] 01-03-PLAN.md - UAT gap closure (6 fixes)
 
 ### Phase 2: Real-time Updates
 **Goal**: TUI automatically refreshes when planning docs change
@@ -85,7 +86,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core TUI | 2/2 | Complete | 2026-01-24 |
+| 1. Core TUI | 2/3 | UAT fixes pending | - |
 | 2. Real-time Updates | 0/1 | Not started | - |
 | 3. Actions and Editing | 0/2 | Not started | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
