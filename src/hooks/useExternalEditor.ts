@@ -50,7 +50,51 @@ export function getEditableFiles(context: EditContext): string[] {
 
 	switch (activeTab) {
 		case 'roadmap': {
-			// Roadmap tab: ROADMAP.md
+			// If a phase is selected, offer phase files AND roadmap
+			if (selectedPhase !== undefined) {
+				const phaseDir = findPhaseDir(planningDir, selectedPhase);
+				if (phaseDir) {
+					// Build list of phase files
+					const paddedNum = String(selectedPhase).padStart(2, '0');
+					const planPattern = new RegExp(`^${paddedNum}-\\d{2}-PLAN\\.md$`);
+
+					const files = readdirSync(phaseDir);
+					const editableFiles: string[] = [];
+
+					// Add phase-specific plan files (like 03-01-PLAN.md)
+					for (const file of files) {
+						if (planPattern.test(file)) {
+							editableFiles.push(join(phaseDir, file));
+						}
+					}
+
+					// Add common phase files
+					const candidates = [
+						`${paddedNum}-CONTEXT.md`,
+						`${paddedNum}-RESEARCH.md`,
+						`${paddedNum}-SUMMARY.md`,
+						`${paddedNum}-UAT.md`,
+						`${paddedNum}-VERIFICATION.md`,
+					];
+
+					for (const candidate of candidates) {
+						const filePath = join(phaseDir, candidate);
+						if (existsSync(filePath) && !editableFiles.includes(filePath)) {
+							editableFiles.push(filePath);
+						}
+					}
+
+					// Also add ROADMAP.md as last option
+					const roadmapPath = join(planningDir, 'ROADMAP.md');
+					if (existsSync(roadmapPath)) {
+						editableFiles.push(roadmapPath);
+					}
+
+					return editableFiles;
+				}
+			}
+
+			// Fallback: just ROADMAP.md
 			const roadmapPath = join(planningDir, 'ROADMAP.md');
 			return existsSync(roadmapPath) ? [roadmapPath] : [];
 		}
