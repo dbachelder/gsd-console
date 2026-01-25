@@ -27,7 +27,9 @@ function deriveAffectedItemIds(files: string[], data: GsdData): string[] {
 	const ids: string[] = [];
 
 	for (const file of files) {
-		// ROADMAP.md affects all phases
+		// ROADMAP.md affects all phases - conservative behavior
+		// We cannot diff markdown content to identify which specific phase changed,
+		// so we highlight all phases to signal "roadmap changed, check phases"
 		if (file.includes('ROADMAP.md')) {
 			for (const p of data.phases) {
 				ids.push(`phase-${p.number}`);
