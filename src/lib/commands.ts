@@ -4,6 +4,7 @@
  */
 
 import type { ToastType } from '../hooks/useToast.ts';
+import { spawnOpencodeSession } from './opencode.ts';
 
 export interface Command {
 	name: string;
@@ -66,5 +67,18 @@ export const commands: Command[] = [
 		name: 'execute-phase',
 		description: 'Execute phase plan',
 		action: createStubAction('execute-phase'),
+	},
+	{
+		name: 'spawn-opencode',
+		description: 'Open OpenCode session for complex workflows',
+		action: (showToast) => {
+			// Note: spawnSync is blocking, so TUI will pause during OpenCode session
+			const success = spawnOpencodeSession();
+			if (success) {
+				showToast('OpenCode session completed', 'success');
+			} else {
+				showToast('OpenCode session failed or was cancelled', 'warning');
+			}
+		},
 	},
 ];
