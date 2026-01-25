@@ -72,7 +72,7 @@ export function formatProgressBar(
 	};
 }
 
-// Get indicator icons for a phase
+// Get indicator icons for a phase (with text labels)
 export function getIndicatorIcons(indicators: {
 	hasContext: boolean;
 	hasPlan: boolean;
@@ -81,10 +81,10 @@ export function getIndicatorIcons(indicators: {
 }): string {
 	const parts: string[] = [];
 
-	if (indicators.hasResearch) parts.push(icons.hasResearch);
-	if (indicators.hasContext) parts.push(icons.hasContext);
-	if (indicators.hasPlan) parts.push(icons.hasPlan);
-	if (indicators.needsVerification) parts.push(icons.needsVerification);
+	if (indicators.hasResearch) parts.push(`${icons.hasResearch} Research`);
+	if (indicators.hasContext) parts.push(`${icons.hasContext} Context`);
+	if (indicators.hasPlan) parts.push(`${icons.hasPlan} Plan`);
+	if (indicators.needsVerification) parts.push(`${icons.needsVerification} Verify`);
 
-	return parts.join(' ');
+	return parts.join('  ');
 }

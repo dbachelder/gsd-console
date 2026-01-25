@@ -30,35 +30,34 @@ export function PhaseRow({ phase, isSelected, isExpanded, showIndicators = true 
 	return (
 		<Box flexDirection="column">
 			{/* Main phase row */}
-			<Box>
-				{/* Selection indicator */}
-				<Text
-					backgroundColor={isSelected ? 'gray' : undefined}
-					color={isSelected ? 'white' : undefined}
-				>
-					{/* Chevron */}
-					<Text>{chevron} </Text>
+			<Box justifyContent="space-between">
+				{/* Left side: chevron, status, name */}
+				<Box>
+					<Text
+						backgroundColor={isSelected ? 'gray' : undefined}
+						color={isSelected ? 'white' : undefined}
+					>
+						{/* Chevron */}
+						<Text>{chevron} </Text>
 
-					{/* Status icon */}
-					<Text color={statusColor}>[{statusIcon}] </Text>
+						{/* Status icon */}
+						<Text color={statusColor}>[{statusIcon}] </Text>
 
-					{/* Phase name */}
-					<Text bold={isSelected}>
-						Phase {phase.number}: {phase.name}
+						{/* Phase name */}
+						<Text bold={isSelected}>
+							Phase {phase.number}: {phase.name}
+						</Text>
 					</Text>
+				</Box>
 
-					{/* Spacer */}
-					<Text>{'  '}</Text>
-				</Text>
-
-				{/* Mini progress bar */}
-				<ProgressBar percent={planPercent} width={10} showPercent={false} />
-
-				{/* Plan count */}
-				<Text dimColor>
-					{' '}
-					{phase.plansComplete}/{phase.plansTotal} plans
-				</Text>
+				{/* Right side: progress bar and count */}
+				<Box>
+					<ProgressBar percent={planPercent} width={10} showPercent={false} />
+					<Text dimColor>
+						{' '}
+						{phase.plansComplete}/{phase.plansTotal}
+					</Text>
+				</Box>
 			</Box>
 
 			{/* Expanded content: indicator icons */}
