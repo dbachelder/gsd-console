@@ -34,6 +34,7 @@ export default function App({ flags }: AppProps) {
 	useInput((input) => {
 		if (input === 'q') {
 			exit();
+			process.exit(0);
 		}
 		if (input === '?') {
 			setShowHelp((prev) => !prev);

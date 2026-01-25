@@ -83,16 +83,14 @@ export function useGsdData(planningDir = '.planning'): GsdData {
 				// Update total phases from parsed roadmap
 				state = { ...state, totalPhases: phases.length };
 
-				// Calculate progress from phases
-				const totalPlans = phases.reduce((sum, p) => sum + p.plansTotal, 0);
-				const completedPlans = phases.reduce((sum, p) => sum + p.plansComplete, 0);
-
-				if (totalPlans > 0) {
-					state = {
-						...state,
-						progressPercent: Math.round((completedPlans / totalPlans) * 100),
-					};
-				}
+				// Calculate progress based on completed phases (not plans)
+				// This gives 25% per phase (1/4 = 25%, 2/4 = 50%, etc.)
+				const completedPhases = phases.filter((p) => p.status === 'complete').length;
+				state = {
+					...state,
+					progressPercent:
+						phases.length > 0 ? Math.round((completedPhases / phases.length) * 100) : 0,
+				};
 
 				// Parse todos
 				const todos = parseTodos(stateContent, absDir);
