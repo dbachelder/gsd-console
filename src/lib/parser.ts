@@ -69,7 +69,7 @@ export function parseRoadmap(content: string, phasesDir: string): Phase[] {
 					hasContext: false,
 					hasPlan: false,
 					hasResearch: false,
-					needsVerification: false,
+					isVerified: false,
 				};
 
 		// Count completed plans by checking for SUMMARY files
@@ -132,7 +132,7 @@ export function scanPhaseDirectory(phaseDir: string, phaseNumber: number): Phase
 		hasContext: false,
 		hasPlan: false,
 		hasResearch: false,
-		needsVerification: false,
+		isVerified: false,
 	};
 
 	if (!existsSync(phaseDir)) return indicators;
@@ -150,6 +150,13 @@ export function scanPhaseDirectory(phaseDir: string, phaseNumber: number): Phase
 		}
 		if (lowerFile.includes('research.md')) {
 			indicators.hasResearch = true;
+		}
+		// Check verification files for status: passed
+		if (lowerFile.includes('verification') && lowerFile.endsWith('.md')) {
+			const { data } = readPlanningFile(`${phaseDir}/${file}`);
+			if (data.status === 'passed') {
+				indicators.isVerified = true;
+			}
 		}
 	}
 

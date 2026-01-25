@@ -17,7 +17,7 @@ export const icons = {
 	hasContext: '\uD83D\uDCCB', // Clipboard emoji
 	hasPlan: '\uD83D\uDCDD', // Memo emoji
 	hasResearch: '\uD83D\uDD2C', // Microscope emoji
-	needsVerification: '\u26A0', // Warning sign
+	isVerified: '\u2705', // White heavy check mark (✅)
 
 	// Placeholder for inactive indicators
 	placeholder: '\u25A1', // Empty square
@@ -87,7 +87,7 @@ export function getIndicatorIcons(indicators: {
 	hasContext: boolean;
 	hasPlan: boolean;
 	hasResearch: boolean;
-	needsVerification: boolean;
+	isVerified: boolean;
 }): IndicatorItem[] {
 	return [
 		{
@@ -106,9 +106,9 @@ export function getIndicatorIcons(indicators: {
 			active: indicators.hasPlan,
 		},
 		{
-			icon: indicators.needsVerification ? icons.needsVerification : icons.placeholder,
-			label: 'Verify',
-			active: indicators.needsVerification,
+			icon: indicators.isVerified ? icons.isVerified : icons.placeholder,
+			label: 'Verified',
+			active: indicators.isVerified,
 		},
 	];
 }
