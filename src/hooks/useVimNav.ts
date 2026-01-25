@@ -5,7 +5,7 @@
  */
 
 import { useInput } from 'ink';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface VimNavConfig {
 	itemCount: number;
@@ -47,7 +47,6 @@ export function useVimNav(config: VimNavConfig): VimNavState {
 	const [selectedIndex, setSelectedIndex] = useState(initialIndex);
 	const [scrollOffset, setScrollOffset] = useState(0);
 	const [lastKey, setLastKey] = useState<LastKey>({ key: '', time: 0 });
-	const isFirstRender = useRef(true);
 
 	// Clamp selected index when item count changes
 	useEffect(() => {
@@ -56,12 +55,8 @@ export function useVimNav(config: VimNavConfig): VimNavState {
 		}
 	}, [itemCount, selectedIndex]);
 
-	// Notify parent of index changes (skip initial mount to prevent render loop)
+	// Notify parent of index changes
 	useEffect(() => {
-		if (isFirstRender.current) {
-			isFirstRender.current = false;
-			return;
-		}
 		onIndexChange?.(selectedIndex);
 	}, [selectedIndex, onIndexChange]);
 

@@ -69,20 +69,6 @@ export function TabLayout({
 		setTab('phase', { detailLevel: level });
 	};
 
-	// Restore roadmap state from tab state
-	const roadmapTabState = getTab('roadmap');
-	const expandedPhases = roadmapTabState.expandedPhases ?? [];
-	const roadmapSelectedIndex = roadmapTabState.selectedIndex ?? 0;
-
-	// Handle roadmap state changes
-	const handleExpandedPhasesChange = (phases: number[]) => {
-		setTab('roadmap', { expandedPhases: phases });
-	};
-
-	const handleRoadmapSelectedIndexChange = (index: number) => {
-		setTab('roadmap', { selectedIndex: index });
-	};
-
 	// Track tab changes for state restoration
 	useEffect(() => {
 		// Store current tab state before switching away
@@ -120,10 +106,6 @@ export function TabLayout({
 						isPhaseHighlighted={isPhaseHighlighted}
 						isPhaseFading={isPhaseFading}
 						showToast={showToast}
-						expandedPhases={expandedPhases}
-						onExpandedPhasesChange={handleExpandedPhasesChange}
-						selectedIndex={roadmapSelectedIndex}
-						onSelectedIndexChange={handleRoadmapSelectedIndexChange}
 					/>
 				)}
 				{flags.only === 'phase' && (
@@ -168,10 +150,6 @@ export function TabLayout({
 						isPhaseHighlighted={isPhaseHighlighted}
 						isPhaseFading={isPhaseFading}
 						showToast={showToast}
-						expandedPhases={expandedPhases}
-						onExpandedPhasesChange={handleExpandedPhasesChange}
-						selectedIndex={roadmapSelectedIndex}
-						onSelectedIndexChange={handleRoadmapSelectedIndexChange}
 					/>
 				)}
 				{activeTab === 'phase' && (
