@@ -11,7 +11,7 @@ export interface PhaseIndicators {
 	hasContext: boolean; // CONTEXT.md exists
 	hasPlan: boolean; // PLAN.md exists
 	hasResearch: boolean; // RESEARCH.md exists
-	isVerified: boolean; // VERIFICATION.md exists with status: passed
+	uatComplete: boolean; // UAT.md exists with status: passed
 }
 
 export interface Phase {
