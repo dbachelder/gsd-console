@@ -204,12 +204,14 @@ export default function App({ flags }: AppProps) {
 				case 'interactive':
 					// Spawn new OpenCode session with this command
 					{
-						const success = spawnOpencodeSession(`/gsd:${fullCommand}`);
-						if (success) {
-							showToast('OpenCode session completed', 'success');
-						} else {
-							showToast('OpenCode session failed or was cancelled', 'warning');
-						}
+						void (async () => {
+							const success = await spawnOpencodeSession(`/gsd:${fullCommand}`);
+							if (success) {
+								showToast('OpenCode session completed', 'success');
+							} else {
+								showToast('OpenCode session failed or was cancelled', 'warning');
+							}
+						})();
 					}
 					break;
 
@@ -395,9 +397,9 @@ export default function App({ flags }: AppProps) {
 							setShowSessionPicker(false);
 							showToast(`Connected to session ${sessionId.slice(0, 8)}...`, 'success');
 						}}
-						onSpawnNew={() => {
+						onSpawnNew={async () => {
 							setShowSessionPicker(false);
-							const success = spawnOpencodeSession();
+							const success = await spawnOpencodeSession();
 							if (success) {
 								showToast('OpenCode session completed', 'success');
 							} else {

@@ -104,20 +104,37 @@ export async function getProjectSessions(projectDir: string): Promise<SessionInf
 }
 
 /**
- * Spawn an OpenCode session with terminal handoff.
+ * Spawn an OpenCode session attached to the serve.
+ * Uses `opencode attach` so the session can receive API calls.
  * Exits TUI alternate screen, runs OpenCode, then returns.
  *
- * @param initialPrompt - Optional prompt to start the session with
+ * @param initialPrompt - Optional prompt to send after attaching
  * @returns true if OpenCode exited successfully (status 0)
  */
-export function spawnOpencodeSession(initialPrompt?: string): boolean {
+export async function spawnOpencodeSession(initialPrompt?: string): Promise<boolean> {
+	const serverUrl = `http://127.0.0.1:${DEFAULT_PORT}`;
+	let sessionId: string | undefined;
+
+	// If we have an initial prompt, create a session and send it first
+	if (initialPrompt) {
+		const newSessionId = await createSession(initialPrompt);
+		if (newSessionId) {
+			sessionId = newSessionId;
+			// Send the prompt to the new session
+			await sendPrompt(newSessionId, initialPrompt);
+		}
+	}
+
 	// Exit alternate screen (same pattern as useExternalEditor)
 	process.stdout.write('\x1b[?1049l');
 	process.stdout.write('\x1b[2J\x1b[H');
 
 	try {
-		// Build args: opencode OR opencode run "prompt"
-		const args = initialPrompt ? ['run', initialPrompt] : [];
+		// Use opencode attach to connect to serve (enables API injection)
+		const args = ['attach', serverUrl];
+		if (sessionId) {
+			args.push('-s', sessionId);
+		}
 
 		const result = spawnSync('opencode', args, {
 			stdio: 'inherit',

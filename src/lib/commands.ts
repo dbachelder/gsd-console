@@ -84,9 +84,9 @@ export const commands: Command[] = [
 	{
 		name: 'spawn-opencode',
 		description: 'Open OpenCode session for complex workflows',
-		action: (showToast, _args) => {
+		action: async (showToast, _args) => {
 			// Note: spawnSync is blocking, so TUI will pause during OpenCode session
-			const success = spawnOpencodeSession();
+			const success = await spawnOpencodeSession();
 			if (success) {
 				showToast('OpenCode session completed', 'success');
 			} else {
