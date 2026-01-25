@@ -13,10 +13,13 @@ export interface Command {
 }
 
 /**
- * Stub action for commands that will be connected to OpenCode in Phase 4.
+ * Create a stub action for a command that will be connected to OpenCode in Phase 4.
+ * Each command shows its name in the toast for clarity.
  */
-function stubAction(showToast: (msg: string, type?: ToastType) => void): void {
-	showToast('Will execute when connected to OpenCode', 'info');
+function createStubAction(commandName: string) {
+	return (showToast: (msg: string, type?: ToastType) => void): void => {
+		showToast(`Command: ${commandName} - will execute when connected to OpenCode`, 'info');
+	};
 }
 
 /**
@@ -27,41 +30,41 @@ export const commands: Command[] = [
 	{
 		name: 'add-todo',
 		description: 'Add a new todo item',
-		action: stubAction,
+		action: createStubAction('add-todo'),
 	},
 	{
 		name: 'add-phase',
 		description: 'Add a new phase to roadmap',
-		action: stubAction,
+		action: createStubAction('add-phase'),
 	},
 	{
 		name: 'insert-phase',
 		description: 'Insert a phase between existing phases',
-		action: stubAction,
+		action: createStubAction('insert-phase'),
 	},
 	{
 		name: 'progress',
 		description: 'Update task progress',
-		action: stubAction,
+		action: createStubAction('progress'),
 	},
 	{
 		name: 'verify',
 		description: 'Run verification checks',
-		action: stubAction,
+		action: createStubAction('verify'),
 	},
 	{
 		name: 'discuss-phase',
 		description: 'Start phase discussion',
-		action: stubAction,
+		action: createStubAction('discuss-phase'),
 	},
 	{
 		name: 'plan-phase',
 		description: 'Create phase plan',
-		action: stubAction,
+		action: createStubAction('plan-phase'),
 	},
 	{
 		name: 'execute-phase',
 		description: 'Execute phase plan',
-		action: stubAction,
+		action: createStubAction('execute-phase'),
 	},
 ];
