@@ -223,7 +223,10 @@ export function PhaseView({
 				)}
 
 				{/* Success Criteria (secondary) */}
-				<CriteriaList criteria={phase.successCriteria} />
+				<CriteriaList
+					criteria={phase.successCriteria}
+					phaseComplete={phase.status === 'complete'}
+				/>
 
 				{/* Level 2: Requirements + Dependencies */}
 				{detailLevel >= 2 && (

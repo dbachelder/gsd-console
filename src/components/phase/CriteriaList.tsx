@@ -1,6 +1,7 @@
 /**
  * CriteriaList Component
  * Displays success criteria as a numbered checkbox list.
+ * Shows green checkmarks when phase is complete, empty boxes otherwise.
  */
 
 import { Box, Text } from 'ink';
@@ -8,9 +9,15 @@ import { Box, Text } from 'ink';
 interface CriteriaListProps {
 	criteria: string[];
 	label?: string;
+	/** Whether the phase is complete (all criteria are considered verified) */
+	phaseComplete?: boolean;
 }
 
-export function CriteriaList({ criteria, label = 'Success Criteria:' }: CriteriaListProps) {
+export function CriteriaList({
+	criteria,
+	label = 'Success Criteria:',
+	phaseComplete = false,
+}: CriteriaListProps) {
 	if (criteria.length === 0) {
 		return null;
 	}
@@ -25,7 +32,7 @@ export function CriteriaList({ criteria, label = 'Success Criteria:' }: Criteria
 					// biome-ignore lint/suspicious/noArrayIndexKey: criteria are static content, order doesn't change
 					<Text key={index} wrap="wrap">
 						<Text dimColor>{index + 1}. </Text>
-						<Text color="gray">[ ] </Text>
+						<Text color={phaseComplete ? 'green' : 'gray'}>{phaseComplete ? '[✓] ' : '[ ] '}</Text>
 						{criterion}
 					</Text>
 				))}
