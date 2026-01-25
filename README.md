@@ -25,8 +25,6 @@ Then run from anywhere:
 gsd-tui
 ```
 
-> **Note:** The package must not be marked as `private` in `package.json` for global installation. If installation fails, temporarily remove `"private": true` from package.json.
-
 **Option 2: Use `bun link` (for development)**
 
 ```bash

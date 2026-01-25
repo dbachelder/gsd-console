@@ -4,7 +4,6 @@
 	"description": "Terminal UI for viewing GSD project status",
 	"module": "src/cli.tsx",
 	"type": "module",
-	"private": true,
 	"bin": {
 		"gsd-tui": "./src/cli.tsx"
 	},
