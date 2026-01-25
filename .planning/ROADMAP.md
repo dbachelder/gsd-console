@@ -63,11 +63,12 @@ Plans:
   3. User can add/complete todos inline without leaving TUI
   4. User can reorder phases with keyboard shortcuts
   5. Command palette supports fuzzy search
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md - Toast system and command palette with fuzzy search
+- [ ] 03-02-PLAN.md - External editor integration and help/footer updates
+- [ ] 03-03-PLAN.md - Inline editing stubs (todo toggle, reorder mode)
 
 ### Phase 4: OpenCode Integration
 **Goal**: TUI can spawn and coordinate with OpenCode sessions
@@ -91,5 +92,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Core TUI! | 4/4 | Complete | 2026-01-25 |
 | 2. Real-time Updates | 3/3 | Complete | 2026-01-24 |
-| 3. Actions and Editing | 0/2 | Not started | - |
+| 3. Actions and Editing | 0/3 | Not started | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
