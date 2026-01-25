@@ -85,6 +85,7 @@ Recent decisions affecting current work:
 
 1. **Fix UI shift on first navigation** (ui) — Slight UI shift occurs on first navigation after opening
 2. **Add arrow key and fuzzy navigation to file picker** (ui) — Number keys only work up to 10 files
+3. **Remove project progress bar from roadmap screen** (ui) — Plan-based progress misleading; phase completion bar sufficient
 
 ### Roadmap Evolution
 
