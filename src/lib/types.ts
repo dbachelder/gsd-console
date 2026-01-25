@@ -92,3 +92,6 @@ export interface BackgroundJobsState {
 	sessionId?: string;
 	error?: Error;
 }
+
+/** Execution mode for GSD commands */
+export type ExecutionMode = 'headless' | 'interactive' | 'primary';

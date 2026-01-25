@@ -11,6 +11,7 @@ export interface Command {
 	description: string;
 	key?: string;
 	action: (showToast: (msg: string, type?: ToastType) => void) => void;
+	queueable?: boolean; // If true, prompts for execution mode
 }
 
 /**
@@ -32,41 +33,49 @@ export const commands: Command[] = [
 		name: 'add-todo',
 		description: 'Add a new todo item',
 		action: createStubAction('add-todo'),
+		queueable: true,
 	},
 	{
 		name: 'add-phase',
 		description: 'Add a new phase to roadmap',
 		action: createStubAction('add-phase'),
+		queueable: true,
 	},
 	{
 		name: 'insert-phase',
 		description: 'Insert a phase between existing phases',
 		action: createStubAction('insert-phase'),
+		queueable: true,
 	},
 	{
 		name: 'progress',
 		description: 'Update task progress',
 		action: createStubAction('progress'),
+		queueable: true,
 	},
 	{
 		name: 'verify',
 		description: 'Run verification checks',
 		action: createStubAction('verify'),
+		queueable: true,
 	},
 	{
 		name: 'discuss-phase',
 		description: 'Start phase discussion',
 		action: createStubAction('discuss-phase'),
+		queueable: true,
 	},
 	{
 		name: 'plan-phase',
 		description: 'Create phase plan',
 		action: createStubAction('plan-phase'),
+		queueable: true,
 	},
 	{
 		name: 'execute-phase',
 		description: 'Execute phase plan',
 		action: createStubAction('execute-phase'),
+		queueable: true,
 	},
 	{
 		name: 'spawn-opencode',
@@ -80,11 +89,13 @@ export const commands: Command[] = [
 				showToast('OpenCode session failed or was cancelled', 'warning');
 			}
 		},
+		// Not queueable - already terminal handoff
 	},
 	{
 		name: 'connect-session',
 		description: 'Connect to existing OpenCode session',
 		key: 'c',
 		action: createStubAction('connect-session'),
+		// Not queueable - session management
 	},
 ];
