@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 ## Current Position
 
 Phase: 05 of 5 (Test Coverage)
-Plan: 11 of 18 in current phase
+Plan: 12 of 18 in current phase
 Status: In progress
-Last activity: 2026-01-25 - Completed 05-11-PLAN.md (useChangeHighlight test fix)
+Last activity: 2026-01-25 - Completed 05-12-PLAN.md (fix parser regex patterns and test fixtures)
 
-Progress: [██████████░░░░░] 93% (36/38 plans)
+Progress: [████████████░░░░] 94% (37/39 plans)
 
 ## Performance Metrics
 
@@ -32,10 +32,10 @@ Progress: [██████████░░░░░] 93% (36/38 plans)
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
 | 4 | 7 | 26 min | 3.7 min |
-| 5 | 11 | 81 min | 7.4 min |
+| 5 | 12 | 88 min | 7.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 11 min, 6 min, 4 min, 3 min, 10 min
+- Last 5 plans: 11 min, 6 min, 4 min, 3 min, 7 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -147,10 +147,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
 | 4. OpenCode Integration | 7/7 | Complete | 2026-01-25 |
- | 5. Test Coverage | 9/10 | In progress | - |
+ | 5. Test Coverage | 12/18 | In progress | - |
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 05-11-PLAN.md (useChangeHighlight test fix)
+Stopped at: Completed 05-12-PLAN.md (fix parser regex patterns and test fixtures)
 Resume file: None
