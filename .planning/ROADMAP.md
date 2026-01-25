@@ -13,7 +13,7 @@ Build a standalone terminal UI that displays GSD project status in real-time alo
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Core TUI** - Display roadmap, phases, and todos with keyboard navigation
-- [x] **Phase 2: Real-time Updates** - Watch .planning/ files and refresh on changes
+- [ ] **Phase 2: Real-time Updates** - Watch .planning/ files and refresh on changes
 - [ ] **Phase 3: Actions and Editing** - Execute GSD commands and edit todos inline
 - [ ] **Phase 4: OpenCode Integration** - Spawn sessions and queue commands
 
@@ -46,11 +46,12 @@ Plans:
   1. TUI refreshes automatically when any .planning/ file is saved
   2. Rapid file saves do not cause flicker (debounced)
   3. Recently changed items show a visual indicator (e.g., highlight, icon)
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
 - [x] 02-01-PLAN.md - File watcher and change highlight hooks
 - [x] 02-02-PLAN.md - UI integration (spinner, highlights, wiring)
+- [ ] 02-03-PLAN.md - UAT gap closure (spinner, flicker, highlight fixes)
 
 ### Phase 3: Actions and Editing
 **Goal**: User can execute GSD commands and edit todos without leaving TUI
@@ -88,7 +89,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core TUI | 4/4 | Complete | 2026-01-25 |
-| 2. Real-time Updates | 2/2 | Complete | 2026-01-25 |
+| 1. Core TUI! | 4/4 | Complete | 2026-01-25 |
+| 2. Real-time Updates | 2/3 | In progress | - |
 | 3. Actions and Editing | 0/2 | Not started | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
