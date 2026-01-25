@@ -67,8 +67,8 @@ export async function listSessions(): Promise<SessionInfo[]> {
 				id: s.id,
 				directory: s.directory,
 				lastCommand: s.title,
-				createdAt: new Date(s.time.created * 1000).toISOString(),
-				updatedAt: s.time.updated * 1000,
+				createdAt: new Date(s.time.created).toISOString(),
+				updatedAt: s.time.updated,
 			}));
 		}
 	} catch {
