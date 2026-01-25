@@ -144,6 +144,7 @@ export default function App({ flags }: AppProps) {
 	// Execution mode prompt state
 	const [showModePrompt, setShowModePrompt] = useState(false);
 	const [pendingCommand, setPendingCommand] = useState<Command | null>(null);
+	const [pendingArgs, setPendingArgs] = useState<string | undefined>(undefined);
 
 	// Toast notifications
 	const { toasts, show: showToast } = useToast();
@@ -167,14 +168,15 @@ export default function App({ flags }: AppProps) {
 	 * Queueable commands show execution mode prompt, others execute immediately.
 	 */
 	const handleCommandSelect = useCallback(
-		(command: Command) => {
+		(command: Command, args?: string) => {
 			if (command.queueable) {
 				// Show execution mode prompt for queueable commands
 				setPendingCommand(command);
+				setPendingArgs(args);
 				setShowModePrompt(true);
 			} else {
 				// Execute non-queueable commands immediately
-				command.action(showToast);
+				command.action(showToast, args);
 			}
 		},
 		[showToast],
@@ -190,17 +192,19 @@ export default function App({ flags }: AppProps) {
 			if (!pendingCommand) return;
 
 			const commandName = pendingCommand.name;
+			// Build full command with args (e.g., "plan-phase 4")
+			const fullCommand = pendingArgs ? `${commandName} ${pendingArgs}` : commandName;
 
 			switch (mode) {
 				case 'headless':
 					// Add to background jobs for headless execution
-					addBackgroundJob(commandName);
+					addBackgroundJob(fullCommand);
 					break;
 
 				case 'interactive':
 					// Spawn new OpenCode session with this command
 					{
-						const success = spawnOpencodeSession(`/gsd:${commandName}`);
+						const success = spawnOpencodeSession(`/gsd:${fullCommand}`);
 						if (success) {
 							showToast('OpenCode session completed', 'success');
 						} else {
@@ -214,16 +218,18 @@ export default function App({ flags }: AppProps) {
 					if (!activeSessionId) {
 						showToast("No session connected. Press 'c' to connect.", 'warning');
 						setPendingCommand(null);
+						setPendingArgs(undefined);
 						return;
 					}
 					// For now, queue as background job with the connected session
-					addBackgroundJob(commandName);
+					addBackgroundJob(fullCommand);
 					break;
 			}
 
 			setPendingCommand(null);
+			setPendingArgs(undefined);
 		},
-		[pendingCommand, activeSessionId, addBackgroundJob, showToast],
+		[pendingCommand, pendingArgs, activeSessionId, addBackgroundJob, showToast],
 	);
 
 	/**
@@ -232,6 +238,7 @@ export default function App({ flags }: AppProps) {
 	const handleModeCancel = useCallback(() => {
 		setShowModePrompt(false);
 		setPendingCommand(null);
+		setPendingArgs(undefined);
 	}, []);
 
 	// Global input handlers (q to quit, ? to toggle help, e to edit, c to connect)
@@ -353,9 +360,9 @@ export default function App({ flags }: AppProps) {
 							palette.setSelectedIndex(idx);
 							setFilteredCount(commands.length); // Will be refined by palette
 						}}
-						onExecute={(command) => {
+						onExecute={(command, _showToast, args) => {
 							palette.close();
-							handleCommandSelect(command);
+							handleCommandSelect(command, args);
 						}}
 						showToast={showToast}
 						onClose={palette.close}

@@ -17,7 +17,11 @@ export interface UseCommandPaletteResult {
 	selectedIndex: number;
 	setSelectedIndex: (index: number) => void;
 	close: () => void;
-	execute: (command: Command, showToast: (msg: string, type?: ToastType) => void) => void;
+	execute: (
+		command: Command,
+		showToast: (msg: string, type?: ToastType) => void,
+		args?: string,
+	) => void;
 }
 
 interface UseCommandPaletteConfig {
@@ -39,8 +43,8 @@ export function useCommandPalette(config: UseCommandPaletteConfig): UseCommandPa
 	}, []);
 
 	const execute = useCallback(
-		(command: Command, showToast: (msg: string, type?: ToastType) => void) => {
-			command.action(showToast);
+		(command: Command, showToast: (msg: string, type?: ToastType) => void, args?: string) => {
+			command.action(showToast, args);
 			close();
 		},
 		[close],

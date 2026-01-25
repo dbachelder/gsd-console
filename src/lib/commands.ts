@@ -10,7 +10,7 @@ export interface Command {
 	name: string;
 	description: string;
 	key?: string;
-	action: (showToast: (msg: string, type?: ToastType) => void) => void;
+	action: (showToast: (msg: string, type?: ToastType) => void, args?: string) => void;
 	queueable?: boolean; // If true, prompts for execution mode
 }
 
@@ -19,8 +19,12 @@ export interface Command {
  * Each command shows its name in the toast for clarity.
  */
 function createStubAction(commandName: string) {
-	return (showToast: (msg: string, type?: ToastType) => void): void => {
-		showToast(`Command: ${commandName} - will execute when connected to OpenCode`, 'info');
+	return (showToast: (msg: string, type?: ToastType) => void, args?: string): void => {
+		const argsInfo = args ? ` with args: ${args}` : '';
+		showToast(
+			`Command: ${commandName}${argsInfo} - will execute when connected to OpenCode`,
+			'info',
+		);
 	};
 }
 
@@ -80,7 +84,7 @@ export const commands: Command[] = [
 	{
 		name: 'spawn-opencode',
 		description: 'Open OpenCode session for complex workflows',
-		action: (showToast) => {
+		action: (showToast, _args) => {
 			// Note: spawnSync is blocking, so TUI will pause during OpenCode session
 			const success = spawnOpencodeSession();
 			if (success) {
