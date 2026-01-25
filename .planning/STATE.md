@@ -85,10 +85,9 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-1. **Fix UI shift on first navigation** (ui) — Slight UI shift occurs on first navigation after opening
-2. **Add arrow key and fuzzy navigation to file picker** (ui) — Number keys only work up to 10 files
-3. **Remove project progress bar from roadmap screen** (ui) — Plan-based progress misleading; phase completion bar sufficient
-4. **Success criteria on phase tab never checked off** (ui) — Checkboxes don't reflect actual completion status
+1. **Add arrow key and fuzzy navigation to file picker** (ui) — Number keys only work up to 10 files
+2. **Remove project progress bar from roadmap screen** (ui) — Plan-based progress misleading; phase completion bar sufficient
+3. **Success criteria on phase tab never checked off** (ui) — Checkboxes don't reflect actual completion status
 
 ### Roadmap Evolution
 
