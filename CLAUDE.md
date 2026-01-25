@@ -137,6 +137,100 @@ To send commands to a running TUI session via API:
 | Interactive | Spawns `opencode attach` with initial prompt |
 | Primary | Sends prompt to connected session via SDK |
 
+### Session Activity Monitoring
+
+Track active OpenCode sessions and display what they're currently doing.
+
+**Architecture:**
+- `lib/sessionActivity.ts` - Core utilities for detecting and monitoring sessions
+- `hooks/useSessionActivity.ts` - React hook for real-time updates in components
+- Uses OpenCode SDK's `session.list()` and SSE event stream
+
+**Key Functions:**
+
+```typescript
+// Get most recently active session
+import { getActiveSession } from './lib/sessionActivity.ts';
+
+const activity = await getActiveSession();
+// Returns:
+// {
+//   sessionId: string;
+//   title: string;           // "Verify Phase 05 plans (@gsd-plan-checker subagent)"
+//   isActive: boolean;        // true if updated within 60 seconds
+//   currentActivity?: string;  // "gsd-plan-checker: running"
+//   lastUpdated: number;       // timestamp in ms
+// }
+
+// Monitor real-time activity
+import { monitorSessionActivity } from './lib/sessionActivity.ts';
+
+const cleanup = monitorSessionActivity((activity) => {
+  console.log(`Active: ${activity.currentActivity}`);
+});
+
+cleanup(); // Stop listening
+
+// React hook for components
+import { useSessionActivity } from './hooks/useSessionActivity.ts';
+
+function MyComponent() {
+  const activity = useSessionActivity();
+
+  if (activity?.isActive) {
+    return <Text>Running: {activity.currentActivity}</Text>;
+  }
+  return null;
+}
+```
+
+**Activity Detection:**
+- Sessions updated within 60 seconds are considered "active"
+- Current activity extracted from session title parsing:
+  - `Phase XX: Description` → "Working on Phase XX"
+  - `@subagent-name` → "subagent running"
+  - `Verb something` → "verifying / planning / executing"
+- Real-time updates from SSE events:
+  - `type="task"` → Shows subagent name and status
+  - `type="tool"` → Shows tool name and status
+  - `type="reasoning"` → Shows reasoning preview
+
+**Usage in Footer:**
+
+```tsx
+import { useSessionActivity } from '../hooks/useSessionActivity.ts';
+
+export function Footer() {
+  const activity = useSessionActivity();
+
+  return (
+    <Box>
+      <Text dimColor>
+        {activity?.isActive && activity.currentActivity && (
+          <Text color="cyan" bold>
+            ● {activity.currentActivity} |{' '}
+          </Text>
+        )}
+        Tab: tabs | c: connect | q: quit
+      </Text>
+    </Box>
+  );
+}
+```
+
+**Demo Script:**
+Run standalone demo to see real-time activity:
+```bash
+bun demo-session-activity.ts
+```
+
+**Requirements:**
+- `opencode serve --port 4096` must be running
+- Uses SDK `session.list()` for detection
+- Event stream filters by current session ID
+
+**See Also:** `SESSION-ACTIVITY.md` for full documentation
+
 ## Custom Controlled Input
 
 `@inkjs/ui` TextInput is uncontrolled (no `value` prop). For Tab completion, replace with custom input:

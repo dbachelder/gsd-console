@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 ## Current Position
 
 Phase: 05 of 5 (Test Coverage)
-Plan: 4 of 10 in current phase (layout components tests)
+Plan: 7 of 10 in current phase (OpenCode integration tests)
 Status: In progress
-Last activity: 2026-01-25 - Completed 05-04-PLAN.md (layout components tests)
+Last activity: 2026-01-25 - Completed 05-07-PLAN.md (OpenCode integration tests)
 
-Progress: [████████████░] 84% (28/33 plans)
+Progress: [████████████░] 87% (29/33 plans)
 
 ## Performance Metrics
 
@@ -105,7 +105,8 @@ Recent decisions affecting current work:
 - Store pendingArgs alongside pendingCommand for deferred execution (04-07)
 - Bun module mocking requires inline vi.mock() in test files (05-01)
 - test/setup.ts exports vol for fixtures, individual tests mock modules (05-01)
-- Bun's preload cannot import 'bun/test' directly - tests use vi.mock() inline per file (05-01)
+ - Bun's preload cannot import 'bun/test' directly - tests use vi.mock() inline per file (05-01)
+- Mock functions must be declared before vi.mock() calls to be available in mock implementations (05-07)
 - Memfs filesystem mocking via vol.fromJSON() and beforeEach vol.reset() (05-02)
 - Component wrapper pattern for hook tests with ink-testing-library (05-03)
 - useVimNav coverage 59% acceptable given re-render limitations of wrapper pattern (05-03)
@@ -142,5 +143,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 05-04-PLAN.md (layout components tests)
+Stopped at: Completed 05-07-PLAN.md (OpenCode integration tests)
 Resume file: None

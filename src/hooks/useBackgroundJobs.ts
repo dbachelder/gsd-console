@@ -18,6 +18,7 @@ interface UseBackgroundJobsProps {
 interface UseBackgroundJobsReturn {
 	jobs: BackgroundJob[];
 	isProcessing: boolean;
+	activeCommand?: string;
 	add: (command: string) => void;
 	cancel: (jobId: string) => void;
 	clear: () => void;
@@ -49,6 +50,7 @@ export function useBackgroundJobs({
 }: UseBackgroundJobsProps): UseBackgroundJobsReturn {
 	const [jobs, setJobs] = useState<BackgroundJob[]>([]);
 	const [isProcessing, setIsProcessing] = useState(false);
+	const [activeCommand, setActiveCommand] = useState<string | undefined>();
 	const [error, setError] = useState<Error | undefined>(undefined);
 
 	// Track output for current running job
@@ -72,6 +74,9 @@ export function useBackgroundJobs({
 
 				showToast?.(`Background: ${runningJob.command} complete`, 'success');
 
+				// Clear active command
+				setActiveCommand(undefined);
+
 				return pruneJobs(
 					prev.map((j) =>
 						j.id === runningJob.id
@@ -89,6 +94,9 @@ export function useBackgroundJobs({
 			// Find next pending job - start it
 			const pendingJob = prev.find((j) => j.status === 'pending');
 			if (pendingJob) {
+				// Set active command
+				setActiveCommand(pendingJob.command);
+
 				// Start the job asynchronously
 				if (sessionId) {
 					setIsProcessing(true);
@@ -116,6 +124,7 @@ export function useBackgroundJobs({
 							);
 							showToast?.(`Background: ${jobCommand} failed`, 'warning');
 							setIsProcessing(false);
+							setActiveCommand(undefined);
 						}
 					});
 				}
@@ -134,6 +143,7 @@ export function useBackgroundJobs({
 
 			// No more jobs to process
 			setIsProcessing(false);
+			setActiveCommand(undefined);
 			return prev;
 		});
 	}, [sessionId, showToast]);
@@ -160,6 +170,7 @@ export function useBackgroundJobs({
 					const output = currentOutputRef.current;
 					currentOutputRef.current = '';
 					setIsProcessing(false);
+					setActiveCommand(undefined);
 
 					return pruneJobs(
 						prev.map((j) =>
@@ -239,6 +250,7 @@ export function useBackgroundJobs({
 				if (wasRunning) {
 					currentOutputRef.current = '';
 					setIsProcessing(false);
+					setActiveCommand(undefined);
 					// Note: ideally we'd call session.abort() here, but that's complex
 				}
 
@@ -265,11 +277,13 @@ export function useBackgroundJobs({
 		setJobs([]);
 		currentOutputRef.current = '';
 		setIsProcessing(false);
+		setActiveCommand(undefined);
 	}, []);
 
 	return {
 		jobs,
 		isProcessing,
+		activeCommand,
 		add,
 		cancel,
 		clear,

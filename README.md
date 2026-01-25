@@ -13,6 +13,52 @@ Terminal UI for viewing GSD project status. Displays roadmap progress, phase det
 
 Without opencode, the TUI works as a standalone viewer — you can still execute GSD CLI commands and edit planning files in your `$EDITOR`.
 
+## OpenCode Integration
+
+### Architecture
+
+GSD TUI integrates with OpenCode for coding agent execution:
+
+| Component | Description |
+|-----------|-------------|
+| `opencode` | Standalone TUI, no HTTP API |
+| `opencode serve --port 4096` | Headless server with HTTP API |
+| `opencode attach http://localhost:4096` | TUI connected to server |
+
+Sessions are stored in `~/.local/share/opencode/storage/session/`. Both TUI and serve read/write to the same storage, but don't communicate in real-time unless using attach.
+
+### Connecting for Primary Mode
+
+To execute commands via the "primary" mode (sending prompts to a connected TUI session):
+
+1. **Start the OpenCode server:**
+   ```bash
+   opencode serve --port 4096
+   ```
+
+2. **Attach the TUI to the server:**
+   ```bash
+   opencode attach http://localhost:4096
+   ```
+
+3. **Now API commands appear in the TUI** — both use the same server
+
+**Key insight:** Without `attach`, API calls go to session storage but the TUI doesn't poll for external changes. Use `attach` to connect the TUI to the HTTP server for real-time communication.
+
+### SDK Gotchas
+
+- **Timestamps are milliseconds** — `s.time.created` and `s.time.updated` are already in ms, don't multiply by 1000
+- **SDK requires serve running** — All SDK calls fail with ConnectionRefused if `opencode serve` isn't running
+- **Session list from SDK** — Returns active sessions only (not all historical like local storage)
+
+### Execution Modes
+
+| Mode | What it does |
+|------|--------------|
+| Headless | Adds to background job queue, runs via SDK |
+| Interactive | Spawns `opencode attach` with initial prompt |
+| Primary | Sends prompt to connected session via SDK (requires `opencode serve` + `attach`) |
+
 ## Installation
 
 ### Prerequisites
