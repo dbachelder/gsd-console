@@ -63,6 +63,9 @@ Recent decisions affecting current work:
 - Stub all command actions - execution deferred to Phase 4
 - Stub actions show command name in toast for clarity
 - showToast prop is optional to avoid breaking existing tests
+- Use alternate screen escape sequences for clean editor handoff
+- Lift selection state to App.tsx for editor context awareness
+- Arrow symbols in footer instead of j/k for cleaner appearance
 
 ### Pending Todos
 
@@ -84,5 +87,5 @@ None - Phase 3 in progress.
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 03-03-PLAN.md (inline editing stubs)
+Stopped at: Completed 03-02-PLAN.md (external editor integration)
 Resume file: None
