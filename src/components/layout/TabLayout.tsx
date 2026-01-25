@@ -74,6 +74,7 @@ export function TabLayout({
 						onSelectPhase={handleSelectPhase}
 						isPhaseHighlighted={isPhaseHighlighted}
 						isPhaseFading={isPhaseFading}
+						showToast={showToast}
 					/>
 				)}
 				{flags.only === 'phase' && (
@@ -112,6 +113,7 @@ export function TabLayout({
 						onSelectPhase={handleSelectPhase}
 						isPhaseHighlighted={isPhaseHighlighted}
 						isPhaseFading={isPhaseFading}
+						showToast={showToast}
 					/>
 				)}
 				{activeTab === 'phase' && (

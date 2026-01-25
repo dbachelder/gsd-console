@@ -16,6 +16,7 @@ interface RoadmapViewProps {
 	onSelectPhase?: (phaseNumber: number) => void;
 	isPhaseHighlighted?: (phaseNumber: number) => boolean;
 	isPhaseFading?: (phaseNumber: number) => boolean;
+	showToast?: (message: string, type?: 'info' | 'success' | 'warning') => void;
 }
 
 export function RoadmapView({
@@ -24,6 +25,7 @@ export function RoadmapView({
 	onSelectPhase,
 	isPhaseHighlighted,
 	isPhaseFading,
+	showToast,
 }: RoadmapViewProps) {
 	// Track which phases are expanded
 	const [expandedPhases, setExpandedPhases] = useState<Set<number>>(new Set());
@@ -91,11 +93,14 @@ export function RoadmapView({
 		{ isActive },
 	);
 
-	// Handle d key for detail toggle
+	// Handle d key for detail toggle, r key for reorder mode stub
 	useInput(
 		(input) => {
 			if (input === 'd') {
 				setShowIndicators((prev) => !prev);
+			} else if (input === 'r') {
+				// Reorder mode stub - will be implemented in Phase 4
+				showToast?.('Phase reorder mode - will be implemented in Phase 4', 'info');
 			}
 		},
 		{ isActive },
