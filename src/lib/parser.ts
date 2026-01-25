@@ -46,10 +46,12 @@ export function parseRoadmap(content: string, phasesDir: string): Phase[] {
 		const criteriaMatch = successCriteriaPattern.exec(section);
 		const successCriteria: string[] = [];
 		if (criteriaMatch) {
-			const criteriaLines = criteriaMatch[0].match(/\d+\.\s+(.+?)(?=\n|$)/g);
+			// Match numbered lines, accounting for possible leading whitespace
+			const criteriaLines = criteriaMatch[0].match(/^\s*\d+\.\s+.+$/gm);
 			if (criteriaLines) {
 				for (const line of criteriaLines) {
-					const text = line.replace(/^\d+\.\s+/, '').trim();
+					// Remove leading whitespace, number prefix, and trailing whitespace
+					const text = line.replace(/^\s*\d+\.\s+/, '').trim();
 					if (text) successCriteria.push(text);
 				}
 			}

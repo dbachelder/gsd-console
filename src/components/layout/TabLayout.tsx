@@ -48,10 +48,10 @@ export function TabLayout({ data, flags, isActive = true, onTabChange }: TabLayo
 		setActiveTab('phase');
 	};
 
-	// Single view mode (--only flag)
+	// Single view mode (--only flag) - fill terminal height
 	if (flags.only) {
 		return (
-			<Box flexDirection="column">
+			<Box flexDirection="column" flexGrow={1}>
 				{flags.only === 'roadmap' && (
 					<RoadmapView phases={data.phases} isActive={isActive} onSelectPhase={handleSelectPhase} />
 				)}

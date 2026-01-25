@@ -79,7 +79,7 @@ export default function App({ flags }: AppProps) {
 
 	// Main app layout
 	return (
-		<Box flexDirection="column">
+		<Box flexDirection="column" flexGrow={1}>
 			<Header projectName={data.state.projectName} state={data.state} />
 			<TabLayout data={data} flags={flags} isActive={!showHelp} onTabChange={setActiveTab} />
 			<Footer activeTab={activeTab} onlyMode={flags.only} />
