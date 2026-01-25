@@ -99,6 +99,8 @@ Recent decisions affecting current work:
 - Enable event subscription only when pending jobs exist or job running (04-04)
 - Add connect hint to commonHints for global visibility (04-06)
 - Normalize paths by removing trailing slashes for session detection (04-06)
+- Read sessions from local storage as SDK fallback (04-06)
+- Filter sessions to last 24h, limit to 10 most recent (04-06)
 - Replace @inkjs/ui TextInput with custom controlled input for Tab intercept (04-07)
 - Fuzzy search only on command name portion (before space) for args support (04-07)
 - Store pendingArgs alongside pendingCommand for deferred execution (04-07)
