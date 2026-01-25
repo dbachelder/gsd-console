@@ -84,6 +84,7 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 1. **Fix UI shift on first navigation** (ui) — Slight UI shift occurs on first navigation after opening
+2. **Add arrow key and fuzzy navigation to file picker** (ui) — Number keys only work up to 10 files
 
 ### Roadmap Evolution
 
