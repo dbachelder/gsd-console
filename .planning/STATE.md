@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 ## Current Position
 
 Phase: 03.1 of 4 (UI Polish)
-Plan: 4 of 4 in current phase (gap closure)
-Status: Phase complete (including gap closure)
-Last activity: 2026-01-25 - Completed 03.1-04-PLAN.md (gap closure)
+Plan: 5 of 5 in current phase (final gap closure)
+Status: Phase complete
+Last activity: 2026-01-25 - Completed 03.1-05-PLAN.md (final gap closure)
 
 Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 15
+- Total plans completed: 16
 - Average duration: 4 min
-- Total execution time: 55 min
+- Total execution time: 58 min
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [██████████] 100%
 | 1 | 4 | 19 min | 4.75 min |
 | 2 | 3 | 8 min | 2.7 min |
 | 3 | 4 | 15 min | 3.75 min |
-| 03.1 | 4 | 13 min | 3.25 min |
+| 03.1 | 5 | 16 min | 3.2 min |
 
 **Recent Trend:**
-- Last 5 plans: 4 min, 3 min, 4 min, 2 min, 4 min
+- Last 5 plans: 3 min, 4 min, 2 min, 4 min, 3 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -82,16 +82,18 @@ Recent decisions affecting current work:
 - Checkbox styling: green checkmark for completed, empty for pending (03.1-03)
 - Controlled/uncontrolled pattern for RoadmapView state (03.1-04)
 - Extended useVimNav with initialIndex and onIndexChange for state restoration (03.1-04)
+- Fuzzy filtering via useFuzzySearchList from @nozbe/microfuzz/react (03.1-05)
+- Filter clears on Escape, second Escape closes picker (03.1-05)
+- Phase completion determines all success criteria checkbox state (03.1-05)
 
 ### Pending Todos
 
-1. **Add arrow key and fuzzy navigation to file picker** (ui) — Number keys only work up to 10 files
-2. **Remove project progress bar from roadmap screen** (ui) — Plan-based progress misleading; phase completion bar sufficient
-3. **Success criteria on phase tab never checked off** (ui) — Checkboxes don't reflect actual completion status
+None - all Phase 03.1 todos addressed in plan 05.
 
 ### Roadmap Evolution
 
 - Phase 03.1 inserted after Phase 3: UI polish (URGENT)
+- Phase 5 added: Test Coverage - Reproducible tests with mocked filesystem to reach 80%+ coverage
 
 ### Quick Tasks Completed
 
@@ -106,5 +108,5 @@ None - Phase 03.1 complete. Ready for Phase 4.
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 03.1-04-PLAN.md (Phase 03.1 gap closure complete)
+Stopped at: Completed 03.1-05-PLAN.md (Phase 03.1 final gap closure complete)
 Resume file: None
