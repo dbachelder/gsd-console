@@ -24,16 +24,27 @@ const defaultData: GsdData = {
 	state: defaultState,
 	loading: true,
 	error: null,
+	changedFiles: [],
 };
 
 /**
  * Hook to load and manage GSD planning data
  * @param planningDir Path to the .planning directory (default: '.planning')
+ * @param refreshTrigger Timestamp that triggers data reload when changed
+ * @param changedFiles Array of files that changed (from file watcher)
  */
-export function useGsdData(planningDir = '.planning'): GsdData {
+export function useGsdData(
+	planningDir = '.planning',
+	refreshTrigger?: number,
+	changedFiles: string[] = [],
+): GsdData {
 	const [data, setData] = useState<GsdData>(defaultData);
 
 	useEffect(() => {
+		// refreshTrigger is intentionally used only as a dependency to force re-runs
+		// when file changes are detected by the file watcher
+		void refreshTrigger;
+
 		const loadData = async () => {
 			try {
 				const absDir = join(process.cwd(), planningDir);
@@ -101,6 +112,7 @@ export function useGsdData(planningDir = '.planning'): GsdData {
 					state,
 					loading: false,
 					error: null,
+					changedFiles,
 				});
 			} catch (error) {
 				setData({
@@ -112,7 +124,7 @@ export function useGsdData(planningDir = '.planning'): GsdData {
 		};
 
 		loadData();
-	}, [planningDir]);
+	}, [planningDir, refreshTrigger, changedFiles]);
 
 	return data;
 }

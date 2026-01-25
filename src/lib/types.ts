@@ -50,6 +50,7 @@ export interface GsdData {
 	state: ProjectState;
 	loading: boolean;
 	error: Error | null;
+	changedFiles: string[]; // Files that changed in last refresh
 }
 
 // CLI flags for the TUI
