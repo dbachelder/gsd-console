@@ -5,7 +5,7 @@
 
 import { Spinner } from '@inkjs/ui';
 import { Box, Text, useApp, useInput } from 'ink';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Footer } from './components/layout/Footer.tsx';
 import { Header } from './components/layout/Header.tsx';
 import { HelpOverlay } from './components/layout/HelpOverlay.tsx';
@@ -55,11 +55,16 @@ export default function App({ flags }: AppProps) {
 	const { exit } = useApp();
 	const planningDir = flags.dir ?? '.planning';
 
+	// Stable error handler to prevent useFileWatcher's useEffect from re-running on every render
+	const handleWatcherError = useCallback((err: Error) => {
+		console.error('File watcher error:', err);
+	}, []);
+
 	// File watcher for automatic refresh
 	const { changedFiles, isRefreshing, lastRefresh } = useFileWatcher({
 		path: planningDir,
 		debounceMs: 300,
-		onError: (err) => console.error('File watcher error:', err),
+		onError: handleWatcherError,
 	});
 
 	// Load data with file watcher integration
