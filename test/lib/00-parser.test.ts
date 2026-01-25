@@ -7,7 +7,7 @@ vi.mock('node:fs', () => fs);
 vi.mock('node:fs/promises', () => fs.promises);
 
 // Import parser AFTER mocks are configured
-import { parseState, parseTodos, parseRoadmap, readPlanningFile } from '../../src/lib/parser.ts';
+import { parseState, parseTodos, parseRoadmap, readPlanningFile, parsePlanFiles } from '../../src/lib/parser.ts';
 import type { Phase, ProjectState } from '../../src/lib/types.ts';
 
 /*
@@ -398,10 +398,10 @@ describe("parsePlanFiles", () => {
 
 	test("reads plan files from phase directory", () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-Plans: 1 plan
+**Plans**: 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md - Test`;
+- [ ] 01-01-PLAN.md - Test plan`;
 
 		vol.fromJSON({
 			".planning/ROADMAP.md": roadmapContent,
