@@ -4,7 +4,7 @@
  */
 
 import { Box, Text, useInput } from 'ink';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useVimNav } from '../../hooks/useVimNav.ts';
 import type { Phase } from '../../lib/types.ts';
 import { PhaseRow } from './PhaseRow.tsx';
@@ -14,6 +14,7 @@ interface RoadmapViewProps {
 	phases: Phase[];
 	isActive: boolean;
 	onSelectPhase?: (phaseNumber: number) => void;
+	onPhaseNavigate?: (phaseNumber: number) => void;
 	isPhaseHighlighted?: (phaseNumber: number) => boolean;
 	isPhaseFading?: (phaseNumber: number) => boolean;
 	showToast?: (message: string, type?: 'info' | 'success' | 'warning') => void;
@@ -23,6 +24,7 @@ export function RoadmapView({
 	phases,
 	isActive,
 	onSelectPhase,
+	onPhaseNavigate,
 	isPhaseHighlighted,
 	isPhaseFading,
 	showToast,
@@ -79,6 +81,14 @@ export function RoadmapView({
 		},
 		onBack: () => collapseSelected(selectedIndex),
 	});
+
+	// Notify parent of phase navigation for editor context
+	useEffect(() => {
+		const phase = phases[selectedIndex];
+		if (phase) {
+			onPhaseNavigate?.(phase.number);
+		}
+	}, [selectedIndex, phases, onPhaseNavigate]);
 
 	// Handle Enter key for navigating to Phase tab
 	useInput(

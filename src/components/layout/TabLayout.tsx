@@ -78,6 +78,7 @@ export function TabLayout({
 						phases={data.phases}
 						isActive={isActive}
 						onSelectPhase={handleSelectPhase}
+						onPhaseNavigate={onPhaseSelect}
 						isPhaseHighlighted={isPhaseHighlighted}
 						isPhaseFading={isPhaseFading}
 						showToast={showToast}
@@ -118,6 +119,7 @@ export function TabLayout({
 						phases={data.phases}
 						isActive={isActive}
 						onSelectPhase={handleSelectPhase}
+						onPhaseNavigate={onPhaseSelect}
 						isPhaseHighlighted={isPhaseHighlighted}
 						isPhaseFading={isPhaseFading}
 						showToast={showToast}
