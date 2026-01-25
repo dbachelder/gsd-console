@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 05 Test Coverage - useGsdData hook tests complete
+**Current focus:** Phase 05 Test Coverage - useExternalEditor hook tests complete
 
 ## Current Position
 
 Phase: 05 of 5 (Test Coverage)
-Plan: 16 of 18 in current phase
+Plan: 15 of 18 in current phase
 Status: In progress
-Last activity: 2026-01-25 - Completed 05-16-PLAN.md (add useGsdData hook tests)
+Last activity: 2026-01-25 - Completed 05-15-PLAN.md (useExternalEditor hook tests)
 
-Progress: [████████████] 97% (38/39 plans)
+Progress: [█████████████░░░░] 98% (39/40 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 36
+- Total plans completed: 37
 - Average duration: 4 min
-- Total execution time: 141 min
+- Total execution time: 155 min
 
 **By Phase:**
 
@@ -118,6 +118,8 @@ Recent decisions affecting current work:
 - React state updates are asynchronous - tests verify initial rendering state rather than intermediate keyboard navigation states (05-08)
 - Mock command actions use proper function signature with (showToast, args?) parameters (05-08)
 - SessionInfo type uses lastCommand for display in SessionPicker (05-08)
+- useExternalEditor hook tested with 95.12% coverage covering all functions and tab contexts (05-15)
+- readdirSync mock with conditional logic handles withFileTypes option and plain string returns (05-15)
 - useCommandPalette hook tested with 61.40% line coverage - acceptable given wrapper pattern limitations for useInput handlers (05-14)
 - Component wrapper pattern tests focus on initialization, setters, and callbacks - keyboard input handlers covered by component integration tests (05-14)
 
@@ -155,5 +157,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 05-16-PLAN.md (add useGsdData hook tests)
+Stopped at: Completed 05-15-PLAN.md (useExternalEditor hook tests)
 Resume file: None
