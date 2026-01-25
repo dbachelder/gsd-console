@@ -20,9 +20,9 @@
 
 ### Real-time Updates
 
-- [ ] **RT-01**: TUI watches .planning/ directory and refreshes on file changes
-- [ ] **RT-02**: Updates are debounced to avoid flicker on rapid changes
-- [ ] **RT-03**: Recently changed items show visual indicator
+- [x] **RT-01**: TUI watches .planning/ directory and refreshes on file changes
+- [x] **RT-02**: Updates are debounced to avoid flicker on rapid changes
+- [x] **RT-03**: Recently changed items show visual indicator
 
 ### Actions
 
@@ -90,9 +90,9 @@
 | TECH-01 | Phase 1 | Complete |
 | TECH-02 | Phase 1 | Complete |
 | TECH-03 | Phase 1 | Complete |
-| RT-01 | Phase 2 | Pending |
-| RT-02 | Phase 2 | Pending |
-| RT-03 | Phase 2 | Pending |
+| RT-01 | Phase 2 | Complete |
+| RT-02 | Phase 2 | Complete |
+| RT-03 | Phase 2 | Complete |
 | ACT-01 | Phase 3 | Pending |
 | ACT-02 | Phase 3 | Pending |
 | ACT-03 | Phase 3 | Pending |
