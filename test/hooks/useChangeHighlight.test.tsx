@@ -3,13 +3,17 @@
  * Tests for change highlight hook with timed highlight and fade.
  */
 
-import { beforeEach, describe, expect, test, vi, spyOn } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, test, vi, spyOn } from 'bun:test';
 import { render } from 'ink-testing-library';
 import { useChangeHighlight } from '../../src/hooks/useChangeHighlight.ts';
 
 describe('useChangeHighlight', () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
 	});
 
 	test('initializes with empty changed items', () => {
