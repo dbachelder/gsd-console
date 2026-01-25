@@ -117,4 +117,120 @@ describe('useSessionActivity', () => {
 			expect(capturedActivity?.currentActivity).toBe('idle');
 		});
 	});
+
+	describe('activity monitoring', () => {
+		test('registers callback with monitorSessionActivity', async () => {
+			(getActiveSession as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+
+			let mockCallback: ((activity: SessionActivity) => void) | null = null;
+
+			(monitorSessionActivity as ReturnType<typeof vi.fn>).mockImplementation((callback) => {
+				mockCallback = callback;
+				return () => {}; // Cleanup function
+			});
+
+			const TestComponent = () => {
+				useSessionActivity();
+				return null;
+			};
+
+			render(<TestComponent />);
+
+			await new Promise((resolve) => setTimeout(resolve, 100));
+
+			// Should have registered callback
+			expect(monitorSessionActivity).toHaveBeenCalled();
+			expect(mockCallback).not.toBeNull();
+		});
+
+		test('updates state when callback receives new activity', async () => {
+			(getActiveSession as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+
+			let capturedActivity: SessionActivity | null = null;
+			let mockCallback: ((activity: SessionActivity) => void) | null = null;
+
+			(monitorSessionActivity as ReturnType<typeof vi.fn>).mockImplementation((callback) => {
+				mockCallback = callback;
+				return () => {};
+			});
+
+			const TestComponent = () => {
+				const activity = useSessionActivity();
+				capturedActivity = activity;
+				return null;
+			};
+
+			render(<TestComponent />);
+
+			await new Promise((resolve) => setTimeout(resolve, 100));
+
+			// Simulate new activity from callback
+			const newActivity: SessionActivity = {
+				sessionId: 'session-456',
+				title: 'New session',
+				directory: '/Users/dan/src/gsd-tui',
+				isActive: true,
+				currentActivity: 'gsd-execute: running',
+				lastUpdated: Date.now(),
+			};
+
+			if (mockCallback) {
+				mockCallback(newActivity);
+			}
+
+			// Wait for state update
+			await new Promise((resolve) => setTimeout(resolve, 50));
+
+			// Should have updated activity
+			expect(capturedActivity).not.toBeNull();
+			expect(capturedActivity?.sessionId).toBe('session-456');
+			expect(capturedActivity?.currentActivity).toBe('gsd-execute: running');
+		});
+
+		test('handles session becoming inactive', async () => {
+			const initialActivity: SessionActivity = {
+				sessionId: 'session-123',
+				title: 'Active session',
+				directory: '/Users/dan/src/gsd-tui',
+				isActive: true,
+				currentActivity: 'running',
+				lastUpdated: Date.now(),
+			};
+
+			(getActiveSession as ReturnType<typeof vi.fn>).mockResolvedValue(initialActivity);
+
+			let capturedActivity: SessionActivity | null = initialActivity;
+			let mockCallback: ((activity: SessionActivity) => void) | null = null;
+
+			(monitorSessionActivity as ReturnType<typeof vi.fn>).mockImplementation((callback) => {
+				mockCallback = callback;
+				return () => {};
+			});
+
+			const TestComponent = () => {
+				const activity = useSessionActivity();
+				capturedActivity = activity;
+				return null;
+			};
+
+			render(<TestComponent />);
+
+			await new Promise((resolve) => setTimeout(resolve, 100));
+
+			// Simulate session becoming inactive
+			const inactiveActivity: SessionActivity = {
+				...initialActivity,
+				isActive: false,
+				lastUpdated: Date.now() - 120000,
+			};
+
+			if (mockCallback) {
+				mockCallback(inactiveActivity);
+			}
+
+			await new Promise((resolve) => setTimeout(resolve, 50));
+
+			expect(capturedActivity?.isActive).toBe(false);
+		});
+	});
 });
