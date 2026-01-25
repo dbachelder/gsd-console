@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 ## Current Position
 
 Phase: 03.1 of 4 (UI Polish)
-Plan: 3 of 3 in current phase
-Status: Phase complete
-Last activity: 2026-01-25 - Completed 03.1-03-PLAN.md
+Plan: 4 of 4 in current phase (gap closure)
+Status: Phase complete (including gap closure)
+Last activity: 2026-01-25 - Completed 03.1-04-PLAN.md (gap closure)
 
 Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
+- Total plans completed: 15
 - Average duration: 4 min
-- Total execution time: 51 min
+- Total execution time: 55 min
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [██████████] 100%
 | 1 | 4 | 19 min | 4.75 min |
 | 2 | 3 | 8 min | 2.7 min |
 | 3 | 4 | 15 min | 3.75 min |
-| 03.1 | 3 | 9 min | 3 min |
+| 03.1 | 4 | 13 min | 3.25 min |
 
 **Recent Trend:**
-- Last 5 plans: 3 min, 4 min, 3 min, 4 min, 2 min
+- Last 5 plans: 4 min, 3 min, 4 min, 2 min, 4 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -80,6 +80,8 @@ Recent decisions affecting current work:
 - Completion status via SUMMARY.md existence check (03.1-03)
 - Wave/task info shown at detail level 2+ only (03.1-03)
 - Checkbox styling: green checkmark for completed, empty for pending (03.1-03)
+- Controlled/uncontrolled pattern for RoadmapView state (03.1-04)
+- Extended useVimNav with initialIndex and onIndexChange for state restoration (03.1-04)
 
 ### Pending Todos
 
@@ -105,5 +107,5 @@ None - Phase 03.1 complete. Ready for Phase 4.
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 03.1-03-PLAN.md (Phase 03.1 complete)
+Stopped at: Completed 03.1-04-PLAN.md (Phase 03.1 gap closure complete)
 Resume file: None
