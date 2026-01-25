@@ -13,10 +13,13 @@ export interface TabState {
 	detailLevel?: number; // 1-3 for PhaseView
 	scrollOffset?: number;
 	selectedTodoId?: string;
+	// Roadmap state
+	expandedPhases?: number[]; // Array of expanded phase numbers
+	selectedIndex?: number; // Currently selected row index
 }
 
 const defaultTabState: Record<TabId, TabState> = {
-	roadmap: { selectedPhaseNumber: undefined, detailLevel: undefined, scrollOffset: 0 },
+	roadmap: { expandedPhases: [], selectedIndex: 0, scrollOffset: 0 },
 	phase: { selectedPhaseNumber: undefined, detailLevel: 1, scrollOffset: 0 },
 	todos: { selectedTodoId: undefined, detailLevel: undefined, scrollOffset: 0 },
 };
