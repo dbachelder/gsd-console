@@ -1,27 +1,19 @@
 // Testing infrastructure for Phase 05: Test Coverage
 //
-// IMPORTANT: Bun's preload mechanism cannot import from 'bun/test' directly.
-// Module mocking must be done PER TEST FILE using vi.mock():
+// IMPORTANT: All tests must use memfs for 'node:fs' mocking to prevent
+// competing vi.mock() calls.
 //
-// In each test file that needs filesystem mocking:
+// Pattern for each test file:
 //
 // import { vi } from 'bun:test';
-// import { fs } from 'memfs';
+// import { fs as memfs } from 'memfs';
 //
-// vi.mock('node:fs', () => fs);
-// vi.mock('node:fs/promises', () => fs.promises);
+// vi.mock('node:fs', () => memfs);
+// vi.mock('node:fs/promises', () => memfs.promises);
 //
-// Then use vol.fromJSON() in tests to populate filesystem:
-//
-// beforeEach(() => {
-//   vol.reset();
-//   vol.fromJSON({
-//     '.planning/ROADMAP.md': '### Phase 1: Test',
-//   });
-// });
-//
-// See Pattern 3 in 05-RESEARCH.md for complete examples.
-// This follows Pitfall 1: Don't mock after imports
+// Then in beforeEach():
+// - For parser tests: use vol.fromJSON() to set up virtual filesystem
+// - For hook tests: use vol.reset() and mock individual functions as needed
 
 // Export vol for test fixtures (used with vol.fromJSON())
-export { vol } from 'memfs';
+export { fs as memfs, vol } from 'memfs';
