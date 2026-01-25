@@ -130,7 +130,7 @@ Plans:
   - [ ] 05-11-PLAN.md — Fix useChangeHighlight React warnings (Wave 1, 2 tasks) [gap closure]
   - [ ] 05-12-PLAN.md — Fix 5 failing parser tests (Wave 2, 4 tasks) [gap closure]
   - [ ] 05-13-PLAN.md — Add parser coverage for uncovered functions (Wave 2, 4 tasks) [gap closure]
-  - [ ] 05-14-PLAN.md — Add tests for useCommandPalette hook (Wave 3, 4 tasks) [gap closure]
+  - [x] 05-14-PLAN.md — Add tests for useCommandPalette hook (Wave 3, 4 tasks) [gap closure]
   - [ ] 05-15-PLAN.md — Add tests for useExternalEditor hook (Wave 3, 5 tasks) [gap closure]
   - [ ] 05-16-PLAN.md — Add tests for useGsdData hook (Wave 3, 4 tasks) [gap closure]
   - [ ] 05-17-PLAN.md — Add tests for useSessionActivity hook (Wave 4, 3 tasks) [gap closure]
@@ -148,4 +148,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
  | 4. OpenCode Integration | 7/7 | Complete | 2026-01-25 |
- | 5. Test Coverage | 10/18 | In progress | - |
+  | 5. Test Coverage | 14/18 | In progress | - |
