@@ -5,8 +5,10 @@
 
 import { Spinner } from '@inkjs/ui';
 import { Box, Text, useApp, useInput } from 'ink';
+import { useState } from 'react';
 import { Footer } from './components/layout/Footer.tsx';
 import { Header } from './components/layout/Header.tsx';
+import { HelpOverlay } from './components/layout/HelpOverlay.tsx';
 import { TabLayout } from './components/layout/TabLayout.tsx';
 import { useGsdData } from './hooks/useGsdData.ts';
 import type { CliFlags } from './lib/types.ts';
@@ -19,10 +21,22 @@ export default function App({ flags }: AppProps) {
 	const { exit } = useApp();
 	const data = useGsdData(flags.dir ?? '.planning');
 
-	// Global quit handler
+	// Help overlay state
+	const [showHelp, setShowHelp] = useState(false);
+
+	// Track active tab for footer (passed up from TabLayout would be better,
+	// but for simplicity we'll default to roadmap and let Footer handle it)
+	const [activeTab, setActiveTab] = useState<'roadmap' | 'phase' | 'todos'>(
+		flags.only ?? 'roadmap',
+	);
+
+	// Global input handlers (q to quit, ? to toggle help)
 	useInput((input) => {
 		if (input === 'q') {
 			exit();
+		}
+		if (input === '?') {
+			setShowHelp((prev) => !prev);
 		}
 	});
 
@@ -52,12 +66,22 @@ export default function App({ flags }: AppProps) {
 		);
 	}
 
+	// Help overlay takes over the screen
+	if (showHelp) {
+		return (
+			<Box flexDirection="column">
+				<Header projectName={data.state.projectName} state={data.state} />
+				<HelpOverlay onClose={() => setShowHelp(false)} />
+			</Box>
+		);
+	}
+
 	// Main app layout
 	return (
 		<Box flexDirection="column">
 			<Header projectName={data.state.projectName} state={data.state} />
-			<TabLayout data={data} flags={flags} />
-			<Footer onlyMode={flags.only} />
+			<TabLayout data={data} flags={flags} isActive={!showHelp} onTabChange={setActiveTab} />
+			<Footer activeTab={activeTab} onlyMode={flags.only} />
 		</Box>
 	);
 }

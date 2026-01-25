@@ -4,11 +4,12 @@
  */
 
 import { Box, Text } from 'ink';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTabNav } from '../../hooks/useTabNav.ts';
-import type { CliFlags, GsdData, Todo } from '../../lib/types.ts';
+import type { CliFlags, GsdData } from '../../lib/types.ts';
 import { PhaseView } from '../phase/PhaseView.tsx';
 import { RoadmapView } from '../roadmap/RoadmapView.tsx';
+import { TodosView } from '../todos/TodosView.tsx';
 
 type TabId = 'roadmap' | 'phase' | 'todos';
 
@@ -16,9 +17,10 @@ interface TabLayoutProps {
 	data: GsdData;
 	flags: CliFlags;
 	isActive?: boolean;
+	onTabChange?: (tab: TabId) => void;
 }
 
-export function TabLayout({ data, flags, isActive = true }: TabLayoutProps) {
+export function TabLayout({ data, flags, isActive = true, onTabChange }: TabLayoutProps) {
 	const isOnlyMode = Boolean(flags.only);
 
 	// Track selected phase number (for Phase view navigation)
@@ -30,6 +32,11 @@ export function TabLayout({ data, flags, isActive = true }: TabLayoutProps) {
 		initialTab: flags.only ?? 'roadmap',
 		isActive: isActive && !isOnlyMode,
 	});
+
+	// Notify parent of tab changes
+	useEffect(() => {
+		onTabChange?.(activeTab);
+	}, [activeTab, onTabChange]);
 
 	// Get selected phase object
 	const selectedPhase =
@@ -56,7 +63,7 @@ export function TabLayout({ data, flags, isActive = true }: TabLayoutProps) {
 						onPhaseChange={setSelectedPhaseNumber}
 					/>
 				)}
-				{flags.only === 'todos' && <TodosPlaceholder todos={data.todos} />}
+				{flags.only === 'todos' && <TodosView todos={data.todos} isActive={isActive} />}
 			</Box>
 		);
 	}
@@ -80,7 +87,7 @@ export function TabLayout({ data, flags, isActive = true }: TabLayoutProps) {
 						onPhaseChange={setSelectedPhaseNumber}
 					/>
 				)}
-				{activeTab === 'todos' && <TodosPlaceholder todos={data.todos} />}
+				{activeTab === 'todos' && <TodosView todos={data.todos} isActive={isActive} />}
 			</Box>
 		</Box>
 	);
@@ -112,35 +119,6 @@ function TabBar({ activeTab }: TabBarProps) {
 					</Text>
 				</Box>
 			))}
-		</Box>
-	);
-}
-
-// Temporary placeholder - will be replaced by full TodosView in Task 3
-interface TodosPlaceholderProps {
-	todos: Todo[];
-}
-
-function TodosPlaceholder({ todos }: TodosPlaceholderProps) {
-	return (
-		<Box flexDirection="column" borderStyle="single" paddingX={1} marginX={1}>
-			<Text bold color="yellow">
-				Todos View
-			</Text>
-			<Text dimColor>{todos.length} items</Text>
-			{todos.length === 0 ? (
-				<Text dimColor>No todos found</Text>
-			) : (
-				<Box marginTop={1} flexDirection="column">
-					{todos.slice(0, 5).map((todo) => (
-						<Box key={todo.id}>
-							<Text color={todo.completed ? 'green' : 'gray'}>[{todo.completed ? 'x' : ' '}] </Text>
-							<Text strikethrough={todo.completed}>{todo.text}</Text>
-						</Box>
-					))}
-					{todos.length > 5 && <Text dimColor>...and {todos.length - 5} more</Text>}
-				</Box>
-			)}
 		</Box>
 	);
 }
