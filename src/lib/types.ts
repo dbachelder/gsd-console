@@ -59,3 +59,13 @@ export interface CliFlags {
 	phase?: number;
 	dir?: string;
 }
+
+// OpenCode integration types
+
+/** OpenCode connection state */
+export interface OpencodeConnectionState {
+	isConnected: boolean;
+	isChecking: boolean;
+	serverVersion?: string;
+	error?: Error;
+}
