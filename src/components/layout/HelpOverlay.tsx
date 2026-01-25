@@ -18,35 +18,28 @@ const helpGroups: KeyGroup[] = [
 	{
 		title: 'Navigation',
 		keys: [
-			{ key: 'j / Down', description: 'Move down' },
-			{ key: 'k / Up', description: 'Move up' },
-			{ key: 'h / Left', description: 'Collapse / back' },
-			{ key: 'l / Right / Enter', description: 'Expand / select' },
-			{ key: 'gg', description: 'Jump to top' },
-			{ key: 'G', description: 'Jump to bottom' },
-			{ key: 'Ctrl+d', description: 'Page down' },
-			{ key: 'Ctrl+u', description: 'Page up' },
-		],
-	},
-	{
-		title: 'Tabs',
-		keys: [
-			{ key: 'Tab', description: 'Next tab' },
-			{ key: 'Shift+Tab', description: 'Previous tab' },
-			{ key: '1 / 2 / 3', description: 'Jump to tab' },
-		],
-	},
-	{
-		title: 'Views',
-		keys: [
-			{ key: 'd', description: 'Toggle detail level' },
-			{ key: 'f', description: 'Filter (in Todos)' },
+			{ key: 'j / k', description: 'Move up / down' },
+			{ key: 'h / l', description: 'Collapse / expand' },
+			{ key: 'Enter', description: 'Select / expand' },
+			{ key: 'gg / G', description: 'Jump to top / bottom' },
+			{ key: 'Ctrl+d / Ctrl+u', description: 'Page down / up' },
+			{ key: 'Tab / Shift+Tab', description: 'Next / prev tab' },
 			{ key: '[ / ]', description: 'Prev / next phase' },
 		],
 	},
 	{
-		title: 'General',
+		title: 'Actions',
 		keys: [
+			{ key: ':', description: 'Command palette' },
+			{ key: 'e', description: 'Open in editor' },
+			{ key: 'Space', description: 'Toggle todo (in Todos)' },
+		],
+	},
+	{
+		title: 'Display',
+		keys: [
+			{ key: 'd', description: 'Toggle detail level' },
+			{ key: 'f', description: 'Filter (in Todos)' },
 			{ key: '?', description: 'Toggle this help' },
 			{ key: 'q', description: 'Quit' },
 		],
