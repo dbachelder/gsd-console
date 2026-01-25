@@ -413,7 +413,7 @@ export default function App({ flags }: AppProps) {
 			{showModePrompt && pendingCommand && (
 				<Box position="absolute" marginTop={3} marginLeft={2}>
 					<ExecutionModePrompt
-						command={pendingCommand.name}
+						command={pendingArgs ? `${pendingCommand.name} ${pendingArgs}` : pendingCommand.name}
 						hasActiveSession={Boolean(activeSessionId)}
 						onSelect={handleModeSelect}
 						onCancel={handleModeCancel}
