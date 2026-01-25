@@ -61,6 +61,8 @@ export function ExecutionModePrompt({
 			paddingX={2}
 			paddingY={1}
 			width={50}
+			// biome-ignore lint/suspicious/noExplicitAny: Ink supports backgroundColor but types are incomplete
+			{...({ backgroundColor: 'black' } as any)}
 		>
 			{/* Header */}
 			<Box marginBottom={1}>
