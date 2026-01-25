@@ -77,9 +77,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03.1-01-PLAN.md - Sticky footer and tab styling improvements
-- [ ] 03.1-02-PLAN.md - Tab state persistence (selected phase, detail level, scroll position)
-- [ ] 03.1-03-PLAN.md - Plan file display (summary, task count, wave info)
+- [ ] 03.1-01-PLAN.md — Sticky footer, tab styling, and header sizing fixes (Wave 1, 3 tasks)
+- [ ] 03.1-02-PLAN.md — Tab state persistence and detail toggle removal (Wave 2, 3 tasks)
+- [ ] 03.1-03-PLAN.md — Plan file display (summary, task count, wave info) (Wave 3, 3 tasks)
 
 ### Phase 4: OpenCode Integration
 **Goal**: TUI can spawn and coordinate with OpenCode sessions
