@@ -4,7 +4,7 @@
  */
 
 import { Box, Text } from 'ink';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useTabNav } from '../../hooks/useTabNav.ts';
 import { type TabId, useTabState } from '../../hooks/useTabState.ts';
 import type { CliFlags, GsdData } from '../../lib/types.ts';
@@ -69,6 +69,19 @@ export function TabLayout({
 		setTab('phase', { detailLevel: level });
 	};
 
+	// Get roadmap initial state (ref-based, stable values)
+	const roadmapTabState = getTab('roadmap');
+	const initialExpandedPhases = roadmapTabState.expandedPhases;
+	const initialSelectedIndex = roadmapTabState.selectedIndex;
+
+	// Save roadmap state on unmount (ref-based setTab, no re-renders)
+	const handleSaveRoadmapState = useCallback(
+		(state: { expandedPhases: number[]; selectedIndex: number }) => {
+			setTab('roadmap', state);
+		},
+		[setTab],
+	);
+
 	// Track tab changes for state restoration
 	useEffect(() => {
 		// Store current tab state before switching away
@@ -106,6 +119,9 @@ export function TabLayout({
 						isPhaseHighlighted={isPhaseHighlighted}
 						isPhaseFading={isPhaseFading}
 						showToast={showToast}
+						initialExpandedPhases={initialExpandedPhases}
+						initialSelectedIndex={initialSelectedIndex}
+						onSaveState={handleSaveRoadmapState}
 					/>
 				)}
 				{flags.only === 'phase' && (
@@ -150,6 +166,9 @@ export function TabLayout({
 						isPhaseHighlighted={isPhaseHighlighted}
 						isPhaseFading={isPhaseFading}
 						showToast={showToast}
+						initialExpandedPhases={initialExpandedPhases}
+						initialSelectedIndex={initialSelectedIndex}
+						onSaveState={handleSaveRoadmapState}
 					/>
 				)}
 				{activeTab === 'phase' && (

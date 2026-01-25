@@ -4,7 +4,7 @@
  */
 
 import { Box, Text, useInput } from 'ink';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useVimNav } from '../../hooks/useVimNav.ts';
 import type { Phase } from '../../lib/types.ts';
 import { PhaseRow } from './PhaseRow.tsx';
@@ -18,20 +18,12 @@ interface RoadmapViewProps {
 	isPhaseHighlighted?: (phaseNumber: number) => boolean;
 	isPhaseFading?: (phaseNumber: number) => boolean;
 	showToast?: (message: string, type?: 'info' | 'success' | 'warning') => void;
-	/** Optional selected phase number for state restoration */
-	selectedPhaseNumber?: number;
-	/** Optional scroll offset for state restoration */
-	scrollOffset?: number;
-	/** Optional callback when scroll position changes */
-	onScrollOffsetChange?: (offset: number) => void;
-	/** Controlled expanded phases state */
-	expandedPhases?: number[];
-	/** Callback when expanded phases change */
-	onExpandedPhasesChange?: (phases: number[]) => void;
-	/** Controlled selected index state */
-	selectedIndex?: number;
-	/** Callback when selected index changes */
-	onSelectedIndexChange?: (index: number) => void;
+	/** Initial expanded phases for state restoration */
+	initialExpandedPhases?: number[];
+	/** Initial selected index for state restoration */
+	initialSelectedIndex?: number;
+	/** Callback to save state on unmount (should not trigger re-renders) */
+	onSaveState?: (state: { expandedPhases: number[]; selectedIndex: number }) => void;
 }
 
 export function RoadmapView({
@@ -42,20 +34,14 @@ export function RoadmapView({
 	isPhaseHighlighted,
 	isPhaseFading,
 	showToast,
-	selectedPhaseNumber: _selectedPhaseNumber,
-	scrollOffset: _scrollOffset,
-	onScrollOffsetChange: _onScrollOffsetChange,
-	expandedPhases: expandedPhasesProp,
-	onExpandedPhasesChange,
-	selectedIndex: selectedIndexProp,
-	onSelectedIndexChange,
+	initialExpandedPhases,
+	initialSelectedIndex,
+	onSaveState,
 }: RoadmapViewProps) {
-	// Track which phases are expanded (internal state if not controlled)
-	const [internalExpandedPhases, setInternalExpandedPhases] = useState<Set<number>>(new Set());
-
-	// Use controlled state if provided, else internal
-	const expandedSet =
-		expandedPhasesProp !== undefined ? new Set(expandedPhasesProp) : internalExpandedPhases;
+	// Track which phases are expanded - initialize from props
+	const [expandedPhases, setExpandedPhases] = useState<Set<number>>(
+		() => new Set(initialExpandedPhases ?? []),
+	);
 
 	// Toggle expansion for selected phase
 	const toggleExpand = useCallback(
@@ -63,21 +49,17 @@ export function RoadmapView({
 			const phase = phases[index];
 			if (!phase) return;
 
-			const next = new Set(expandedSet);
-			if (next.has(phase.number)) {
-				next.delete(phase.number);
-			} else {
-				next.add(phase.number);
-			}
-
-			// Report to parent if controlled
-			onExpandedPhasesChange?.([...next]);
-			// Update internal if uncontrolled
-			if (expandedPhasesProp === undefined) {
-				setInternalExpandedPhases(next);
-			}
+			setExpandedPhases((prev) => {
+				const next = new Set(prev);
+				if (next.has(phase.number)) {
+					next.delete(phase.number);
+				} else {
+					next.add(phase.number);
+				}
+				return next;
+			});
 		},
-		[phases, expandedSet, expandedPhasesProp, onExpandedPhasesChange],
+		[phases],
 	);
 
 	// Collapse selected phase
@@ -86,33 +68,45 @@ export function RoadmapView({
 			const phase = phases[index];
 			if (!phase) return;
 
-			if (expandedSet.has(phase.number)) {
-				const next = new Set(expandedSet);
-				next.delete(phase.number);
-
-				// Report to parent if controlled
-				onExpandedPhasesChange?.([...next]);
-				// Update internal if uncontrolled
-				if (expandedPhasesProp === undefined) {
-					setInternalExpandedPhases(next);
+			setExpandedPhases((prev) => {
+				if (prev.has(phase.number)) {
+					const next = new Set(prev);
+					next.delete(phase.number);
+					return next;
 				}
-			}
+				return prev;
+			});
 		},
-		[phases, expandedSet, expandedPhasesProp, onExpandedPhasesChange],
+		[phases],
 	);
 
-	// Vim navigation with controlled index support
+	// Vim navigation - initialize from props
 	const { selectedIndex } = useVimNav({
 		itemCount: phases.length,
 		pageSize: 10,
 		isActive,
-		initialIndex: selectedIndexProp ?? 0,
-		onIndexChange: onSelectedIndexChange,
+		initialIndex: initialSelectedIndex ?? 0,
 		onSelect: () => {
 			toggleExpand(selectedIndex);
 		},
 		onBack: () => collapseSelected(selectedIndex),
 	});
+
+	// Track current state in refs for unmount save
+	const expandedRef = useRef(expandedPhases);
+	const selectedIndexRef = useRef(selectedIndex);
+	expandedRef.current = expandedPhases;
+	selectedIndexRef.current = selectedIndex;
+
+	// Save state on unmount (ref-based, no re-renders)
+	useEffect(() => {
+		return () => {
+			onSaveState?.({
+				expandedPhases: [...expandedRef.current],
+				selectedIndex: selectedIndexRef.current,
+			});
+		};
+	}, [onSaveState]);
 
 	// Notify parent of phase navigation for editor context
 	useEffect(() => {
@@ -127,7 +121,7 @@ export function RoadmapView({
 		(_input, key) => {
 			if (key.return) {
 				const phase = phases[selectedIndex];
-				if (phase && expandedSet.has(phase.number)) {
+				if (phase && expandedPhases.has(phase.number)) {
 					onSelectPhase?.(phase.number);
 				}
 			}
@@ -174,7 +168,7 @@ export function RoadmapView({
 							key={phase.number}
 							phase={phase}
 							isSelected={index === selectedIndex}
-							isExpanded={expandedSet.has(phase.number)}
+							isExpanded={expandedPhases.has(phase.number)}
 							showIndicators={true}
 							isHighlighted={isPhaseHighlighted?.(phase.number)}
 							isFading={isPhaseFading?.(phase.number)}

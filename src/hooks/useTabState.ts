@@ -4,7 +4,7 @@
  * State persists only for the current session (not across TUI restarts).
  */
 
-import { useCallback, useState } from 'react';
+import { useCallback, useRef } from 'react';
 
 export type TabId = 'roadmap' | 'phase' | 'todos';
 
@@ -25,23 +25,22 @@ const defaultTabState: Record<TabId, TabState> = {
 };
 
 export function useTabState() {
-	const [tabState, setTabState] = useState<Record<TabId, TabState>>({
+	// Use ref instead of state to avoid re-renders when saving tab state
+	const tabStateRef = useRef<Record<TabId, TabState>>({
 		...defaultTabState,
 	});
 
 	const setTab = useCallback((tab: TabId, state: Partial<TabState>) => {
-		setTabState((prev) => ({
-			...prev,
-			[tab]: { ...prev[tab], ...state },
-		}));
+		// Mutate ref directly - no re-render triggered
+		tabStateRef.current = {
+			...tabStateRef.current,
+			[tab]: { ...tabStateRef.current[tab], ...state },
+		};
 	}, []);
 
-	const getTab = useCallback(
-		(tab: TabId): TabState => {
-			return tabState[tab] ?? {};
-		},
-		[tabState],
-	);
+	const getTab = useCallback((tab: TabId): TabState => {
+		return tabStateRef.current[tab] ?? {};
+	}, []);
 
-	return { tabState, setTab, getTab };
+	return { tabState: tabStateRef.current, setTab, getTab };
 }
