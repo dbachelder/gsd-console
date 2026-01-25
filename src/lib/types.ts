@@ -69,3 +69,26 @@ export interface OpencodeConnectionState {
 	serverVersion?: string;
 	error?: Error;
 }
+
+/** Background job status */
+export type BackgroundJobStatus = 'pending' | 'running' | 'complete' | 'failed' | 'cancelled';
+
+/** A background job for headless execution */
+export interface BackgroundJob {
+	id: string;
+	command: string;
+	status: BackgroundJobStatus;
+	output?: string; // Captured output for expandable display
+	error?: string;
+	queuedAt: number;
+	startedAt?: number;
+	completedAt?: number;
+}
+
+/** Background jobs state */
+export interface BackgroundJobsState {
+	jobs: BackgroundJob[];
+	isProcessing: boolean;
+	sessionId?: string;
+	error?: Error;
+}

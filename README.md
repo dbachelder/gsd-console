@@ -2,44 +2,48 @@
 
 Terminal UI for viewing GSD project status. Displays roadmap progress, phase details, and todos in a keyboard-navigable interface.
 
+## Compatibility
+
+**Works with any GSD `.planning/` directory.** If you have a project using the [GSD workflow](https://github.com/glittercowboy/get-shit-done), this TUI will display its roadmap, phases, and todos with live updates as files change.
+
+**For coding agent integration**, GSD TUI supports [opencode](https://github.com/sst/opencode). With opencode installed, you can:
+- Spawn opencode sessions directly from the TUI
+- Queue GSD commands for sequential execution
+- Connect to existing opencode sessions
+
+Without opencode, the TUI works as a standalone viewer — you can still execute GSD CLI commands and edit planning files in your `$EDITOR`.
+
 ## Installation
 
-### Local Development
+### Prerequisites
+
+- **Bun** (required) — [install bun](https://bun.sh/)
+- **opencode** (optional) — [install opencode](https://opencode.ai/) for coding agent integration
+
+### From npm
 
 ```bash
-bun install
+bun install -g gsd-tui
 ```
 
-### Global Installation
-
-To run `gsd-tui` from any directory:
-
-**Option 1: Install globally (recommended for production use)**
+### From Source
 
 ```bash
+git clone https://github.com/dnakov/gsd-tui.git
+cd gsd-tui
+bun install
 bun install -g .
 ```
 
-Then run from anywhere:
-```bash
-gsd-tui
-```
+### For Development
 
-**Option 2: Use `bun link` (for development)**
+Use `bun link` to run `gsd-tui` from anywhere while using the local source code:
 
 ```bash
 bun link
 ```
 
-This creates a symlink so you can run `gsd-tui` from anywhere while still using the local source code.
-
-**To uninstall:**
-
-```bash
-bun uninstall -g gsd-tui
-# or
-bun unlink
-```
+To unlink: `bun unlink`
 
 ## Usage
 

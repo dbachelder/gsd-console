@@ -117,3 +117,38 @@ export function spawnOpencodeSession(initialPrompt?: string): boolean {
 		return false;
 	}
 }
+
+/**
+ * Send a prompt to an OpenCode session.
+ * Returns true if prompt was sent successfully.
+ */
+export async function sendPrompt(sessionId: string, text: string): Promise<boolean> {
+	try {
+		const client = createClient();
+		await client.session.prompt({
+			path: { id: sessionId },
+			body: {
+				parts: [{ type: 'text', text }],
+			},
+		});
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * Create a new OpenCode session for background jobs.
+ * Returns session ID or null on failure.
+ */
+export async function createSession(title?: string): Promise<string | null> {
+	try {
+		const client = createClient();
+		const response = await client.session.create({
+			body: { title: title ?? 'GSD Background' },
+		});
+		return response.data?.id ?? null;
+	} catch {
+		return null;
+	}
+}
