@@ -32,6 +32,26 @@ function truncate(str: string | undefined, maxLength: number): string {
 	return `${str.slice(0, maxLength - 3)}...`;
 }
 
+/**
+ * Format a timestamp as relative time (e.g., "5m ago", "2h ago")
+ */
+function relativeTime(timestamp: number | undefined): string {
+	if (!timestamp) return '';
+	const now = Date.now();
+	const diff = now - timestamp;
+	const minutes = Math.floor(diff / 60000);
+	const hours = Math.floor(diff / 3600000);
+	const days = Math.floor(diff / 86400000);
+
+	if (minutes < 1) return 'now';
+	if (minutes < 60) return `${minutes}m ago`;
+	if (hours < 24) return `${hours}h ago`;
+	return `${days}d ago`;
+}
+
+/** Max sessions to show before truncating */
+const MAX_VISIBLE_SESSIONS = 8;
+
 export function SessionPicker({
 	sessions,
 	onSelect,
@@ -64,16 +84,21 @@ export function SessionPicker({
 			return;
 		}
 
-		// Arrow keys and vim navigation
+		// Arrow keys and vim navigation (limited to visible sessions)
+		const maxIndex = Math.min(sessions.length, MAX_VISIBLE_SESSIONS) - 1;
 		if (key.upArrow || input === 'k') {
 			setSelectedIndex((prev) => Math.max(0, prev - 1));
 			return;
 		}
 		if (key.downArrow || input === 'j') {
-			setSelectedIndex((prev) => Math.min(sessions.length - 1, prev + 1));
+			setSelectedIndex((prev) => Math.min(maxIndex, prev + 1));
 			return;
 		}
 	});
+
+	// Limit visible sessions, track if there are more
+	const visibleSessions = sessions.slice(0, MAX_VISIBLE_SESSIONS);
+	const hasMore = sessions.length > MAX_VISIBLE_SESSIONS;
 
 	return (
 		<Box
@@ -82,7 +107,9 @@ export function SessionPicker({
 			borderColor="cyan"
 			paddingX={2}
 			paddingY={1}
-			backgroundColor="black"
+			width="100%"
+			// biome-ignore lint/suspicious/noExplicitAny: Ink supports backgroundColor but types incomplete
+			{...({ backgroundColor: 'black' } as any)}
 		>
 			{/* Title */}
 			<Box marginBottom={1}>
@@ -112,32 +139,33 @@ export function SessionPicker({
 			{/* Session list */}
 			{!isLoading && sessions.length > 0 && (
 				<Box flexDirection="column">
-					{sessions.map((session, index) => {
+					{visibleSessions.map((session, index) => {
 						const isSelected = index === selectedIndex;
+						const time = relativeTime(session.updatedAt);
 						return (
-							<Box key={session.id} flexDirection="column">
-								{/* First line: ID + directory */}
-								<Box>
-									<Text color={isSelected ? 'cyan' : undefined} bold={isSelected}>
-										{isSelected ? '> ' : '  '}
-										{truncate(session.id, 8)}
-									</Text>
-									<Text color={isSelected ? 'cyan' : undefined} bold={isSelected}>
-										{'  '}
-									</Text>
-									<Text color={isSelected ? 'cyan' : 'yellow'} bold={isSelected}>
-										{truncate(session.directory, 40)}
-									</Text>
-								</Box>
-								{/* Second line: last command (indented, dimmed) */}
-								{session.lastCommand && (
-									<Box marginLeft={2}>
-										<Text dimColor>"{truncate(session.lastCommand, 40)}"</Text>
+							<Box key={session.id} marginBottom={1}>
+								<Box flexDirection="column">
+									{/* First line: selector + title + time */}
+									<Box>
+										<Text color={isSelected ? 'cyan' : undefined} bold={isSelected}>
+											{isSelected ? '▶ ' : '  '}
+										</Text>
+										<Text color={isSelected ? 'cyan' : undefined} bold={isSelected}>
+											{truncate(session.lastCommand || session.id, 60)}
+										</Text>
+										<Text dimColor> ({time})</Text>
 									</Box>
-								)}
+									{/* Second line: directory (dimmed) */}
+									<Box marginLeft={2}>
+										<Text dimColor>{session.directory}</Text>
+									</Box>
+								</Box>
 							</Box>
 						);
 					})}
+					{hasMore && (
+						<Text dimColor> ... and {sessions.length - MAX_VISIBLE_SESSIONS} more sessions</Text>
+					)}
 				</Box>
 			)}
 
