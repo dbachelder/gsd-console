@@ -12,7 +12,7 @@ Build a standalone terminal UI that displays GSD project status in real-time alo
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 1: Core TUI** - Display roadmap, phases, and todos with keyboard navigation
+- [ ] **Phase 1: Core TUI** - Display roadmap, phases, and todos with keyboard navigation
 - [ ] **Phase 2: Real-time Updates** - Watch .planning/ files and refresh on changes
 - [ ] **Phase 3: Actions and Editing** - Execute GSD commands and edit todos inline
 - [ ] **Phase 4: OpenCode Integration** - Spawn sessions and queue commands
@@ -30,12 +30,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. User can navigate between panels using Tab and arrow keys
   5. User can scroll content using Vim keybindings (hjkl, gg, G, Ctrl+d/u)
   6. Each phase shows visual indicators (has plan, has context, needs verification, blocked, etc.)
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [x] 01-01-PLAN.md - Project setup, tooling, types, parser, and app shell
 - [x] 01-02-PLAN.md - Roadmap/Phase/Todos views with Vim navigation
 - [x] 01-03-PLAN.md - UAT gap closure (6 fixes)
+- [ ] 01-04-PLAN.md - UAT gap closure round 2 (3 fixes)
 
 ### Phase 2: Real-time Updates
 **Goal**: TUI automatically refreshes when planning docs change
@@ -86,7 +87,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core TUI | 3/3 | ✓ Complete | 2026-01-24 |
+| 1. Core TUI | 3/4 | In Progress | - |
 | 2. Real-time Updates | 0/1 | Not started | - |
 | 3. Actions and Editing | 0/2 | Not started | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
