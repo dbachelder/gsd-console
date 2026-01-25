@@ -45,13 +45,16 @@ bun run test:coverage # Run with coverage
 ```
 App.tsx
 ├── Header (project name, progress)
-├── TabLayout (tab switching: 1/2/3 or Tab)
+├── TabLayout (tab switching: 1/2/3/4 or Tab)
 │   ├── RoadmapView (phase list with expand/collapse)
 │   ├── PhaseView (single phase detail)
-│   └── TodosView (todo list)
+│   ├── TodosView (todo list)
+│   └── BackgroundView (job queue status)
 ├── Footer (context-sensitive keybindings)
-├── CommandPalette (Ctrl+P fuzzy search)
-├── FilePicker (multi-file selection for editor)
+├── CommandPalette (: key, fuzzy search with Tab completion)
+├── ExecutionModePrompt (headless/interactive/primary selection)
+├── SessionPicker (c key, connect to OpenCode sessions)
+├── FilePicker (e key, multi-file selection for editor)
 └── ToastContainer (notifications)
 ```
 
@@ -101,10 +104,78 @@ Terminal UI flicker typically comes from unnecessary re-renders. Key lessons:
    }, [onSaveState]);
    ```
 
+## OpenCode Integration
+
+### Architecture
+
+- **`opencode`** (TUI) - Standalone terminal app, no HTTP API
+- **`opencode serve --port 4096`** - Headless server with HTTP API
+- **`opencode attach http://localhost:4096`** - TUI connected to serve
+
+Sessions are stored in `~/.local/share/opencode/storage/session/`. Both TUI and serve read/write to same storage, but don't communicate in real-time unless using attach.
+
+### Key Insight: Use Attach for API Injection
+
+To send commands to a running TUI session via API:
+1. Run `opencode serve --port 4096` (required for SDK)
+2. Run `opencode attach http://localhost:4096` (not plain `opencode`)
+3. Now API calls show up in the TUI because both use the same server
+
+**Without attach:** API calls go to session storage but TUI doesn't poll for external changes.
+
+### SDK Gotchas
+
+- **Timestamps are milliseconds** - `s.time.created` and `s.time.updated` are already in ms, don't multiply by 1000
+- **SDK requires serve running** - All SDK calls fail with ConnectionRefused if `opencode serve` isn't running
+- **Session list from SDK** - Returns active sessions only (not all historical like local storage)
+
+### Execution Modes
+
+| Mode | What it does |
+|------|--------------|
+| Headless | Adds to background job queue, runs via SDK |
+| Interactive | Spawns `opencode attach` with initial prompt |
+| Primary | Sends prompt to connected session via SDK |
+
+## Custom Controlled Input
+
+`@inkjs/ui` TextInput is uncontrolled (no `value` prop). For Tab completion, replace with custom input:
+
+```tsx
+const [inputValue, setInputValue] = useState('');
+
+useInput((input, key) => {
+  if (key.tab) {
+    // Handle Tab completion
+    setInputValue(completed + ' ');
+    return;
+  }
+  if (key.backspace) {
+    setInputValue(prev => prev.slice(0, -1));
+    return;
+  }
+  if (input && !key.ctrl && !key.meta) {
+    setInputValue(prev => prev + input);
+  }
+});
+
+// Render manually
+<Text>{inputValue}</Text>
+```
+
+## Overlay Styling
+
+For readable overlays, add solid background:
+```tsx
+// biome-ignore lint/suspicious/noExplicitAny: Ink types incomplete
+{...({ backgroundColor: 'black' } as any)}
+```
+
 ## Key Dependencies
 
 - **ink** - React renderer for terminals
 - **@inkjs/ui** - Spinner, TextInput components
+- **@opencode-ai/sdk** - OpenCode API client
 - **@nozbe/microfuzz** - Lightweight fuzzy search for command palette
 - **gray-matter** - YAML frontmatter parsing
 - **fullscreen-ink** - Alternate screen buffer management
