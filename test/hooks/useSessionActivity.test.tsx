@@ -233,4 +233,33 @@ describe('useSessionActivity', () => {
 			expect(capturedActivity?.isActive).toBe(false);
 		});
 	});
+
+	describe('cleanup', () => {
+		test('calls cleanup function on unmount', async () => {
+			(getActiveSession as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+
+			let cleanupCalled = false;
+
+			const mockCleanup = () => {
+				cleanupCalled = true;
+			};
+
+			(monitorSessionActivity as ReturnType<typeof vi.fn>).mockReturnValue(mockCleanup);
+
+			const TestComponent = () => {
+				useSessionActivity();
+				return null;
+			};
+
+			const { unmount } = render(<TestComponent />);
+
+			await new Promise((resolve) => setTimeout(resolve, 100));
+
+			// Unmount component
+			unmount();
+
+			// Cleanup should have been called
+			expect(cleanupCalled).toBe(true);
+		});
+	});
 });
