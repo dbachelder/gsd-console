@@ -247,34 +247,49 @@ export function parseState(content: string): ProjectState {
 }
 
 /**
- * Extract todos from STATE.md pending section and other planning docs
+ * Extract todos from .planning/todos/pending/ and .planning/todos/done/ directories
  */
-export function parseTodos(stateContent: string, _planningDir?: string): Todo[] {
+export function parseTodos(_stateContent: string, planningDir?: string): Todo[] {
 	const todos: Todo[] = [];
+	const baseDir = planningDir ?? '.planning';
 
-	// Extract todos from "### Pending Todos" section in STATE.md
-	const pendingMatch = /### Pending Todos[\s\S]*?(?=###|$)/i.exec(stateContent);
-	if (pendingMatch) {
-		const pendingSection = pendingMatch[0];
-		const todoLines = pendingSection.match(/^[-*]\s+\[[ x]\]\s+.+$/gm);
-		if (todoLines) {
-			for (const line of todoLines) {
-				const completed = line.includes('[x]') || line.includes('[X]');
-				const text = line.replace(/^[-*]\s+\[[x ]\]\s+/i, '').trim();
-				if (text && text !== 'None yet.') {
-					todos.push({
-						id: `state-${todos.length}`,
-						text,
-						completed,
-						source: 'STATE.md',
-					});
-				}
+	// Read pending todos
+	const pendingDir = `${baseDir}/todos/pending`;
+	if (existsSync(pendingDir)) {
+		const files = readdirSync(pendingDir).filter((f) => f.endsWith('.md'));
+		for (const file of files) {
+			const filePath = `${pendingDir}/${file}`;
+			const { data } = readPlanningFile(filePath);
+			if (data.title) {
+				const area = data.area ? ` (${data.area})` : '';
+				todos.push({
+					id: `pending-${file}`,
+					text: `${data.title}${area}`,
+					completed: false,
+					source: filePath,
+				});
 			}
 		}
 	}
 
-	// If planning dir provided, could scan for todos in other files
-	// (deferred to future enhancement - _planningDir reserved for this)
+	// Read done todos
+	const doneDir = `${baseDir}/todos/done`;
+	if (existsSync(doneDir)) {
+		const files = readdirSync(doneDir).filter((f) => f.endsWith('.md'));
+		for (const file of files) {
+			const filePath = `${doneDir}/${file}`;
+			const { data } = readPlanningFile(filePath);
+			if (data.title) {
+				const area = data.area ? ` (${data.area})` : '';
+				todos.push({
+					id: `done-${file}`,
+					text: `${data.title}${area}`,
+					completed: true,
+					source: filePath,
+				});
+			}
+		}
+	}
 
 	return todos;
 }
