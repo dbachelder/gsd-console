@@ -16,6 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Real-time Updates** - Watch .planning/ files and refresh on changes
 - [x] **Phase 3: Actions and Editing** - Execute GSD commands and edit todos inline
 - [ ] **Phase 4: OpenCode Integration** - Spawn sessions and queue commands
+- [ ] **Phase 5: Test Coverage** - Reproducible tests with mocked filesystem to reach 80%+ coverage
 
 ## Phase Details
 
@@ -75,13 +76,14 @@ Plans:
 
 **Goal**: UI refinement for existing TUI — addressing visual polish and state issues from earlier phases
 **Depends on**: Phase 3
-**Plans**: 4 plans
+**Plans**: 5 plans
 
 Plans:
 - [x] 03.1-01-PLAN.md — Sticky footer, tab styling, and header sizing fixes (Wave 1, 3 tasks)
 - [x] 03.1-02-PLAN.md — Tab state persistence and detail toggle removal (Wave 2, 3 tasks)
 - [x] 03.1-03-PLAN.md — Plan file display (summary, task count, wave info) (Wave 3, 3 tasks)
-- [ ] 03.1-04-PLAN.md — Roadmap state persistence fix (Wave 1, 3 tasks) [gap closure]
+- [x] 03.1-04-PLAN.md — Roadmap state persistence fix (Wave 1, 3 tasks) [gap closure]
+- [ ] 03.1-05-PLAN.md — File picker navigation, progress bar removal, success criteria fix (Wave 2, 3 tasks) [gap closure]
 
 ### Phase 4: OpenCode Integration
 **Goal**: TUI can spawn and coordinate with OpenCode sessions
@@ -96,15 +98,31 @@ Plans:
 Plans:
 - [ ] 04-01: TBD
 
+### Phase 5: Test Coverage
+**Goal**: Reproducible tests with mocked filesystem to reach 80%+ line coverage
+**Depends on**: Phase 4
+**Requirements**: None (quality improvement)
+**Success Criteria** (what must be TRUE):
+  1. All tests pass consistently (no flaky tests)
+  2. Tests use mocked filesystem, not real .planning/ directory
+  3. Line coverage reaches 80% or higher
+  4. Parser functions have comprehensive test cases
+  5. Hook functions have test coverage where feasible
+**Plans**: TBD
+
+Plans:
+- [ ] 05-01: TBD (run /gsd:plan-phase 5 to break down)
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Core TUI! | 4/4 | Complete | 2026-01-25 |
 | 2. Real-time Updates | 3/3 | Complete | 2026-01-24 |
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
-| 03.1: UI polish (INSERTED) | 3/4 | In progress | - |
+| 03.1: UI polish (INSERTED) | 4/5 | In progress | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
+| 5. Test Coverage | 0/1 | Not started | - |
