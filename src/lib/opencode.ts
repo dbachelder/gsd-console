@@ -1,9 +1,14 @@
 /**
  * OpenCode SDK Client Wrapper
  * Factory functions for creating SDK clients and detecting server availability.
+ *
+ * Session detection uses local storage directly since SDK requires `opencode serve`.
  */
 
 import { spawnSync } from 'node:child_process';
+import { readdir, readFile } from 'node:fs/promises';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
 import { createOpencodeClient } from '@opencode-ai/sdk';
 
 /** Default port for OpenCode server */
@@ -15,6 +20,17 @@ export interface SessionInfo {
 	directory?: string; // Project directory
 	lastCommand?: string; // Last prompt/command run
 	createdAt?: string;
+}
+
+/** Local session storage format */
+interface LocalSession {
+	id: string;
+	directory: string;
+	title: string;
+	time: {
+		created: number;
+		updated: number;
+	};
 }
 
 /** Default base URL for OpenCode server */
@@ -51,22 +67,73 @@ export async function detectServer(port = DEFAULT_PORT): Promise<boolean> {
 }
 
 /**
+ * Read sessions from local storage.
+ * OpenCode stores sessions in ~/.local/share/opencode/storage/session/
+ */
+async function readLocalSessions(): Promise<SessionInfo[]> {
+	const storageDir = join(homedir(), '.local/share/opencode/storage/session');
+	const sessions: SessionInfo[] = [];
+
+	try {
+		const projectDirs = await readdir(storageDir);
+
+		for (const projectHash of projectDirs) {
+			const projectPath = join(storageDir, projectHash);
+			let files: string[];
+			try {
+				files = await readdir(projectPath);
+			} catch {
+				continue; // Skip if can't read directory
+			}
+
+			for (const file of files) {
+				if (!file.endsWith('.json')) continue;
+
+				try {
+					const content = await readFile(join(projectPath, file), 'utf8');
+					const session = JSON.parse(content) as LocalSession;
+					sessions.push({
+						id: session.id,
+						directory: session.directory,
+						lastCommand: session.title,
+						createdAt: new Date(session.time.created).toISOString(),
+					});
+				} catch {
+					// Skip invalid files
+				}
+			}
+		}
+	} catch {
+		// Storage dir doesn't exist
+	}
+
+	// Sort by most recently updated (createdAt is actually from time.created)
+	return sessions;
+}
+
+/**
  * List all OpenCode sessions.
- * Returns empty array if server not available.
+ * Tries SDK first (if server running), falls back to local storage.
  */
 export async function listSessions(): Promise<SessionInfo[]> {
+	// First try SDK (for when `opencode serve` is running)
 	try {
 		const client = createClient();
 		const response = await client.session.list();
-		return (response.data ?? []).map((s) => ({
-			id: s.id,
-			directory: s.directory,
-			lastCommand: s.title, // Session title shows recent activity
-			createdAt: new Date(s.time.created * 1000).toISOString(),
-		}));
+		if (!response.error && response.data && response.data.length > 0) {
+			return response.data.map((s) => ({
+				id: s.id,
+				directory: s.directory,
+				lastCommand: s.title,
+				createdAt: new Date(s.time.created * 1000).toISOString(),
+			}));
+		}
 	} catch {
-		return [];
+		// SDK failed, fall through to local storage
 	}
+
+	// Fall back to reading local storage directly
+	return readLocalSessions();
 }
 
 /**
