@@ -1,9 +1,9 @@
 ---
 status: complete
 phase: 03-actions-and-editing
-source: [03-01-SUMMARY.md, 03-02-SUMMARY.md, 03-03-SUMMARY.md]
+source: [03-01-SUMMARY.md, 03-02-SUMMARY.md, 03-03-SUMMARY.md, 03-04-SUMMARY.md]
 started: 2026-01-25T04:30:00Z
-updated: 2026-01-25T04:45:00Z
+updated: 2026-01-25T05:18:00Z
 ---
 
 ## Current Test
@@ -14,9 +14,8 @@ updated: 2026-01-25T04:45:00Z
 
 ### 1. Open Command Palette
 expected: Press `:` key. A command palette overlay appears with a text input for searching and a list of GSD commands.
-result: issue
-reported: "that works, but it's a bit too transparent"
-severity: cosmetic
+result: pass
+note: Re-tested after fix (backgroundColor="black" added)
 
 ### 2. Close Command Palette
 expected: With command palette open, press Escape. The palette closes and returns to normal TUI view.
@@ -48,9 +47,8 @@ result: pass
 
 ### 9. File Picker for Multiple Files
 expected: Press `e` when there are multiple relevant files. A file picker overlay appears letting you select which file to edit (numbered 1-9).
-result: issue
-reported: "on the roadmap screen the e key just brings up the roadmap file for editing regardless of the phase i'm on"
-severity: major
+result: pass
+note: Re-tested after fix (phase navigation wiring + context-aware getEditableFiles)
 
 ### 10. Help Overlay Actions Section
 expected: Press `?` to open help. There's an "Actions" section showing `:` (command palette) and `e` (edit) keybindings.
@@ -71,29 +69,23 @@ result: pass
 ## Summary
 
 total: 13
-passed: 11
-issues: 2
+passed: 13
+issues: 0
 pending: 0
 skipped: 0
 
 ## Gaps
 
+[All gaps resolved - re-tested and passed after 03-04 fixes]
+
+### Resolved Gaps (for reference)
+
 - truth: "Command palette overlay should be clearly readable"
-  status: failed
-  reason: "User reported: that works, but it's a bit too transparent"
-  severity: cosmetic
-  test: 1
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  status: resolved
+  fix: "Added backgroundColor='black' to CommandPalette.tsx and FilePicker.tsx"
+  verified: 2026-01-25T05:18:00Z
 
 - truth: "File picker appears when pressing e with multiple relevant files for selected phase"
-  status: failed
-  reason: "User reported: on the roadmap screen the e key just brings up the roadmap file for editing regardless of the phase i'm on"
-  severity: major
-  test: 9
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  status: resolved
+  fix: "Wired RoadmapView navigation to App state + updated getEditableFiles() for context-aware file list"
+  verified: 2026-01-25T05:18:00Z
