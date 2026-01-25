@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 ## Current Position
 
 Phase: 04 of 5 (OpenCode Integration)
-Plan: 2 of 5 in current phase (terminal handoff)
+Plan: 3 of 5 in current phase (session picker)
 Status: In progress
-Last activity: 2026-01-25 - Completed 04-02-PLAN.md (terminal handoff)
+Last activity: 2026-01-25 - Completed 04-03-PLAN.md (session picker)
 
-Progress: [████████░░] 86% (18/21 plans)
+Progress: [█████████░] 90% (19/21 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 18
+- Total plans completed: 19
 - Average duration: 4 min
-- Total execution time: 64 min
+- Total execution time: 68 min
 
 **By Phase:**
 
@@ -31,10 +31,10 @@ Progress: [████████░░] 86% (18/21 plans)
 | 2 | 3 | 8 min | 2.7 min |
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
-| 4 | 2 | 6 min | 3 min |
+| 4 | 3 | 10 min | 3.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 4 min, 2 min, 4 min, 3 min, 3 min
+- Last 5 plans: 2 min, 4 min, 3 min, 3 min, 4 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -91,6 +91,9 @@ Recent decisions affecting current work:
 - Client is null when disconnected (not undefined) (04-01)
 - spawnOpencodeSession merged into Plan 01 commit during parallel execution (04-02)
 - Warning toast for failed/cancelled OpenCode sessions, not error (04-02)
+- Use session.title as lastCommand proxy (SDK session.list doesn't include messages) (04-03)
+- Filter sessions by directory tree match (startsWith in both directions) (04-03)
+- Prefix unused state with underscore (_activeSessionId) for future use (04-03)
 
 ### Pending Todos
 
@@ -109,10 +112,10 @@ None - Phase 04 plans 03-05 pending.
 
 ### Blockers/Concerns
 
-None - Phase 04 plans 01-02 complete. Plans 03-05 ready.
+None - Phase 04 plans 01-03 complete. Plans 04-05 ready.
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 04-02-PLAN.md (terminal handoff)
+Stopped at: Completed 04-03-PLAN.md (session picker)
 Resume file: None
