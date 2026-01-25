@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 ## Current Position
 
 Phase: 05 of 5 (Test Coverage)
-Plan: 7 of 10 in current phase (OpenCode integration tests)
+Plan: 6 of 10 in current phase (File watcher and change highlight tests)
 Status: In progress
-Last activity: 2026-01-25 - Completed 05-07-PLAN.md (OpenCode integration tests)
+Last activity: 2026-01-25 - Completed 05-06-PLAN.md (file watcher and change highlight tests)
 
-Progress: [████████████░] 87% (29/33 plans)
+Progress: [████████████░] 91% (30/33 plans)
 
 ## Performance Metrics
 
@@ -32,7 +32,7 @@ Progress: [████████████░] 87% (29/33 plans)
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
 | 4 | 7 | 26 min | 3.7 min |
- | 5 | 3 | 18 min | 6.0 min |
+| 5 | 6 | 52 min | 8.7 min |
 
 **Recent Trend:**
 - Last 5 plans: 6 min, 4 min, 3 min, 6 min, 6 min
@@ -105,11 +105,14 @@ Recent decisions affecting current work:
 - Store pendingArgs alongside pendingCommand for deferred execution (04-07)
 - Bun module mocking requires inline vi.mock() in test files (05-01)
 - test/setup.ts exports vol for fixtures, individual tests mock modules (05-01)
- - Bun's preload cannot import 'bun/test' directly - tests use vi.mock() inline per file (05-01)
-- Mock functions must be declared before vi.mock() calls to be available in mock implementations (05-07)
+- Bun's preload cannot import 'bun/test' directly - tests use vi.mock() inline per file (05-01)
 - Memfs filesystem mocking via vol.fromJSON() and beforeEach vol.reset() (05-02)
 - Component wrapper pattern for hook tests with ink-testing-library (05-03)
 - useVimNav coverage 59% acceptable given re-render limitations of wrapper pattern (05-03)
+- useFileWatcher and useChangeHighlight hooks tested with 88% combined coverage (05-06)
+- vi.mock('node:fs') pattern for fs.watch mocking without real filesystem (05-06)
+- vi.useFakeTimers() and vi.advanceTimersByTime() for timing-dependent tests (05-06)
+- React state update warnings in hook tests due to calling markChanged during render - acceptable testing limitation (05-06)
 
 ### Pending Todos
 
@@ -142,6 +145,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 ## Session Continuity
 
-Last session: 2026-01-25
-Stopped at: Completed 05-07-PLAN.md (OpenCode integration tests)
+Last session: 2026-01-25 (Session continuation)
+Stopped at: Completed 05-06-PLAN.md (file watcher and change highlight tests)
 Resume file: None
