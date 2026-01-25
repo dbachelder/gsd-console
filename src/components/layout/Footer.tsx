@@ -5,7 +5,7 @@
 
 import { Box, Text } from 'ink';
 
-type TabId = 'roadmap' | 'phase' | 'todos';
+type TabId = 'roadmap' | 'phase' | 'todos' | 'background';
 
 interface FooterProps {
 	activeTab?: TabId;
@@ -33,6 +33,11 @@ const viewHints: Record<TabId, Hint[]> = {
 		{ key: '\u2191\u2193', action: 'select' },
 		{ key: 'Space', action: 'toggle' },
 		{ key: 'e', action: 'edit' },
+	],
+	background: [
+		{ key: '\u2191\u2193', action: 'navigate' },
+		{ key: 'Enter', action: 'expand' },
+		{ key: 'x', action: 'cancel' },
 	],
 };
 

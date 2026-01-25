@@ -7,7 +7,8 @@ import { Box, Text } from 'ink';
 import { useCallback, useEffect, useRef } from 'react';
 import { useTabNav } from '../../hooks/useTabNav.ts';
 import { type TabId, useTabState } from '../../hooks/useTabState.ts';
-import type { CliFlags, GsdData } from '../../lib/types.ts';
+import type { BackgroundJob, CliFlags, GsdData } from '../../lib/types.ts';
+import { BackgroundView } from '../background/BackgroundView.tsx';
 import { PhaseView } from '../phase/PhaseView.tsx';
 import { RoadmapView } from '../roadmap/RoadmapView.tsx';
 import { TodosView } from '../todos/TodosView.tsx';
@@ -29,6 +30,10 @@ interface TabLayoutProps {
 	onTodoSelect?: (todoId: string | undefined) => void;
 	/** Planning directory path for plan file parsing */
 	planningDir?: string;
+	/** Background jobs for Background tab */
+	backgroundJobs?: BackgroundJob[];
+	/** Callback to cancel a background job */
+	onCancelJob?: (jobId: string) => void;
 }
 
 export function TabLayout({
@@ -46,6 +51,8 @@ export function TabLayout({
 	selectedTodoId: _selectedTodoId,
 	onTodoSelect,
 	planningDir = '.planning',
+	backgroundJobs = [],
+	onCancelJob,
 }: TabLayoutProps) {
 	const isOnlyMode = Boolean(flags.only);
 
@@ -55,7 +62,7 @@ export function TabLayout({
 
 	// Tab navigation using hook
 	const { activeTab, setActiveTab } = useTabNav<TabId>({
-		tabs: ['roadmap', 'phase', 'todos'],
+		tabs: ['roadmap', 'phase', 'todos', 'background'],
 		initialTab: flags.only ?? 'roadmap',
 		isActive: isActive && !isOnlyMode,
 	});
@@ -107,6 +114,7 @@ export function TabLayout({
 	};
 
 	// Single view mode (--only flag) - fill terminal height
+	// Note: --only background is not a valid CLI flag, but we handle it for consistency
 	if (flags.only) {
 		return (
 			<Box flexDirection="column" flexGrow={1}>
@@ -192,6 +200,14 @@ export function TabLayout({
 						onTodoSelect={onTodoSelect}
 					/>
 				)}
+				{activeTab === 'background' && (
+					<BackgroundView
+						jobs={backgroundJobs}
+						isActive={isActive}
+						onCancel={onCancelJob ?? (() => {})}
+						showToast={showToast}
+					/>
+				)}
 			</Box>
 		</Box>
 	);
@@ -206,6 +222,7 @@ function TabBar({ activeTab }: TabBarProps) {
 		{ id: 'roadmap', label: 'Roadmap', key: '1' },
 		{ id: 'phase', label: 'Phase', key: '2' },
 		{ id: 'todos', label: 'Todos', key: '3' },
+		{ id: 'background', label: 'Background', key: '4' },
 	];
 
 	return (

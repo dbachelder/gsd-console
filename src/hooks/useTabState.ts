@@ -6,7 +6,7 @@
 
 import { useCallback, useRef } from 'react';
 
-export type TabId = 'roadmap' | 'phase' | 'todos';
+export type TabId = 'roadmap' | 'phase' | 'todos' | 'background';
 
 export interface TabState {
 	selectedPhaseNumber?: number;
@@ -22,6 +22,7 @@ const defaultTabState: Record<TabId, TabState> = {
 	roadmap: { expandedPhases: [], selectedIndex: 0, scrollOffset: 0 },
 	phase: { selectedPhaseNumber: undefined, detailLevel: 1, scrollOffset: 0 },
 	todos: { selectedTodoId: undefined, detailLevel: undefined, scrollOffset: 0 },
+	background: { scrollOffset: 0 },
 };
 
 export function useTabState() {

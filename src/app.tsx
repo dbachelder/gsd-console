@@ -112,7 +112,7 @@ export default function App({ flags }: AppProps) {
 
 	// Track active tab for footer (passed up from TabLayout would be better,
 	// but for simplicity we'll default to roadmap and let Footer handle it)
-	const [activeTab, setActiveTab] = useState<'roadmap' | 'phase' | 'todos'>(
+	const [activeTab, setActiveTab] = useState<'roadmap' | 'phase' | 'todos' | 'background'>(
 		flags.only ?? 'roadmap',
 	);
 

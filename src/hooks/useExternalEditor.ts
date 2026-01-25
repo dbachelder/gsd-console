@@ -12,7 +12,7 @@ import { join } from 'node:path';
  * Context needed to determine which files can be edited.
  */
 export interface EditContext {
-	activeTab: 'roadmap' | 'phase' | 'todos';
+	activeTab: 'roadmap' | 'phase' | 'todos' | 'background';
 	selectedPhase?: number;
 	selectedTodo?: string;
 	planningDir: string;
@@ -154,6 +154,10 @@ export function getEditableFiles(context: EditContext): string[] {
 			const todoPath = join(planningDir, 'todos', status, filename);
 			return existsSync(todoPath) ? [todoPath] : [];
 		}
+
+		case 'background':
+			// Background tab has no editable files
+			return [];
 
 		default:
 			return [];
