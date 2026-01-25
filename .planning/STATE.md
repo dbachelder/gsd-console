@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 3 complete, ready for Phase 4
+**Current focus:** Phase 3 gap closure complete, ready for UAT re-test
 
 ## Current Position
 
-Phase: 3 of 4 (Actions and Editing) - Complete
-Plan: 3 of 3 in current phase
-Status: Phase verified and complete
-Last activity: 2026-01-25 - Completed quick task 001: Replace verified indicator with UAT
+Phase: 3 of 4 (Actions and Editing) - Gap Closure Complete
+Plan: 4 of 4 in current phase (gap closure plan)
+Status: UAT gaps addressed, ready for re-test
+Last activity: 2026-01-25 - Completed 03-04-PLAN.md (gap closure)
 
 Progress: [████████░░] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
+- Total plans completed: 11
 - Average duration: 4 min
-- Total execution time: 38 min
+- Total execution time: 42 min
 
 **By Phase:**
 
@@ -29,10 +29,10 @@ Progress: [████████░░] 75%
 |-------|-------|-------|----------|
 | 1 | 4 | 19 min | 4.75 min |
 | 2 | 3 | 8 min | 2.7 min |
-| 3 | 3 | 11 min | 3.7 min |
+| 3 | 4 | 15 min | 3.75 min |
 
 **Recent Trend:**
-- Last 5 plans: 2 min, 3 min, 3 min, 5 min, 3 min
+- Last 5 plans: 3 min, 3 min, 5 min, 3 min, 4 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -66,6 +66,9 @@ Recent decisions affecting current work:
 - Use alternate screen escape sequences for clean editor handoff
 - Lift selection state to App.tsx for editor context awareness
 - Arrow symbols in footer instead of j/k for cleaner appearance
+- backgroundColor='black' for overlay readability (03-04)
+- Fire onPhaseNavigate on j/k navigation for editor context (03-04)
+- Include ROADMAP.md as last option when phase files available (03-04)
 
 ### Pending Todos
 
@@ -88,10 +91,10 @@ Recent decisions affecting current work:
 
 ### Blockers/Concerns
 
-None - Phase 3 complete, ready for Phase 4.
+None - Gap closure complete, ready for UAT re-test.
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Phase 3 complete and verified
+Stopped at: Completed 03-04-PLAN.md (gap closure)
 Resume file: None
