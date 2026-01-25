@@ -390,3 +390,28 @@ describe('readPlanningFile', () => {
 		expect(content).toBeDefined();
 	});
 });
+
+describe("parsePlanFiles", () => {
+	beforeEach(() => {
+		vol.reset();
+	});
+
+	test("reads plan files from phase directory", () => {
+		const roadmapContent = String.raw`### Phase 1: Core TUI
+Plans: 1 plan
+
+Plans:
+- [ ] 01-01-PLAN.md - Test`;
+
+		vol.fromJSON({
+			".planning/ROADMAP.md": roadmapContent,
+			".planning/phases/01-core-tui/01-01-PLAN.md": "---\nplan: 1\n---\n",
+		});
+
+		const plans = parsePlanFiles(".planning/phases/01-core-tui", 1, ".planning");
+
+		expect(plans).toHaveLength(1);
+		expect(plans[0]?.id).toBe("01");
+		expect(plans[0]?.summary).toBe("Test plan");
+	});
+});

@@ -358,13 +358,15 @@ function readRoadmapPlans(roadmapPath: string, phaseId: string): Map<string, str
 		// Find the phase section (handles both integer and decimal phases like "03.1")
 		// Need to match across multiple lines between "Phase X:" and "Plans:" and then content until next ###
 		const sectionRegex = new RegExp(
-			`### Phase ${escapedPhaseId}:[\\s\\S]*?Plans:[\\s\\S]*?(?=###|$)`,
+			`### Phase ${escapedPhaseId}:[\\s\\S]*?\\*\\*\\*Plans\\*\\*:[\\s\\S]*?(?=###|$)`,
 			'i',
 		);
 		const section = roadmapContent.match(sectionRegex)?.[0] ?? '';
 
 		// Match plan lines: `- [x] 03.1-01-PLAN.md — Summary text`
-		const planRegex = /- \[.\] ([\d.]+-\d+-PLAN\.md)\s*[—-]\s*(.+)/g;
+		// Capture filename in group 1, summary in group 2
+		// Use non-capturing group (?:) for separator to exclude it from summary
+		const planRegex = /- \[.\] ([\d.]+-\d+-PLAN\.md)\s+(?:[-—:])\s*(.+)/g;
 		const matches = section.matchAll(planRegex);
 
 		for (const match of matches) {
@@ -386,8 +388,9 @@ function readRoadmapPlans(roadmapPath: string, phaseId: string): Map<string, str
  * Count task elements in PLAN.md content
  */
 function parseTaskCount(content: string): number {
-	// Count <task> tags in PLAN.md content
-	const taskMatches = content.match(/<task/g);
+	// Count <task> opening tags, excluding <tasks> and </task>
+	// Match <task followed by >, space, or newline (but not 's' for <tasks> or '/' for </task>)
+	const taskMatches = content.match(/<task[>\s\n]/g);
 	return taskMatches?.length ?? 0;
 }
 
