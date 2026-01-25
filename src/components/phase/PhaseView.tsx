@@ -194,6 +194,35 @@ export function PhaseView({
 			<Box flexDirection="column" borderStyle="single" paddingX={1}>
 				{/* Level 1: Goal + Success Criteria */}
 				<GoalSection goal={phase.goal} />
+
+				{/* Plan list (inside the box, below goal) */}
+				{planInfos.length > 0 && (
+					<Box flexDirection="column" marginBottom={1}>
+						<Text bold dimColor>
+							Plans:
+						</Text>
+						{planInfos.map((plan) => (
+							<Box key={plan.id} flexDirection="column" paddingLeft={2}>
+								<Box>
+									<Text color={plan.completed ? 'green' : undefined}>
+										[{plan.completed ? '✓' : ' '}]{' '}
+									</Text>
+									<Text>{plan.summary}</Text>
+								</Box>
+								{/* Wave/task info on second line at detail level 2+ */}
+								{detailLevel >= 2 && (
+									<Box paddingLeft={4}>
+										<Text dimColor>
+											(Wave {plan.wave}, {plan.taskCount} task{plan.taskCount !== 1 ? 's' : ''})
+										</Text>
+									</Box>
+								)}
+							</Box>
+						))}
+					</Box>
+				)}
+
+				{/* Success Criteria (secondary) */}
 				<CriteriaList criteria={phase.successCriteria} />
 
 				{/* Level 2: Requirements + Dependencies */}
@@ -220,25 +249,6 @@ export function PhaseView({
 					</Box>
 				)}
 			</Box>
-
-			{/* Plan list */}
-			{planInfos.length > 0 && (
-				<Box flexDirection="column" marginTop={1}>
-					<Text bold dimColor>
-						Plans:
-					</Text>
-					{planInfos.map((plan) => (
-						<Box key={plan.id} paddingLeft={2}>
-							<Text dimColor>{plan.id}: </Text>
-							<Text>{plan.summary}</Text>
-							<Text dimColor>
-								{' '}
-								(Wave {plan.wave}, {plan.taskCount} task{plan.taskCount !== 1 ? 's' : ''})
-							</Text>
-						</Box>
-					))}
-				</Box>
-			)}
 
 			{/* Navigation hints */}
 			<Box marginTop={1}>

@@ -329,6 +329,7 @@ export interface PlanInfo {
 	summary: string;
 	taskCount: number;
 	wave: number;
+	completed: boolean; // True if SUMMARY.md exists for this plan
 }
 
 /**
@@ -362,11 +363,11 @@ function readRoadmapPlans(roadmapPath: string, phaseId: string): Map<string, str
 
 		for (const match of matches) {
 			const planFile = match[1] ?? ''; // e.g., "03.1-01-PLAN.md"
-			const summary = match[2] ?? ''; // e.g., "Sticky footer, tab styling..."
+			const summary = (match[2] ?? '').trim(); // e.g., "Sticky footer, tab styling..."
 			// Extract plan number from filename
 			const planIdMatch = planFile.match(/-(\d+)-PLAN\.md$/);
 			const planId = planIdMatch?.[1] ?? '';
-			if (planId && summary) summaryMap.set(planId, summary);
+			if (planId && summary) summaryMap.set(planId, summary.trim());
 		}
 	} catch {
 		// Return empty map if ROADMAP.md doesn't exist or parsing fails
@@ -424,11 +425,16 @@ export function parsePlanFiles(
 			const filePath = `${phaseDir}/${file}`;
 			const { content, data } = readPlanningFile(filePath);
 
+			// Check if SUMMARY.md exists for this plan (indicates completion)
+			const summaryFile = file.replace('-PLAN.md', '-SUMMARY.md');
+			const completed = existsSync(`${phaseDir}/${summaryFile}`);
+
 			plans.push({
 				id: planId,
-				summary: summaryMap.get(planId) ?? 'No summary available',
+				summary: (summaryMap.get(planId) ?? 'No summary available').trim(),
 				taskCount: parseTaskCount(content),
 				wave: typeof data.wave === 'number' ? data.wave : 1,
+				completed,
 			});
 		}
 	} catch {
