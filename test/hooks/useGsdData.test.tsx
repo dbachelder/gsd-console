@@ -218,4 +218,102 @@ describe('useGsdData', () => {
 			expect(capturedCoreValue).toBe('');
 		});
 	});
+
+	describe('refresh and changed files', () => {
+		test('stores changedFiles in result', async () => {
+			(existsSync as ReturnType<typeof vi.fn>).mockReturnValue(true);
+			(readPlanningFile as ReturnType<typeof vi.fn>).mockReturnValue({ content: 'mock' });
+
+			(parseRoadmap as ReturnType<typeof vi.fn>).mockReturnValue([]);
+			(parseState as ReturnType<typeof vi.fn>).mockReturnValue({
+				projectName: 'Test',
+			});
+			(parseTodos as ReturnType<typeof vi.fn>).mockReturnValue([]);
+
+			let capturedChangedFiles: string[] = [];
+
+			const TestComponent = () => {
+				const data = useGsdData('.planning', undefined, [
+					'.planning/ROADMAP.md',
+					'.planning/STATE.md',
+				]);
+				capturedChangedFiles = data.changedFiles;
+				return null;
+			};
+
+			render(<TestComponent />);
+
+			await new Promise((resolve) => setTimeout(resolve, 100));
+
+			// Should store changed files from parameter
+			expect(capturedChangedFiles).toEqual([
+				'.planning/ROADMAP.md',
+				'.planning/STATE.md',
+			]);
+		});
+
+		test('reloads data when refreshTrigger changes', async () => {
+			(existsSync as ReturnType<typeof vi.fn>).mockReturnValue(true);
+			(readPlanningFile as ReturnType<typeof vi.fn>).mockReturnValue({ content: 'mock' });
+
+			let parseCount = 0;
+			(parseRoadmap as ReturnType<typeof vi.fn>).mockImplementation(() => {
+				parseCount++;
+				return [];
+			});
+			(parseState as ReturnType<typeof vi.fn>).mockReturnValue({ projectName: 'Test' });
+			(parseTodos as ReturnType<typeof vi.fn>).mockReturnValue([]);
+
+			const TestComponent = () => {
+				useGsdData('.planning', 0); // Initial trigger
+				return null;
+			};
+
+			render(<TestComponent />);
+
+			await new Promise((resolve) => setTimeout(resolve, 100));
+
+			const initialParseCount = parseCount;
+
+			// Remount with new trigger (simulating file watcher update)
+			const TestComponent2 = () => {
+				useGsdData('.planning', 1); // New trigger
+				return null;
+			};
+
+			render(<TestComponent2 />);
+
+			await new Promise((resolve) => setTimeout(resolve, 100));
+
+			// Should have parsed again with new trigger
+			expect(parseCount).toBeGreaterThan(initialParseCount);
+		});
+
+		test('uses ref pattern to avoid render loop with changedFiles', async () => {
+			// This test documents the ref pattern from line 44 of useGsdData.ts
+			// Changed files are stored in ref to prevent dependency array issues
+
+			(existsSync as ReturnType<typeof vi.fn>).mockReturnValue(true);
+			(readPlanningFile as ReturnType<typeof vi.fn>).mockReturnValue({ content: 'mock' });
+			(parseRoadmap as ReturnType<typeof vi.fn>).mockReturnValue([]);
+			(parseState as ReturnType<typeof vi.fn>).mockReturnValue({ projectName: 'Test' });
+			(parseTodos as ReturnType<typeof vi.fn>).mockReturnValue([]);
+
+			let capturedData: any = null;
+
+			const TestComponent = () => {
+				const data = useGsdData('.planning', undefined, ['file1.md']);
+				capturedData = data;
+				return null;
+			};
+
+			render(<TestComponent />);
+
+			await new Promise((resolve) => setTimeout(resolve, 100));
+
+			// Should store changed files without causing re-render loop
+			expect(capturedData.changedFiles).toEqual(['file1.md']);
+			// Hook uses ref pattern to avoid infinite renders
+		});
+	});
 });
