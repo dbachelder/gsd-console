@@ -72,15 +72,14 @@ Plans:
 
 ### Phase 03.1: UI polish (INSERTED)
 
-**Goal:** [Urgent work - to be planned]
-**Depends on:** Phase 3
-**Plans:** 0 plans
+**Goal**: UI refinement for existing TUI — addressing visual polish and state issues from earlier phases
+**Depends on**: Phase 3
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 03.1 to break down)
-
-**Details:**
-[To be added during planning]
+- [ ] 03.1-01-PLAN.md - Sticky footer and tab styling improvements
+- [ ] 03.1-02-PLAN.md - Tab state persistence (selected phase, detail level, scroll position)
+- [ ] 03.1-03-PLAN.md - Plan file display (summary, task count, wave info)
 
 ### Phase 4: OpenCode Integration
 **Goal**: TUI can spawn and coordinate with OpenCode sessions
@@ -105,5 +104,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Core TUI! | 4/4 | Complete | 2026-01-25 |
 | 2. Real-time Updates | 3/3 | Complete | 2026-01-24 |
 | 3. Actions and Editing | 3/3 | Complete | 2026-01-25 |
-| 03.1: UI polish (INSERTED) | 0/0 | Not planned | - |
+| 03.1: UI polish (INSERTED) | 0/3 | Not started | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
