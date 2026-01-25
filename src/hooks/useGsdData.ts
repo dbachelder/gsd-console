@@ -5,7 +5,7 @@
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { parseRoadmap, parseState, parseTodos, readPlanningFile } from '../lib/parser.ts';
 import type { GsdData, ProjectState } from '../lib/types.ts';
 
@@ -39,6 +39,10 @@ export function useGsdData(
 	changedFiles: string[] = [],
 ): GsdData {
 	const [data, setData] = useState<GsdData>(defaultData);
+	// Use ref to store changedFiles, update outside effect to avoid dependency
+	// This prevents the render loop caused by changedFiles array reference changing
+	const changedFilesRef = useRef<string[]>([]);
+	changedFilesRef.current = changedFiles;
 
 	useEffect(() => {
 		// refreshTrigger is intentionally used only as a dependency to force re-runs
@@ -112,7 +116,7 @@ export function useGsdData(
 					state,
 					loading: false,
 					error: null,
-					changedFiles,
+					changedFiles: changedFilesRef.current,
 				});
 			} catch (error) {
 				setData({
@@ -124,7 +128,7 @@ export function useGsdData(
 		};
 
 		loadData();
-	}, [planningDir, refreshTrigger, changedFiles]);
+	}, [planningDir, refreshTrigger]); // changedFiles removed - use ref instead to avoid render loop
 
 	return data;
 }
