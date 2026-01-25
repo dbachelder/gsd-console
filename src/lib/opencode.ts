@@ -75,12 +75,19 @@ export async function listSessions(): Promise<SessionInfo[]> {
  */
 export async function getProjectSessions(projectDir: string): Promise<SessionInfo[]> {
 	const sessions = await listSessions();
-	// Filter to sessions whose directory starts with or equals projectDir
-	// This catches subdirectories of the current project
+
+	// Normalize paths: remove trailing slashes for consistent comparison
+	const normalizedProjectDir = projectDir.replace(/\/+$/, '');
+
 	return sessions.filter((s) => {
 		if (!s.directory) return false;
-		// Session is in the same directory tree as our project
-		return s.directory.startsWith(projectDir) || projectDir.startsWith(s.directory);
+		const normalizedSessionDir = s.directory.replace(/\/+$/, '');
+
+		// Session is in project tree OR project is in session tree
+		return (
+			normalizedSessionDir.startsWith(normalizedProjectDir) ||
+			normalizedProjectDir.startsWith(normalizedSessionDir)
+		);
 	});
 }
 
