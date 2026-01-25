@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 04 OpenCode Integration in progress
+**Current focus:** Phase 04 OpenCode Integration - gap closure complete
 
 ## Current Position
 
 Phase: 04 of 5 (OpenCode Integration)
-Plan: 6 of 7 in current phase (gap closure - footer and session detection)
-Status: Gap closure in progress
-Last activity: 2026-01-25 - Completed 04-06-PLAN.md (footer hint + session detection fix)
+Plan: 7 of 7 in current phase (gap closure - tab completion)
+Status: Phase 04 gap closure complete
+Last activity: 2026-01-25 - Completed 04-07-PLAN.md (tab completion with arguments)
 
-Progress: [█████████░] 100% (22/23 plans)
+Progress: [██████████] 100% (23/23 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 21
+- Total plans completed: 23
 - Average duration: 4 min
-- Total execution time: 77 min
+- Total execution time: 84 min
 
 **By Phase:**
 
@@ -31,10 +31,10 @@ Progress: [█████████░] 100% (22/23 plans)
 | 2 | 3 | 8 min | 2.7 min |
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
-| 4 | 5 | 19 min | 3.8 min |
+| 4 | 7 | 26 min | 3.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 3 min, 3 min, 4 min, 3 min, 6 min
+- Last 5 plans: 3 min, 4 min, 3 min, 2 min, 5 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -99,13 +99,16 @@ Recent decisions affecting current work:
 - Enable event subscription only when pending jobs exist or job running (04-04)
 - Add connect hint to commonHints for global visibility (04-06)
 - Normalize paths by removing trailing slashes for session detection (04-06)
+- Replace @inkjs/ui TextInput with custom controlled input for Tab intercept (04-07)
+- Fuzzy search only on command name portion (before space) for args support (04-07)
+- Store pendingArgs alongside pendingCommand for deferred execution (04-07)
 
 ### Pending Todos
 
-Phase 04 gaps (identified during UAT):
-1. **Tab completion with arguments** — Command palette should allow Tab to complete command name and let user type arguments (e.g., `plan-phase 4`) - addressed in 04-07-PLAN.md
-2. ~~**Session detection not working**~~ — Fixed in 04-06 (path normalization)
-3. ~~**Footer missing 'c' hint**~~ — Fixed in 04-06 (added to commonHints)
+Phase 04 gaps - ALL CLOSED:
+1. ~~**Tab completion with arguments**~~ - Fixed in 04-07 (custom controlled input)
+2. ~~**Session detection not working**~~ - Fixed in 04-06 (path normalization)
+3. ~~**Footer missing 'c' hint**~~ - Fixed in 04-06 (added to commonHints)
 
 ### Roadmap Evolution
 
@@ -120,10 +123,10 @@ Phase 04 gaps (identified during UAT):
 
 ### Blockers/Concerns
 
-Phase 04 gap closure in progress: 2/3 gaps fixed (04-06), 1 remaining (04-07 tab completion).
+Phase 04 complete - all gaps closed. Ready for Phase 05 (Test Coverage).
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 04-06-PLAN.md (gap closure - footer hint + session detection)
+Stopped at: Completed 04-07-PLAN.md (tab completion with arguments)
 Resume file: None
