@@ -29,6 +29,7 @@
 	},
 	"dependencies": {
 		"@inkjs/ui": "^2.0.0",
+		"@nozbe/microfuzz": "^1.0.0",
 		"fullscreen-ink": "^0.1.0",
 		"gray-matter": "^4.0.3",
 		"ink": "^6.6.0",
