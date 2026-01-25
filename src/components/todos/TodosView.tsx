@@ -4,7 +4,7 @@
  */
 
 import { Box, Text, useInput } from 'ink';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useVimNav } from '../../hooks/useVimNav.ts';
 import type { Todo } from '../../lib/types.ts';
 import { TodoItem } from './TodoItem.tsx';
@@ -15,6 +15,8 @@ interface TodosViewProps {
 	isTodoHighlighted?: (todoId: string) => boolean;
 	isTodoFading?: (todoId: string) => boolean;
 	showToast?: (message: string, type?: 'info' | 'success' | 'warning') => void;
+	/** Called when selection changes, reports todo ID to parent */
+	onTodoSelect?: (todoId: string | undefined) => void;
 }
 
 export function TodosView({
@@ -23,6 +25,7 @@ export function TodosView({
 	isTodoHighlighted,
 	isTodoFading,
 	showToast,
+	onTodoSelect,
 }: TodosViewProps) {
 	// Filter state: show completed todos or not
 	const [showCompleted, setShowCompleted] = useState(true);
@@ -53,6 +56,12 @@ export function TodosView({
 		onSelect: () => {}, // No action on select for now (will be used in Phase 3 for editing)
 		onBack: () => {},
 	});
+
+	// Notify parent of selection changes for editor integration
+	useEffect(() => {
+		const selectedTodo = sortedTodos[selectedIndex];
+		onTodoSelect?.(selectedTodo?.id);
+	}, [selectedIndex, sortedTodos, onTodoSelect]);
 
 	// Handle f key for filter toggle, d for detail toggle, Space for todo toggle
 	useInput(

@@ -11,9 +11,11 @@ import { Header } from './components/layout/Header.tsx';
 import { HelpOverlay } from './components/layout/HelpOverlay.tsx';
 import { TabLayout } from './components/layout/TabLayout.tsx';
 import { CommandPalette } from './components/palette/CommandPalette.tsx';
+import { FilePicker } from './components/picker/FilePicker.tsx';
 import { ToastContainer } from './components/toast/ToastContainer.tsx';
 import { useChangeHighlight } from './hooks/useChangeHighlight.ts';
 import { useCommandPalette } from './hooks/useCommandPalette.ts';
+import { useExternalEditor } from './hooks/useExternalEditor.ts';
 import { useFileWatcher } from './hooks/useFileWatcher.ts';
 import { useGsdData } from './hooks/useGsdData.ts';
 import { useToast } from './hooks/useToast.ts';
@@ -112,6 +114,22 @@ export default function App({ flags }: AppProps) {
 		flags.only ?? 'roadmap',
 	);
 
+	// Lifted selection state for editor integration
+	const [selectedPhaseNumber, setSelectedPhaseNumber] = useState<number>(flags.phase ?? 1);
+	const [selectedTodoId, setSelectedTodoId] = useState<string | undefined>();
+
+	// External editor integration
+	const editorContext = {
+		activeTab,
+		selectedPhase: selectedPhaseNumber,
+		selectedTodo: selectedTodoId,
+		planningDir,
+	};
+	const { files: editableFiles, open: openEditor, needsPicker } = useExternalEditor(editorContext);
+
+	// File picker state
+	const [showFilePicker, setShowFilePicker] = useState(false);
+
 	// Toast notifications
 	const { toasts, show: showToast } = useToast();
 
@@ -119,8 +137,8 @@ export default function App({ flags }: AppProps) {
 	const [filteredCount, setFilteredCount] = useState(commands.length);
 	const palette = useCommandPalette({ commands, filteredCount });
 
-	// Global input handlers (q to quit, ? to toggle help)
-	// Disabled when command palette is open
+	// Global input handlers (q to quit, ? to toggle help, e to edit)
+	// Disabled when command palette or file picker is open
 	useInput(
 		(input) => {
 			if (input === 'q') {
@@ -130,8 +148,20 @@ export default function App({ flags }: AppProps) {
 			if (input === '?') {
 				setShowHelp((prev) => !prev);
 			}
+			if (input === 'e') {
+				// Open editor for current context
+				if (editableFiles.length === 0) {
+					showToast('No file to edit in current context', 'warning');
+				} else if (needsPicker) {
+					// Multiple files - show picker
+					setShowFilePicker(true);
+				} else {
+					// Single file - open directly
+					openEditor();
+				}
+			}
 		},
-		{ isActive: palette.mode === 'closed' },
+		{ isActive: palette.mode === 'closed' && !showFilePicker },
 	);
 
 	// Loading state
@@ -181,13 +211,17 @@ export default function App({ flags }: AppProps) {
 			<TabLayout
 				data={data}
 				flags={flags}
-				isActive={!showHelp && palette.mode === 'closed'}
+				isActive={!showHelp && palette.mode === 'closed' && !showFilePicker}
 				onTabChange={setActiveTab}
 				isPhaseHighlighted={(num) => isHighlighted(`phase-${num}`)}
 				isPhaseFading={(num) => isFading(`phase-${num}`)}
 				isTodoHighlighted={(id) => isHighlighted(`todo-${id}`)}
 				isTodoFading={(id) => isFading(`todo-${id}`)}
 				showToast={showToast}
+				selectedPhaseNumber={selectedPhaseNumber}
+				onPhaseSelect={setSelectedPhaseNumber}
+				selectedTodoId={selectedTodoId}
+				onTodoSelect={setSelectedTodoId}
 			/>
 			<Footer activeTab={activeTab} onlyMode={flags.only} />
 
@@ -208,6 +242,20 @@ export default function App({ flags }: AppProps) {
 						onExecute={palette.execute}
 						showToast={showToast}
 						onClose={palette.close}
+					/>
+				</Box>
+			)}
+
+			{/* File picker overlay for multi-file editing */}
+			{showFilePicker && (
+				<Box position="absolute" marginTop={3} marginLeft={2}>
+					<FilePicker
+						files={editableFiles}
+						onSelect={(path) => {
+							setShowFilePicker(false);
+							openEditor(path);
+						}}
+						onClose={() => setShowFilePicker(false)}
 					/>
 				</Box>
 			)}

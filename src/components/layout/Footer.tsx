@@ -17,26 +17,27 @@ interface Hint {
 	action: string;
 }
 
-// Context-sensitive hints per view
+// Context-sensitive hints per view - using arrow symbols for navigation
 const viewHints: Record<TabId, Hint[]> = {
 	roadmap: [
-		{ key: 'j/k', action: 'select' },
-		{ key: 'l', action: 'expand' },
-		{ key: 'd', action: 'details' },
+		{ key: '\u2191\u2193', action: 'select' },
+		{ key: '\u2192', action: 'expand' },
+		{ key: 'e', action: 'edit' },
 	],
 	phase: [
-		{ key: 'j/k', action: 'scroll' },
+		{ key: '\u2191\u2193', action: 'scroll' },
 		{ key: '[/]', action: 'switch phase' },
-		{ key: 'd', action: 'details' },
+		{ key: 'e', action: 'edit' },
 	],
 	todos: [
-		{ key: 'j/k', action: 'select' },
-		{ key: 'f', action: 'filter' },
-		{ key: 'd', action: 'details' },
+		{ key: '\u2191\u2193', action: 'select' },
+		{ key: 'Space', action: 'toggle' },
+		{ key: 'e', action: 'edit' },
 	],
 };
 
 const commonHints: Hint[] = [
+	{ key: ':', action: 'commands' },
 	{ key: '?', action: 'help' },
 	{ key: 'q', action: 'quit' },
 ];
@@ -46,12 +47,7 @@ export function Footer({ activeTab = 'roadmap', onlyMode }: FooterProps) {
 	const contextHints = viewHints[currentTab] ?? viewHints.roadmap;
 
 	// Tab navigation hints (only in tabbed mode)
-	const tabHints: Hint[] = onlyMode
-		? []
-		: [
-				{ key: 'Tab', action: 'switch' },
-				{ key: '1/2/3', action: 'jump' },
-			];
+	const tabHints: Hint[] = onlyMode ? [] : [{ key: 'Tab', action: 'tabs' }];
 
 	const allHints = [...contextHints, ...tabHints, ...commonHints];
 

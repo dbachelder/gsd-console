@@ -4,7 +4,7 @@
  */
 
 import { Box, Text } from 'ink';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTabNav } from '../../hooks/useTabNav.ts';
 import type { CliFlags, GsdData } from '../../lib/types.ts';
 import { PhaseView } from '../phase/PhaseView.tsx';
@@ -23,6 +23,11 @@ interface TabLayoutProps {
 	isTodoHighlighted?: (todoId: string) => boolean;
 	isTodoFading?: (todoId: string) => boolean;
 	showToast?: (message: string, type?: 'info' | 'success' | 'warning') => void;
+	/** Lifted selection state from App */
+	selectedPhaseNumber: number;
+	onPhaseSelect: (phaseNumber: number) => void;
+	selectedTodoId?: string;
+	onTodoSelect?: (todoId: string | undefined) => void;
 }
 
 export function TabLayout({
@@ -35,11 +40,12 @@ export function TabLayout({
 	isTodoHighlighted,
 	isTodoFading,
 	showToast,
+	selectedPhaseNumber,
+	onPhaseSelect,
+	selectedTodoId: _selectedTodoId,
+	onTodoSelect,
 }: TabLayoutProps) {
 	const isOnlyMode = Boolean(flags.only);
-
-	// Track selected phase number (for Phase view navigation)
-	const [selectedPhaseNumber, setSelectedPhaseNumber] = useState<number>(flags.phase ?? 1);
 
 	// Tab navigation using hook
 	const { activeTab, setActiveTab } = useTabNav<TabId>({
@@ -59,7 +65,7 @@ export function TabLayout({
 
 	// Handle phase selection from roadmap
 	const handleSelectPhase = (phaseNumber: number) => {
-		setSelectedPhaseNumber(phaseNumber);
+		onPhaseSelect(phaseNumber);
 		setActiveTab('phase');
 	};
 
@@ -82,7 +88,7 @@ export function TabLayout({
 						phase={selectedPhase}
 						allPhases={data.phases}
 						isActive={isActive}
-						onPhaseChange={setSelectedPhaseNumber}
+						onPhaseChange={onPhaseSelect}
 					/>
 				)}
 				{flags.only === 'todos' && (
@@ -92,6 +98,7 @@ export function TabLayout({
 						isTodoHighlighted={isTodoHighlighted}
 						isTodoFading={isTodoFading}
 						showToast={showToast}
+						onTodoSelect={onTodoSelect}
 					/>
 				)}
 			</Box>
@@ -121,7 +128,7 @@ export function TabLayout({
 						phase={selectedPhase}
 						allPhases={data.phases}
 						isActive={isActive}
-						onPhaseChange={setSelectedPhaseNumber}
+						onPhaseChange={onPhaseSelect}
 					/>
 				)}
 				{activeTab === 'todos' && (
@@ -131,6 +138,7 @@ export function TabLayout({
 						isTodoHighlighted={isTodoHighlighted}
 						isTodoFading={isTodoFading}
 						showToast={showToast}
+						onTodoSelect={onTodoSelect}
 					/>
 				)}
 			</Box>
