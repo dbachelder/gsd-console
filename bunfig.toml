@@ -4,3 +4,4 @@ coverageThreshold = 0.8
 coverageReporter = ["text", "lcov"]
 coverageDir = "coverage"
 coverageSkipTestFiles = true
+preload = ["./test/setup.ts"]
