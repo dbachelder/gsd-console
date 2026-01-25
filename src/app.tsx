@@ -6,6 +6,7 @@
 import { Spinner } from '@inkjs/ui';
 import { Box, Text, useApp, useInput } from 'ink';
 import { useCallback, useEffect, useState } from 'react';
+import { ExecutionModePrompt } from './components/background/ExecutionModePrompt.tsx';
 import { Footer } from './components/layout/Footer.tsx';
 import { Header } from './components/layout/Header.tsx';
 import { HelpOverlay } from './components/layout/HelpOverlay.tsx';
@@ -14,15 +15,17 @@ import { CommandPalette } from './components/palette/CommandPalette.tsx';
 import { FilePicker } from './components/picker/FilePicker.tsx';
 import { SessionPicker } from './components/picker/SessionPicker.tsx';
 import { ToastContainer } from './components/toast/ToastContainer.tsx';
+import { useBackgroundJobs } from './hooks/useBackgroundJobs.ts';
 import { useChangeHighlight } from './hooks/useChangeHighlight.ts';
 import { useCommandPalette } from './hooks/useCommandPalette.ts';
 import { useExternalEditor } from './hooks/useExternalEditor.ts';
 import { useFileWatcher } from './hooks/useFileWatcher.ts';
 import { useGsdData } from './hooks/useGsdData.ts';
 import { useToast } from './hooks/useToast.ts';
+import type { Command } from './lib/commands.ts';
 import { commands } from './lib/commands.ts';
 import { getProjectSessions, type SessionInfo, spawnOpencodeSession } from './lib/opencode.ts';
-import type { CliFlags, GsdData } from './lib/types.ts';
+import type { CliFlags, ExecutionMode, GsdData } from './lib/types.ts';
 
 interface AppProps {
 	flags: CliFlags;
@@ -136,18 +139,106 @@ export default function App({ flags }: AppProps) {
 	const [showSessionPicker, setShowSessionPicker] = useState(false);
 	const [sessions, setSessions] = useState<SessionInfo[]>([]);
 	const [sessionsLoading, setSessionsLoading] = useState(false);
-	const [_activeSessionId, setActiveSessionId] = useState<string | undefined>();
-	// Note: activeSessionId will be used in future plans for command execution
+	const [activeSessionId, setActiveSessionId] = useState<string | undefined>();
+
+	// Execution mode prompt state
+	const [showModePrompt, setShowModePrompt] = useState(false);
+	const [pendingCommand, setPendingCommand] = useState<Command | null>(null);
 
 	// Toast notifications
 	const { toasts, show: showToast } = useToast();
+
+	// Background jobs (uses toast for notifications)
+	const {
+		jobs: backgroundJobs,
+		add: addBackgroundJob,
+		cancel: cancelBackgroundJob,
+	} = useBackgroundJobs({
+		sessionId: activeSessionId,
+		showToast,
+	});
 
 	// Command palette - need to track filtered count for navigation bounds
 	const [filteredCount, setFilteredCount] = useState(commands.length);
 	const palette = useCommandPalette({ commands, filteredCount });
 
+	/**
+	 * Handle command selection from palette.
+	 * Queueable commands show execution mode prompt, others execute immediately.
+	 */
+	const handleCommandSelect = useCallback(
+		(command: Command) => {
+			if (command.queueable) {
+				// Show execution mode prompt for queueable commands
+				setPendingCommand(command);
+				setShowModePrompt(true);
+			} else {
+				// Execute non-queueable commands immediately
+				command.action(showToast);
+			}
+		},
+		[showToast],
+	);
+
+	/**
+	 * Handle execution mode selection.
+	 * Routes command to appropriate execution path based on mode.
+	 */
+	const handleModeSelect = useCallback(
+		(mode: ExecutionMode) => {
+			setShowModePrompt(false);
+			if (!pendingCommand) return;
+
+			const commandName = pendingCommand.name;
+
+			switch (mode) {
+				case 'headless':
+					// Add to background jobs for headless execution
+					addBackgroundJob(commandName);
+					break;
+
+				case 'interactive':
+					// Spawn new OpenCode session with this command
+					{
+						const success = spawnOpencodeSession(`/gsd:${commandName}`);
+						if (success) {
+							showToast('OpenCode session completed', 'success');
+						} else {
+							showToast('OpenCode session failed or was cancelled', 'warning');
+						}
+					}
+					break;
+
+				case 'primary':
+					// Send to existing connected session
+					if (!activeSessionId) {
+						showToast("No session connected. Press 'c' to connect.", 'warning');
+						setPendingCommand(null);
+						return;
+					}
+					// For now, queue as background job with the connected session
+					addBackgroundJob(commandName);
+					break;
+			}
+
+			setPendingCommand(null);
+		},
+		[pendingCommand, activeSessionId, addBackgroundJob, showToast],
+	);
+
+	/**
+	 * Cancel the execution mode prompt.
+	 */
+	const handleModeCancel = useCallback(() => {
+		setShowModePrompt(false);
+		setPendingCommand(null);
+	}, []);
+
 	// Global input handlers (q to quit, ? to toggle help, e to edit, c to connect)
-	// Disabled when command palette, file picker, or session picker is open
+	// Disabled when any overlay is open
+	const isAnyOverlayOpen =
+		palette.mode === 'open' || showFilePicker || showSessionPicker || showModePrompt;
+
 	useInput(
 		(input) => {
 			if (input === 'q') {
@@ -179,7 +270,7 @@ export default function App({ flags }: AppProps) {
 				});
 			}
 		},
-		{ isActive: palette.mode === 'closed' && !showFilePicker && !showSessionPicker },
+		{ isActive: !isAnyOverlayOpen },
 	);
 
 	// Loading state
@@ -230,7 +321,7 @@ export default function App({ flags }: AppProps) {
 				<TabLayout
 					data={data}
 					flags={flags}
-					isActive={!showHelp && palette.mode === 'closed' && !showFilePicker && !showSessionPicker}
+					isActive={!showHelp && !isAnyOverlayOpen}
 					onTabChange={setActiveTab}
 					isPhaseHighlighted={(num) => isHighlighted(`phase-${num}`)}
 					isPhaseFading={(num) => isFading(`phase-${num}`)}
@@ -242,6 +333,8 @@ export default function App({ flags }: AppProps) {
 					selectedTodoId={selectedTodoId}
 					onTodoSelect={setSelectedTodoId}
 					planningDir={planningDir}
+					backgroundJobs={backgroundJobs}
+					onCancelJob={cancelBackgroundJob}
 				/>
 			</Box>
 			<Footer activeTab={activeTab} onlyMode={flags.only} />
@@ -260,7 +353,10 @@ export default function App({ flags }: AppProps) {
 							palette.setSelectedIndex(idx);
 							setFilteredCount(commands.length); // Will be refined by palette
 						}}
-						onExecute={palette.execute}
+						onExecute={(command) => {
+							palette.close();
+							handleCommandSelect(command);
+						}}
 						showToast={showToast}
 						onClose={palette.close}
 					/>
@@ -302,6 +398,18 @@ export default function App({ flags }: AppProps) {
 							}
 						}}
 						onClose={() => setShowSessionPicker(false)}
+					/>
+				</Box>
+			)}
+
+			{/* Execution mode prompt overlay */}
+			{showModePrompt && pendingCommand && (
+				<Box position="absolute" marginTop={3} marginLeft={2}>
+					<ExecutionModePrompt
+						command={pendingCommand.name}
+						hasActiveSession={Boolean(activeSessionId)}
+						onSelect={handleModeSelect}
+						onCancel={handleModeCancel}
 					/>
 				</Box>
 			)}
