@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 ## Current Position
 
 Phase: 04 of 5 (OpenCode Integration)
-Plan: 4 of 5 in current phase (background jobs)
-Status: In progress
-Last activity: 2026-01-25 - Completed 04-04-PLAN.md (background jobs)
+Plan: 5 of 5 in current phase (background UI)
+Status: Phase complete with gaps
+Last activity: 2026-01-25 - Completed 04-05-PLAN.md (background UI, checkpoint approved with gaps)
 
-Progress: [█████████░] 95% (20/21 plans)
+Progress: [█████████░] 100% (21/21 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 20
+- Total plans completed: 21
 - Average duration: 4 min
-- Total execution time: 71 min
+- Total execution time: 77 min
 
 **By Phase:**
 
@@ -31,10 +31,10 @@ Progress: [█████████░] 95% (20/21 plans)
 | 2 | 3 | 8 min | 2.7 min |
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
-| 4 | 4 | 13 min | 3.25 min |
+| 4 | 5 | 19 min | 3.8 min |
 
 **Recent Trend:**
-- Last 5 plans: 4 min, 3 min, 3 min, 4 min, 3 min
+- Last 5 plans: 3 min, 3 min, 4 min, 3 min, 6 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -100,7 +100,10 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None - Phase 04 plans 03-05 pending.
+Phase 04 gaps (identified during UAT):
+1. **Tab completion with arguments** — Command palette should allow Tab to complete command name and let user type arguments (e.g., `plan-phase 4`)
+2. **Session detection not working** — 'c' key shows "no sessions found" even when OpenCode session is open
+3. **Footer missing 'c' hint** — The 'c' key for connecting isn't shown in footer
 
 ### Roadmap Evolution
 
@@ -115,10 +118,10 @@ None - Phase 04 plans 03-05 pending.
 
 ### Blockers/Concerns
 
-None - Phase 04 plans 01-04 complete. Plan 05 ready.
+Phase 04 complete with 3 gaps. Run `/gsd:plan-phase 4 --gaps` to create fix plans before Phase 5.
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 04-04-PLAN.md (background jobs)
+Stopped at: Completed 04-05-PLAN.md (background UI with gaps)
 Resume file: None
