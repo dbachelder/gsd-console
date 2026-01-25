@@ -114,19 +114,27 @@ Plans:
   3. Line coverage reaches 80% or higher
   4. Parser functions have comprehensive test cases
   5. Hook functions have test coverage where feasible
-**Plans**: 10 plans
+**Plans**: 18 plans
 
- Plans:
-  - [ ] 05-01-PLAN.md — Testing dependencies and memfs setup (Wave 1, 3 tasks)
-  - [x] 05-02-PLAN.md— Parser tests and fixtures (Wave 2, 2 tasks)
+  Plans:
+  - [x] 05-01-PLAN.md — Testing dependencies and memfs setup (Wave 1, 3 tasks)
+  - [x] 05-02-PLAN.md — Parser tests and fixtures (Wave 2, 2 tasks)
   - [x] 05-03-PLAN.md — Core hooks tests (Wave 3, 4 tasks)
-- [x] 05-04-PLAN.md — Layout components tests (Wave 4, 3 tasks)
-- [ ] 05-05-PLAN.md — Roadmap components tests (Wave 4, 3 tasks)
-- [ ] 05-06-PLAN.md — File watcher and change highlight tests (Wave 5, 2 tasks)
+  - [x] 05-04-PLAN.md — Layout components tests (Wave 4, 3 tasks)
+  - [x] 05-05-PLAN.md — Roadmap components tests (Wave 4, 3 tasks)
+  - [x] 05-06-PLAN.md — File watcher and change highlight tests (Wave 5, 2 tasks)
   - [x] 05-07-PLAN.md — OpenCode integration tests (Wave 5, 3 tasks)
-- [ ] 05-08-PLAN.md — Command palette and picker tests (Wave 6, 4 tasks)
-- [x] 05-09-PLAN.md — Phase and todos view tests (Wave 6, 4 tasks)
-- [ ] 05-10-PLAN.md — Coverage verification and flaky test removal (Wave 7, 3 tasks)
+  - [x] 05-08-PLAN.md — Command palette and picker tests (Wave 6, 4 tasks)
+  - [x] 05-09-PLAN.md — Phase and todos view tests (Wave 6, 4 tasks)
+  - [x] 05-10-PLAN.md — Coverage verification and flaky test removal (Wave 7, 3 tasks)
+  - [ ] 05-11-PLAN.md — Fix useChangeHighlight React warnings (Wave 1, 2 tasks) [gap closure]
+  - [ ] 05-12-PLAN.md — Fix 5 failing parser tests (Wave 2, 4 tasks) [gap closure]
+  - [ ] 05-13-PLAN.md — Add parser coverage for uncovered functions (Wave 2, 4 tasks) [gap closure]
+  - [ ] 05-14-PLAN.md — Add tests for useCommandPalette hook (Wave 3, 4 tasks) [gap closure]
+  - [ ] 05-15-PLAN.md — Add tests for useExternalEditor hook (Wave 3, 5 tasks) [gap closure]
+  - [ ] 05-16-PLAN.md — Add tests for useGsdData hook (Wave 3, 4 tasks) [gap closure]
+  - [ ] 05-17-PLAN.md — Add tests for useSessionActivity hook (Wave 4, 3 tasks) [gap closure]
+  - [ ] 05-18-PLAN.md — Final verification (Wave 4, 4 tasks) [gap closure]
 
 ## Progress
 
@@ -140,4 +148,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
  | 4. OpenCode Integration | 7/7 | Complete | 2026-01-25 |
- | 5. Test Coverage | 9/10 | In progress | - |
+ | 5. Test Coverage | 10/18 | In progress | - |
