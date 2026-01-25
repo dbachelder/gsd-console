@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Core TUI** - Display roadmap, phases, and todos with keyboard navigation
 - [x] **Phase 2: Real-time Updates** - Watch .planning/ files and refresh on changes
-- [ ] **Phase 3: Actions and Editing** - Execute GSD commands and edit todos inline
+- [x] **Phase 3: Actions and Editing** - Execute GSD commands and edit todos inline
 - [ ] **Phase 4: OpenCode Integration** - Spawn sessions and queue commands
 
 ## Phase Details
@@ -66,9 +66,21 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md - Toast system and command palette with fuzzy search
-- [ ] 03-02-PLAN.md - External editor integration and help/footer updates
-- [ ] 03-03-PLAN.md - Inline editing stubs (todo toggle, reorder mode)
+- [x] 03-01-PLAN.md - Toast system and command palette with fuzzy search
+- [x] 03-02-PLAN.md - External editor integration and help/footer updates
+- [x] 03-03-PLAN.md - Inline editing stubs (todo toggle, reorder mode)
+
+### Phase 03.1: UI polish (INSERTED)
+
+**Goal:** [Urgent work - to be planned]
+**Depends on:** Phase 3
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 03.1 to break down)
+
+**Details:**
+[To be added during planning]
 
 ### Phase 4: OpenCode Integration
 **Goal**: TUI can spawn and coordinate with OpenCode sessions
@@ -92,5 +104,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Core TUI! | 4/4 | Complete | 2026-01-25 |
 | 2. Real-time Updates | 3/3 | Complete | 2026-01-24 |
-| 3. Actions and Editing | 0/3 | Not started | - |
+| 3. Actions and Editing | 3/3 | Complete | 2026-01-25 |
+| 03.1: UI polish (INSERTED) | 0/0 | Not planned | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
