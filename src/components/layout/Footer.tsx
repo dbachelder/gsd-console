@@ -42,6 +42,7 @@ const viewHints: Record<TabId, Hint[]> = {
 };
 
 const commonHints: Hint[] = [
+	{ key: 'c', action: 'connect' },
 	{ key: ':', action: 'commands' },
 	{ key: '?', action: 'help' },
 	{ key: 'q', action: 'quit' },
