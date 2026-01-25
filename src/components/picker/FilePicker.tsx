@@ -2,10 +2,13 @@
  * FilePicker Component
  * Overlay for selecting from multiple files.
  * Used when editing context has multiple file options.
+ * Supports vim-style navigation (j/k), arrow keys, and fuzzy filtering.
  */
 
 import { basename } from 'node:path';
+import { useFuzzySearchList } from '@nozbe/microfuzz/react';
 import { Box, Text, useInput } from 'ink';
+import { useCallback, useEffect, useState } from 'react';
 
 interface FilePickerProps {
 	/** List of file paths to choose from */
@@ -29,21 +32,83 @@ function getDisplayName(filePath: string): string {
 }
 
 export function FilePicker({ files, onSelect, onClose }: FilePickerProps) {
+	const [filter, setFilter] = useState('');
+	const [selectedIndex, setSelectedIndex] = useState(0);
+
+	// Fuzzy search filtering using microfuzz react hook
+	const filteredFiles = useFuzzySearchList({
+		list: files,
+		queryText: filter,
+		getText: (item) => [getDisplayName(item), item],
+		mapResultItem: ({ item }) => item,
+	});
+
+	// Reset selection when filter changes and results shrink
+	useEffect(() => {
+		if (selectedIndex >= filteredFiles.length) {
+			setSelectedIndex(Math.max(0, filteredFiles.length - 1));
+		}
+	}, [filteredFiles.length, selectedIndex]);
+
+	// Handle selection of current file
+	const selectCurrent = useCallback(() => {
+		const selectedFile = filteredFiles[selectedIndex];
+		if (selectedFile) {
+			onSelect(selectedFile);
+		}
+	}, [filteredFiles, selectedIndex, onSelect]);
+
 	// Handle keyboard input
 	useInput((input, key) => {
-		// Escape to close
+		// Escape: clear filter first, then close if filter empty
 		if (key.escape) {
-			onClose();
+			if (filter) {
+				setFilter('');
+				setSelectedIndex(0);
+			} else {
+				onClose();
+			}
 			return;
 		}
 
-		// Number keys 1-9 to select file
-		const num = parseInt(input, 10);
-		if (!Number.isNaN(num) && num >= 1 && num <= files.length) {
-			const selectedFile = files[num - 1];
-			if (selectedFile) {
-				onSelect(selectedFile);
+		// Enter: select current file
+		if (key.return) {
+			selectCurrent();
+			return;
+		}
+
+		// Arrow keys and vim navigation
+		if (key.upArrow || input === 'k') {
+			setSelectedIndex((prev) => Math.max(0, prev - 1));
+			return;
+		}
+		if (key.downArrow || input === 'j') {
+			setSelectedIndex((prev) => Math.min(filteredFiles.length - 1, prev + 1));
+			return;
+		}
+
+		// Number keys 1-9 for quick selection (only when no filter)
+		if (!filter) {
+			const num = parseInt(input, 10);
+			if (!Number.isNaN(num) && num >= 1 && num <= filteredFiles.length && num <= 9) {
+				const selectedFile = filteredFiles[num - 1];
+				if (selectedFile) {
+					onSelect(selectedFile);
+				}
+				return;
 			}
+		}
+
+		// Backspace: remove last character from filter
+		if (key.backspace || key.delete) {
+			setFilter((prev) => prev.slice(0, -1));
+			return;
+		}
+
+		// Printable characters: append to filter
+		if (input.length === 1 && !key.ctrl && !key.meta && input !== 'j' && input !== 'k') {
+			setFilter((prev) => prev + input);
+			setSelectedIndex(0); // Reset selection on new filter input
 		}
 	});
 
@@ -61,23 +126,51 @@ export function FilePicker({ files, onSelect, onClose }: FilePickerProps) {
 				<Text bold color="cyan">
 					Select file to edit
 				</Text>
+				{filter && (
+					<Text dimColor>
+						{' '}
+						({filteredFiles.length}/{files.length})
+					</Text>
+				)}
 			</Box>
+
+			{/* Filter input (shown when typing) */}
+			{filter && (
+				<Box marginBottom={1}>
+					<Text dimColor>Filter: </Text>
+					<Text color="yellow">{filter}</Text>
+					<Text dimColor>_</Text>
+				</Box>
+			)}
 
 			{/* File list */}
 			<Box flexDirection="column">
-				{files.map((file, index) => (
-					<Box key={file}>
-						<Text color="yellow" bold>
-							{index + 1}.{' '}
-						</Text>
-						<Text>{getDisplayName(file)}</Text>
-					</Box>
-				))}
+				{filteredFiles.length === 0 ? (
+					<Text dimColor>No matching files</Text>
+				) : (
+					filteredFiles.map((file, index) => {
+						const isSelected = index === selectedIndex;
+						return (
+							<Box key={file}>
+								<Text color={isSelected ? 'cyan' : 'yellow'} bold={isSelected}>
+									{isSelected ? '>' : ' '} {index + 1}.{' '}
+								</Text>
+								<Text color={isSelected ? 'cyan' : undefined} bold={isSelected}>
+									{getDisplayName(file)}
+								</Text>
+							</Box>
+						);
+					})
+				)}
 			</Box>
 
 			{/* Footer */}
 			<Box marginTop={1}>
-				<Text dimColor>Press 1-{files.length} to select, Escape to cancel</Text>
+				<Text dimColor>
+					{filter
+						? 'Type to filter | j/k: navigate | Enter: select | Esc: clear filter'
+						: 'Type to filter | j/k: navigate | 1-9: quick select | Esc: close'}
+				</Text>
 			</Box>
 		</Box>
 	);
