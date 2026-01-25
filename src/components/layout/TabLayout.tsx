@@ -4,14 +4,13 @@
  */
 
 import { Box, Text } from 'ink';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTabNav } from '../../hooks/useTabNav.ts';
+import { type TabId, useTabState } from '../../hooks/useTabState.ts';
 import type { CliFlags, GsdData } from '../../lib/types.ts';
 import { PhaseView } from '../phase/PhaseView.tsx';
 import { RoadmapView } from '../roadmap/RoadmapView.tsx';
 import { TodosView } from '../todos/TodosView.tsx';
-
-type TabId = 'roadmap' | 'phase' | 'todos';
 
 interface TabLayoutProps {
 	data: GsdData;
@@ -47,12 +46,34 @@ export function TabLayout({
 }: TabLayoutProps) {
 	const isOnlyMode = Boolean(flags.only);
 
+	// Tab state persistence for session
+	const { getTab, setTab } = useTabState();
+	const prevTabRef = useRef<TabId | null>(null);
+
 	// Tab navigation using hook
 	const { activeTab, setActiveTab } = useTabNav<TabId>({
 		tabs: ['roadmap', 'phase', 'todos'],
 		initialTab: flags.only ?? 'roadmap',
 		isActive: isActive && !isOnlyMode,
 	});
+
+	// Restore detail level from tab state on mount/tab change
+	const phaseTabState = getTab('phase');
+	const detailLevel = phaseTabState.detailLevel ?? 1;
+
+	// Handle detail level change from PhaseView
+	const handleDetailLevelChange = (level: number) => {
+		setTab('phase', { detailLevel: level });
+	};
+
+	// Track tab changes for state restoration
+	useEffect(() => {
+		// Store current tab state before switching away
+		if (prevTabRef.current !== null && prevTabRef.current !== activeTab) {
+			// State is automatically tracked via setTab calls
+		}
+		prevTabRef.current = activeTab;
+	}, [activeTab]);
 
 	// Notify parent of tab changes
 	useEffect(() => {
@@ -90,6 +111,8 @@ export function TabLayout({
 						allPhases={data.phases}
 						isActive={isActive}
 						onPhaseChange={onPhaseSelect}
+						detailLevel={detailLevel}
+						onDetailLevelChange={handleDetailLevelChange}
 					/>
 				)}
 				{flags.only === 'todos' && (
@@ -131,6 +154,8 @@ export function TabLayout({
 						allPhases={data.phases}
 						isActive={isActive}
 						onPhaseChange={onPhaseSelect}
+						detailLevel={detailLevel}
+						onDetailLevelChange={handleDetailLevelChange}
 					/>
 				)}
 				{activeTab === 'todos' && (
