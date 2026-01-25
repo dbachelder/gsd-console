@@ -108,7 +108,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/01-core-tui/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases).toHaveLength(1);
 		expect(phases[0]?.number).toBe(1);
 		expect(phases[0]?.name).toBe('Core TUI');
@@ -123,7 +123,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/02-updates/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.dependsOn).toBe('Phase 1');
 	});
 
@@ -135,7 +135,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/01-core-tui/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.requirements).toEqual(['DISP-01', 'DISP-02', 'NAV-01']);
 	});
 
@@ -150,7 +150,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/01-core-tui/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.successCriteria).toEqual([
 			'User sees roadmap',
 			'User can expand phases',
@@ -166,7 +166,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/01-core-tui/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.plansTotal).toBe(4);
 	});
 
@@ -178,7 +178,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/03.1-polish/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases).toHaveLength(1);
 		expect(phases[0]?.number).toBe(3.1);
 		expect(phases[0]?.name).toBe('UI Polish');
@@ -196,7 +196,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/02-updates/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases).toHaveLength(2);
 		expect(phases[0]?.name).toBe('Core TUI');
 		expect(phases[1]?.name).toBe('Updates');
@@ -210,20 +210,21 @@ describe('parseRoadmap', () => {
 			'.planning/phases/01-core-tui/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.dependsOn).toBeNull();
 	});
 
 	test('sets indicators by scanning phase directory', () => {
+		const roadmapContent = String.raw`### Phase 1: Core TUI`;
 		vol.fromJSON({
-			'.planning/ROADMAP.md': String.raw`### Phase 1: Core TUI`,
+			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/PLAN.md': '# Plan',
 			'.planning/phases/01-core-tui/CONTEXT.md': '# Context',
 			'.planning/phases/01-core-tui/RESEARCH.md': '# Research',
 			'.planning/phases/01-core-tui/01-UAT.md': '---\nstatus: passed\n---',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.indicators).toEqual({
 			hasContext: true,
 			hasPlan: true,
@@ -242,7 +243,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/01-core-tui/01-03-PLAN.md': '# Plan',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.plansComplete).toBe(2);
 		expect(phases[0]?.plansTotal).toBe(3);
 	});
@@ -255,7 +256,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/01-core-tui/01-01-PLAN.md': '# Plan',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.status).toBe('in-progress');
 	});
 
@@ -268,7 +269,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/01-core-tui/01-02-SUMMARY.md': '# Summary',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.status).toBe('complete');
 	});
 
@@ -279,7 +280,7 @@ describe('parseRoadmap', () => {
 			'.planning/phases/01-core-tui/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.status).toBe('not-started');
 	});
 
@@ -289,7 +290,7 @@ describe('parseRoadmap', () => {
 			'.planning/ROADMAP.md': roadmapContent,
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases).toHaveLength(1);
 		expect(phases[0]?.indicators).toEqual({
 			hasContext: false,
@@ -309,7 +310,7 @@ No criteria yet.`;
 			'.planning/phases/01-core-tui/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		// Should not crash, success criteria should be empty array or minimal
 		expect(phases[0]?.successCriteria).toBeDefined();
 	});
@@ -322,7 +323,7 @@ No criteria yet.`;
 			'.planning/phases/01-core-tui/.gitkeep': '',
 		});
 
-		const phases = parseRoadmap('.planning/ROADMAP.md', '.planning/phases');
+		const phases = parseRoadmap(roadmapContent, '.planning/phases');
 		expect(phases[0]?.requirements).toEqual([]);
 	});
 });
