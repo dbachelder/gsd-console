@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 2 - Real-time Updates
+**Current focus:** Phase 3 - Actions and Editing
 
 ## Current Position
 
-Phase: 2 of 4 (Real-time Updates)
-Plan: 3 of 3 in current phase (gap closure)
-Status: Phase complete (UAT passed)
-Last activity: 2026-01-25 - Completed 02-03-PLAN.md (UAT gap closure)
+Phase: 3 of 4 (Actions and Editing)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-01-24 - Completed 03-01-PLAN.md (toast and command palette)
 
-Progress: [█████░░░░░] 50%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
+- Total plans completed: 8
 - Average duration: 4 min
-- Total execution time: 27 min
+- Total execution time: 32 min
 
 **By Phase:**
 
@@ -29,9 +29,10 @@ Progress: [█████░░░░░] 50%
 |-------|-------|-------|----------|
 | 1 | 4 | 19 min | 4.75 min |
 | 2 | 3 | 8 min | 2.7 min |
+| 3 | 1 | 5 min | 5 min |
 
 **Recent Trend:**
-- Last 5 plans: 2 min, 2 min, 2 min, 3 min, 3 min
+- Last 5 plans: 2 min, 2 min, 3 min, 3 min, 5 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -57,6 +58,9 @@ Recent decisions affecting current work:
 - useCallback for stable callback references passed to custom hooks
 - useRef pattern to avoid dependency array issues with array props
 - ROADMAP.md all-phases highlighting is intentional conservative behavior
+- Use @nozbe/microfuzz for fuzzy search (2KB, zero deps)
+- TextInput from @inkjs/ui is uncontrolled - use onChange not value
+- Stub all command actions - execution deferred to Phase 4
 
 ### Pending Todos
 
@@ -66,12 +70,16 @@ Recent decisions affecting current work:
 4. **Preserve tab state when switching views** (ui) — Selected phase and toggle state lost when switching between tabs
 5. **Fix inconsistent header sizing** (ui) — Header size changes based on main content area
 
+### Roadmap Evolution
+
+- Phase 03.1 inserted after Phase 3: UI polish (URGENT)
+
 ### Blockers/Concerns
 
-None - Phase 2 complete, ready for Phase 3 planning.
+None - Phase 3 in progress.
 
 ## Session Continuity
 
-Last session: 2026-01-25
-Stopped at: Completed 02-03-PLAN.md (UAT gap closure) - Phase 2 fully complete
+Last session: 2026-01-24
+Stopped at: Completed 03-01-PLAN.md (toast and command palette)
 Resume file: None
