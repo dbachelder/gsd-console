@@ -109,8 +109,13 @@ async function readLocalSessions(): Promise<SessionInfo[]> {
 		// Storage dir doesn't exist
 	}
 
-	// Sort by most recently updated (createdAt is actually from time.created)
-	return sessions;
+	// Deduplicate by ID (in case of storage anomalies)
+	const seen = new Set<string>();
+	return sessions.filter((s) => {
+		if (seen.has(s.id)) return false;
+		seen.add(s.id);
+		return true;
+	});
 }
 
 /**
