@@ -54,6 +54,7 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 1. **Pin help bar to bottom and improve styling** (ui) — Footer should anchor to bottom of terminal viewport
+2. **Improve tab styling** (ui) — Better visual hierarchy for tab bar
 
 ### Blockers/Concerns
 
