@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 ## Current Position
 
 Phase: 03.1 of 4 (UI Polish)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-01-25 - Completed 03.1-01-PLAN.md
+Last activity: 2026-01-25 - Completed 03.1-02-PLAN.md
 
-Progress: [████████░░] 86%
+Progress: [█████████░] 93%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
+- Total plans completed: 13
 - Average duration: 4 min
-- Total execution time: 45 min
+- Total execution time: 49 min
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [████████░░] 86%
 | 1 | 4 | 19 min | 4.75 min |
 | 2 | 3 | 8 min | 2.7 min |
 | 3 | 4 | 15 min | 3.75 min |
-| 03.1 | 1 | 3 min | 3 min |
+| 03.1 | 2 | 7 min | 3.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 3 min, 5 min, 3 min, 4 min, 3 min
+- Last 5 plans: 5 min, 3 min, 4 min, 3 min, 4 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -73,13 +73,14 @@ Recent decisions affecting current work:
 - Underline styling for active tabs (clean terminal aesthetic over pill/segmented) (03.1-01)
 - dimColor for inactive tabs (built-in Ink prop, no custom colors) (03.1-01)
 - Sticky footer via Flexbox flexGrow pattern (03.1-01)
+- Session-only state via React useState over LocalStorage (03.1-02)
+- Controlled PhaseView with lifted detailLevel state (03.1-02)
+- Roadmap indicators always shown, 'd' key reserved for /gsd-discuss-phase (03.1-02)
 
 ### Pending Todos
 
 1. **Display actual plan files in TUI** (ui) — TUI shows phases/todos but doesn't display PLAN.md files
-2. **Preserve tab state when switching views** (ui) — Selected phase and toggle state lost when switching between tabs
-3. **Remove detail toggle from roadmap** (ui) — Repurpose 'd' key for /gsd-discuss-phase command
-4. **Fix UI shift on first navigation** (ui) — Slight UI shift occurs on first navigation after opening
+2. **Fix UI shift on first navigation** (ui) — Slight UI shift occurs on first navigation after opening
 
 ### Roadmap Evolution
 
@@ -98,5 +99,5 @@ None - Phase 03.1 in progress.
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 03.1-01-PLAN.md
+Stopped at: Completed 03.1-02-PLAN.md
 Resume file: None
