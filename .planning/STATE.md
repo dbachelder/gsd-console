@@ -86,6 +86,9 @@ Recent decisions affecting current work:
 - Fuzzy filtering via useFuzzySearchList from @nozbe/microfuzz/react (03.1-05)
 - Filter clears on Escape, second Escape closes picker (03.1-05)
 - Phase completion determines all success criteria checkbox state (03.1-05)
+- Use session.list() for OpenCode server detection (SDK has no health endpoint) (04-01)
+- Connection hook checks on mount with manual recheck option (04-01)
+- Client is null when disconnected (not undefined) (04-01)
 - spawnOpencodeSession merged into Plan 01 commit during parallel execution (04-02)
 - Warning toast for failed/cancelled OpenCode sessions, not error (04-02)
 
