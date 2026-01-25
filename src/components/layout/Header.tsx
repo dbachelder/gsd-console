@@ -3,6 +3,7 @@
  * Displays project name, phase indicator, and progress bar.
  */
 
+import { Spinner } from '@inkjs/ui';
 import { Box, Text } from 'ink';
 import { formatProgressBar } from '../../lib/icons.ts';
 import type { ProjectState } from '../../lib/types.ts';
@@ -10,9 +11,10 @@ import type { ProjectState } from '../../lib/types.ts';
 interface HeaderProps {
 	projectName: string;
 	state: ProjectState;
+	isRefreshing?: boolean;
 }
 
-export function Header({ projectName, state }: HeaderProps) {
+export function Header({ projectName, state, isRefreshing = false }: HeaderProps) {
 	const progress = formatProgressBar(state.progressPercent, 20);
 
 	return (
@@ -25,9 +27,16 @@ export function Header({ projectName, state }: HeaderProps) {
 		>
 			{/* Title row */}
 			<Box justifyContent="space-between">
-				<Text bold color="cyan">
-					GSD Status
-				</Text>
+				<Box>
+					<Text bold color="cyan">
+						GSD Status
+					</Text>
+					{isRefreshing && (
+						<Box marginLeft={1}>
+							<Spinner label="" />
+						</Box>
+					)}
+				</Box>
 				<Text>
 					<Text dimColor>Phase </Text>
 					<Text bold color="yellow">
