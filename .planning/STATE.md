@@ -53,7 +53,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+1. **Pin help bar to bottom and improve styling** (ui) — Footer should anchor to bottom of terminal viewport
 
 ### Blockers/Concerns
 
