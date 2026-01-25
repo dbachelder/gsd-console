@@ -118,7 +118,7 @@ Plans:
 
 Plans:
 - [ ] 05-01-PLAN.md — Testing dependencies and memfs setup (Wave 1, 3 tasks)
-- [ ] 05-02-PLAN.md — Parser tests and fixtures (Wave 2, 2 tasks)
+- [x] 05-02-PLAN.md— Parser tests and fixtures (Wave 2, 2 tasks)
 - [ ] 05-03-PLAN.md — Core hooks tests (Wave 3, 4 tasks)
 - [ ] 05-04-PLAN.md — Layout components tests (Wave 4, 3 tasks)
 - [ ] 05-05-PLAN.md — Roadmap components tests (Wave 4, 3 tasks)
