@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 ## Current Position
 
 Phase: 04 of 5 (OpenCode Integration)
-Plan: 5 of 5 in current phase (background UI)
-Status: Phase complete with gaps
-Last activity: 2026-01-25 - Completed 04-05-PLAN.md (background UI, checkpoint approved with gaps)
+Plan: 6 of 7 in current phase (gap closure - footer and session detection)
+Status: Gap closure in progress
+Last activity: 2026-01-25 - Completed 04-06-PLAN.md (footer hint + session detection fix)
 
-Progress: [█████████░] 100% (21/21 plans)
+Progress: [█████████░] 100% (22/23 plans)
 
 ## Performance Metrics
 
@@ -97,13 +97,15 @@ Recent decisions affecting current work:
 - Use find() instead of findIndex() for cleaner TypeScript narrowing in job state updates (04-04)
 - Accumulate output via ref during job execution, attach to job on completion (04-04)
 - Enable event subscription only when pending jobs exist or job running (04-04)
+- Add connect hint to commonHints for global visibility (04-06)
+- Normalize paths by removing trailing slashes for session detection (04-06)
 
 ### Pending Todos
 
 Phase 04 gaps (identified during UAT):
-1. **Tab completion with arguments** — Command palette should allow Tab to complete command name and let user type arguments (e.g., `plan-phase 4`)
-2. **Session detection not working** — 'c' key shows "no sessions found" even when OpenCode session is open
-3. **Footer missing 'c' hint** — The 'c' key for connecting isn't shown in footer
+1. **Tab completion with arguments** — Command palette should allow Tab to complete command name and let user type arguments (e.g., `plan-phase 4`) - addressed in 04-07-PLAN.md
+2. ~~**Session detection not working**~~ — Fixed in 04-06 (path normalization)
+3. ~~**Footer missing 'c' hint**~~ — Fixed in 04-06 (added to commonHints)
 
 ### Roadmap Evolution
 
@@ -118,10 +120,10 @@ Phase 04 gaps (identified during UAT):
 
 ### Blockers/Concerns
 
-Phase 04 complete with 3 gaps. Run `/gsd:plan-phase 4 --gaps` to create fix plans before Phase 5.
+Phase 04 gap closure in progress: 2/3 gaps fixed (04-06), 1 remaining (04-07 tab completion).
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 04-05-PLAN.md (background UI with gaps)
+Stopped at: Completed 04-06-PLAN.md (gap closure - footer hint + session detection)
 Resume file: None
