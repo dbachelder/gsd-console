@@ -45,8 +45,8 @@ function findPhaseDirectory(phasesDir: string, phaseNumber: number): string | nu
 		.map((d) => d.name);
 
 	// Look for directory starting with phase number (01-, 03.1-, etc.)
-	const paddedNumber =
-		phaseNumber < 10 && !String(phaseNumber).includes('.') ? `0${phaseNumber}` : `${phaseNumber}`;
+	// All phases < 10 need zero-padding (both integer and decimal)
+	const paddedNumber = phaseNumber < 10 ? `0${phaseNumber}` : `${phaseNumber}`;
 	const numPrefix = `${phaseNumber}`;
 
 	for (const dir of dirs) {
@@ -79,10 +79,8 @@ export function PhaseView({
 		const phaseDirName = findPhaseDirectory(phasesDir, phase.number);
 		if (!phaseDirName) return [];
 		// Derive phaseId for ROADMAP lookup - e.g., "03.1" for decimal, "01" for integer
-		const phaseId =
-			phase.number < 10 && !String(phase.number).includes('.')
-				? `0${phase.number}`
-				: String(phase.number);
+		// All phases < 10 need zero-padding (both integer and decimal)
+		const phaseId = phase.number < 10 ? `0${phase.number}` : String(phase.number);
 		return parsePlanFiles(`${phasesDir}/${phaseDirName}`, phase.number, planningDir, phaseId);
 	}, [phase, planningDir]);
 
