@@ -14,9 +14,16 @@ interface TodosViewProps {
 	isActive: boolean;
 	isTodoHighlighted?: (todoId: string) => boolean;
 	isTodoFading?: (todoId: string) => boolean;
+	showToast?: (message: string, type?: 'info' | 'success' | 'warning') => void;
 }
 
-export function TodosView({ todos, isActive, isTodoHighlighted, isTodoFading }: TodosViewProps) {
+export function TodosView({
+	todos,
+	isActive,
+	isTodoHighlighted,
+	isTodoFading,
+	showToast,
+}: TodosViewProps) {
 	// Filter state: show completed todos or not
 	const [showCompleted, setShowCompleted] = useState(true);
 
@@ -47,13 +54,19 @@ export function TodosView({ todos, isActive, isTodoHighlighted, isTodoFading }: 
 		onBack: () => {},
 	});
 
-	// Handle f key for filter toggle, d for detail toggle
+	// Handle f key for filter toggle, d for detail toggle, Space for todo toggle
 	useInput(
 		(input) => {
 			if (input === 'f') {
 				setShowCompleted((prev) => !prev);
 			} else if (input === 'd') {
 				setShowDetail((prev) => !prev);
+			} else if (input === ' ') {
+				// Space key: toggle todo (stub)
+				const selectedTodo = sortedTodos[selectedIndex];
+				if (selectedTodo && showToast) {
+					showToast(`Todo toggle: ${selectedTodo.text} (will execute in Phase 4)`, 'info');
+				}
 			}
 		},
 		{ isActive },

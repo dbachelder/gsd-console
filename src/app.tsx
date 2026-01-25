@@ -187,6 +187,7 @@ export default function App({ flags }: AppProps) {
 				isPhaseFading={(num) => isFading(`phase-${num}`)}
 				isTodoHighlighted={(id) => isHighlighted(`todo-${id}`)}
 				isTodoFading={(id) => isFading(`todo-${id}`)}
+				showToast={showToast}
 			/>
 			<Footer activeTab={activeTab} onlyMode={flags.only} />
 

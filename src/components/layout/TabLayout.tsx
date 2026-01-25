@@ -22,6 +22,7 @@ interface TabLayoutProps {
 	isPhaseFading?: (phaseNumber: number) => boolean;
 	isTodoHighlighted?: (todoId: string) => boolean;
 	isTodoFading?: (todoId: string) => boolean;
+	showToast?: (message: string, type?: 'info' | 'success' | 'warning') => void;
 }
 
 export function TabLayout({
@@ -33,6 +34,7 @@ export function TabLayout({
 	isPhaseFading,
 	isTodoHighlighted,
 	isTodoFading,
+	showToast,
 }: TabLayoutProps) {
 	const isOnlyMode = Boolean(flags.only);
 
@@ -88,6 +90,7 @@ export function TabLayout({
 						isActive={isActive}
 						isTodoHighlighted={isTodoHighlighted}
 						isTodoFading={isTodoFading}
+						showToast={showToast}
 					/>
 				)}
 			</Box>
@@ -125,6 +128,7 @@ export function TabLayout({
 						isActive={isActive}
 						isTodoHighlighted={isTodoHighlighted}
 						isTodoFading={isTodoFading}
+						showToast={showToast}
 					/>
 				)}
 			</Box>
