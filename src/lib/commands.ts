@@ -81,4 +81,10 @@ export const commands: Command[] = [
 			}
 		},
 	},
+	{
+		name: 'connect-session',
+		description: 'Connect to existing OpenCode session',
+		key: 'c',
+		action: createStubAction('connect-session'),
+	},
 ];

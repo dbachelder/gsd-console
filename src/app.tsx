@@ -12,6 +12,7 @@ import { HelpOverlay } from './components/layout/HelpOverlay.tsx';
 import { TabLayout } from './components/layout/TabLayout.tsx';
 import { CommandPalette } from './components/palette/CommandPalette.tsx';
 import { FilePicker } from './components/picker/FilePicker.tsx';
+import { SessionPicker } from './components/picker/SessionPicker.tsx';
 import { ToastContainer } from './components/toast/ToastContainer.tsx';
 import { useChangeHighlight } from './hooks/useChangeHighlight.ts';
 import { useCommandPalette } from './hooks/useCommandPalette.ts';
@@ -20,6 +21,7 @@ import { useFileWatcher } from './hooks/useFileWatcher.ts';
 import { useGsdData } from './hooks/useGsdData.ts';
 import { useToast } from './hooks/useToast.ts';
 import { commands } from './lib/commands.ts';
+import { getProjectSessions, type SessionInfo, spawnOpencodeSession } from './lib/opencode.ts';
 import type { CliFlags, GsdData } from './lib/types.ts';
 
 interface AppProps {
@@ -130,6 +132,13 @@ export default function App({ flags }: AppProps) {
 	// File picker state
 	const [showFilePicker, setShowFilePicker] = useState(false);
 
+	// Session picker state
+	const [showSessionPicker, setShowSessionPicker] = useState(false);
+	const [sessions, setSessions] = useState<SessionInfo[]>([]);
+	const [sessionsLoading, setSessionsLoading] = useState(false);
+	const [_activeSessionId, setActiveSessionId] = useState<string | undefined>();
+	// Note: activeSessionId will be used in future plans for command execution
+
 	// Toast notifications
 	const { toasts, show: showToast } = useToast();
 
@@ -137,8 +146,8 @@ export default function App({ flags }: AppProps) {
 	const [filteredCount, setFilteredCount] = useState(commands.length);
 	const palette = useCommandPalette({ commands, filteredCount });
 
-	// Global input handlers (q to quit, ? to toggle help, e to edit)
-	// Disabled when command palette or file picker is open
+	// Global input handlers (q to quit, ? to toggle help, e to edit, c to connect)
+	// Disabled when command palette, file picker, or session picker is open
 	useInput(
 		(input) => {
 			if (input === 'q') {
@@ -160,8 +169,17 @@ export default function App({ flags }: AppProps) {
 					openEditor();
 				}
 			}
+			if (input === 'c') {
+				// Open session picker
+				setSessionsLoading(true);
+				setShowSessionPicker(true);
+				getProjectSessions(process.cwd()).then((s) => {
+					setSessions(s);
+					setSessionsLoading(false);
+				});
+			}
 		},
-		{ isActive: palette.mode === 'closed' && !showFilePicker },
+		{ isActive: palette.mode === 'closed' && !showFilePicker && !showSessionPicker },
 	);
 
 	// Loading state
@@ -212,7 +230,7 @@ export default function App({ flags }: AppProps) {
 				<TabLayout
 					data={data}
 					flags={flags}
-					isActive={!showHelp && palette.mode === 'closed' && !showFilePicker}
+					isActive={!showHelp && palette.mode === 'closed' && !showFilePicker && !showSessionPicker}
 					onTabChange={setActiveTab}
 					isPhaseHighlighted={(num) => isHighlighted(`phase-${num}`)}
 					isPhaseFading={(num) => isFading(`phase-${num}`)}
@@ -259,6 +277,31 @@ export default function App({ flags }: AppProps) {
 							openEditor(path);
 						}}
 						onClose={() => setShowFilePicker(false)}
+					/>
+				</Box>
+			)}
+
+			{/* Session picker overlay for OpenCode connection */}
+			{showSessionPicker && (
+				<Box position="absolute" marginTop={3} marginLeft={2}>
+					<SessionPicker
+						sessions={sessions}
+						isLoading={sessionsLoading}
+						onSelect={(sessionId) => {
+							setActiveSessionId(sessionId);
+							setShowSessionPicker(false);
+							showToast(`Connected to session ${sessionId.slice(0, 8)}...`, 'success');
+						}}
+						onSpawnNew={() => {
+							setShowSessionPicker(false);
+							const success = spawnOpencodeSession();
+							if (success) {
+								showToast('OpenCode session completed', 'success');
+							} else {
+								showToast('OpenCode session failed or was cancelled', 'warning');
+							}
+						}}
+						onClose={() => setShowSessionPicker(false)}
 					/>
 				</Box>
 			)}
