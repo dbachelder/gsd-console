@@ -151,13 +151,10 @@ export function scanPhaseDirectory(phaseDir: string, phaseNumber: number): Phase
 		if (lowerFile.includes('research.md')) {
 			indicators.hasResearch = true;
 		}
-		// Check UAT files for status: passed (e.g., 01-UAT.md, uat.md)
-		if (
-			(lowerFile.includes('uat.md') || lowerFile.endsWith('-uat.md')) &&
-			lowerFile.endsWith('.md')
-		) {
+		// Check UAT files for status: passed/complete (e.g., 01-UAT.md, 01-UAT-retest.md)
+		if (lowerFile.includes('-uat') && lowerFile.endsWith('.md')) {
 			const { data } = readPlanningFile(`${phaseDir}/${file}`);
-			if (data.status === 'passed') {
+			if (data.status === 'passed' || data.status === 'complete') {
 				indicators.uatComplete = true;
 			}
 		}
