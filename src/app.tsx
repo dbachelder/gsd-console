@@ -39,11 +39,21 @@ function deriveAffectedItemIds(files: string[], data: GsdData): string[] {
 		if (phaseMatch?.[1]) {
 			ids.push(`phase-${parseInt(phaseMatch[1], 10)}`);
 		}
-		// STATE.md or todos/*.md affects todos
-		if (file.includes('STATE.md') || file.includes('todos/')) {
+		// STATE.md affects all todos (can't determine which specific todo changed)
+		if (file.includes('STATE.md')) {
 			for (const t of data.todos) {
 				ids.push(`todo-${t.id}`);
 			}
+		}
+
+		// Individual todo file: extract specific todo ID from path
+		// Files are like "todos/pending/some-task.md" -> id is "pending-some-task.md"
+		// Or "todos/done/completed-task.md" -> id is "done-completed-task.md"
+		const todoMatch = /todos\/(pending|done)\/(.+\.md)$/.exec(file);
+		if (todoMatch) {
+			const status = todoMatch[1]; // 'pending' or 'done'
+			const filename = todoMatch[2]; // filename with extension
+			ids.push(`todo-${status}-${filename}`);
 		}
 	}
 
