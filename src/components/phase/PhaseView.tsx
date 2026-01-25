@@ -196,7 +196,7 @@ export function PhaseView({
 				{/* Plan list (inside the box, below goal) */}
 				{planInfos.length > 0 && (
 					<Box flexDirection="column" marginBottom={1}>
-						<Text bold dimColor>
+						<Text bold color="yellow">
 							Plans:
 						</Text>
 						{planInfos.map((plan) => (
