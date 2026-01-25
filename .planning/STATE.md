@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 ## Current Position
 
 Phase: 04 of 5 (OpenCode Integration)
-Plan: 3 of 5 in current phase (session picker)
+Plan: 4 of 5 in current phase (background jobs)
 Status: In progress
-Last activity: 2026-01-25 - Completed 04-03-PLAN.md (session picker)
+Last activity: 2026-01-25 - Completed 04-04-PLAN.md (background jobs)
 
-Progress: [█████████░] 90% (19/21 plans)
+Progress: [█████████░] 95% (20/21 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 19
+- Total plans completed: 20
 - Average duration: 4 min
-- Total execution time: 68 min
+- Total execution time: 71 min
 
 **By Phase:**
 
@@ -31,10 +31,10 @@ Progress: [█████████░] 90% (19/21 plans)
 | 2 | 3 | 8 min | 2.7 min |
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
-| 4 | 3 | 10 min | 3.3 min |
+| 4 | 4 | 13 min | 3.25 min |
 
 **Recent Trend:**
-- Last 5 plans: 2 min, 4 min, 3 min, 3 min, 4 min
+- Last 5 plans: 4 min, 3 min, 3 min, 4 min, 3 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -94,6 +94,9 @@ Recent decisions affecting current work:
 - Use session.title as lastCommand proxy (SDK session.list doesn't include messages) (04-03)
 - Filter sessions by directory tree match (startsWith in both directions) (04-03)
 - Prefix unused state with underscore (_activeSessionId) for future use (04-03)
+- Use find() instead of findIndex() for cleaner TypeScript narrowing in job state updates (04-04)
+- Accumulate output via ref during job execution, attach to job on completion (04-04)
+- Enable event subscription only when pending jobs exist or job running (04-04)
 
 ### Pending Todos
 
@@ -112,10 +115,10 @@ None - Phase 04 plans 03-05 pending.
 
 ### Blockers/Concerns
 
-None - Phase 04 plans 01-03 complete. Plans 04-05 ready.
+None - Phase 04 plans 01-04 complete. Plan 05 ready.
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 04-03-PLAN.md (session picker)
+Stopped at: Completed 04-04-PLAN.md (background jobs)
 Resume file: None
