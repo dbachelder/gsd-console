@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 01-core-tui
 source: [01-01-SUMMARY.md, 01-02-SUMMARY.md]
 started: 2026-01-25T00:10:00Z
@@ -109,9 +109,12 @@ skipped: 0
   reason: "User reported: the project name is there but the progress bar shows 100% complete"
   severity: major
   test: 2
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "useGsdData.ts calculates progress as completedPlans/totalPlans, but phases 2-4 have 'TBD' for plan count which parses to 0. So totalPlans=2 (phase 1 only), completedPlans=2, progress=100%. Should calculate based on phases or handle TBD plans."
+  artifacts:
+    - path: "src/hooks/useGsdData.ts"
+      issue: "Progress calculation counts only phases with defined plans"
+  missing:
+    - "Calculate progress as phases complete / total phases, or count TBD phases as having 1 plan"
   debug_session: ""
 
 - truth: "Phase list progress bars are right-aligned and concise"
@@ -119,9 +122,13 @@ skipped: 0
   reason: "User reported: yes, I'd like the progress bars to be right aligned, and remove the word 'plans'"
   severity: cosmetic
   test: 5
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "PhaseRow.tsx renders progress bar and count inline without flexbox justification. Need to use justifyContent='space-between' to push progress to the right."
+  artifacts:
+    - path: "src/components/roadmap/PhaseRow.tsx"
+      issue: "Progress bar and count not right-aligned, includes 'plans' text"
+  missing:
+    - "Use flexbox justifyContent='space-between' to right-align progress"
+    - "Change '{n}/{m} plans' to '{n}/{m}' format"
   debug_session: ""
 
 - truth: "Phase indicator icons have text labels for clarity"
@@ -129,9 +136,14 @@ skipped: 0
   reason: "User reported: pass, but I'd like the icons to have text to them, they're not clear enough on their own"
   severity: cosmetic
   test: 6
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "getIndicatorIcons() in icons.ts returns only emoji characters. PhaseRow.tsx expanded view displays just the icons without labels."
+  artifacts:
+    - path: "src/lib/icons.ts"
+      issue: "getIndicatorIcons returns only emoji, no labels"
+    - path: "src/components/roadmap/PhaseRow.tsx"
+      issue: "Expanded view shows raw icon string without labels"
+  missing:
+    - "Add text labels next to each indicator icon (e.g., '📝 Plan' instead of just '📝')"
   debug_session: ""
 
 - truth: "Success criteria checkboxes are consistently aligned"
@@ -139,9 +151,14 @@ skipped: 0
   reason: "User reported: pass, there are some [ ] characters that are missaligned, 3 and 4 have extra space in the beginning"
   severity: cosmetic
   test: 9
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "ROADMAP.md success criteria for items 3 and 4 have leading whitespace that's not being trimmed by the parser. parseRoadmap regex captures whitespace in numbered list items."
+  artifacts:
+    - path: "src/lib/parser.ts"
+      issue: "Success criteria regex doesn't trim leading whitespace from numbered items"
+    - path: ".planning/ROADMAP.md"
+      issue: "Items 3 and 4 may have inconsistent indentation"
+  missing:
+    - "Trim whitespace from criteria text after extraction"
   debug_session: ""
 
 - truth: "Pressing q exits the TUI cleanly back to shell"
@@ -149,9 +166,12 @@ skipped: 0
   reason: "User reported: q makes the ui stop responding to commands, but doesn't drop me back to the shell"
   severity: major
   test: 15
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "app.tsx uses Ink's useApp().exit() which unmounts the React app but doesn't call process.exit(). The terminal is left in a hung state because the Bun process is still running."
+  artifacts:
+    - path: "src/app.tsx"
+      issue: "exit() from useApp() doesn't terminate the Bun process"
+  missing:
+    - "Call process.exit(0) after exit() or use a different exit strategy"
   debug_session: ""
 
 - truth: "--only mode fills the terminal pane properly"
@@ -159,7 +179,10 @@ skipped: 0
   reason: "User reported: it works, but does not fill the terminal pane.. so it looks bad"
   severity: cosmetic
   test: 17
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "TabLayout.tsx single view mode renders without height or flexGrow props. Ink Box defaults to content-sized, not filling available space."
+  artifacts:
+    - path: "src/components/layout/TabLayout.tsx"
+      issue: "Single view Box doesn't set height or flexGrow to fill terminal"
+  missing:
+    - "Add flexGrow={1} or height='100%' to single view container"
   debug_session: ""
