@@ -4,7 +4,7 @@
  * Parses command-line arguments and renders the main app.
  */
 
-import { render } from 'ink';
+import { withFullScreen } from 'fullscreen-ink';
 import App from './app.tsx';
 import type { CliFlags } from './lib/types.ts';
 
@@ -59,4 +59,4 @@ Examples:
 }
 
 const flags = parseArgs();
-render(<App flags={flags} />);
+withFullScreen(<App flags={flags} />).start();
