@@ -44,9 +44,18 @@ function relativeTime(timestamp: number | undefined): string {
 	const days = Math.floor(diff / 86400000);
 
 	if (minutes < 1) return 'now';
-	if (minutes < 60) return `${minutes}m ago`;
-	if (hours < 24) return `${hours}h ago`;
-	return `${days}d ago`;
+	if (minutes < 60) return `${minutes}m`;
+	if (hours < 24) return `${hours}h`;
+	return `${days}d`;
+}
+
+/**
+ * Check if session was updated recently (likely still open)
+ */
+function isRecent(timestamp: number | undefined): boolean {
+	if (!timestamp) return false;
+	const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+	return timestamp > fiveMinutesAgo;
 }
 
 /** Max sessions to show before truncating */
@@ -142,22 +151,24 @@ export function SessionPicker({
 					{visibleSessions.map((session, index) => {
 						const isSelected = index === selectedIndex;
 						const time = relativeTime(session.updatedAt);
+						const recent = isRecent(session.updatedAt);
 						return (
 							<Box key={session.id} marginBottom={1}>
 								<Box flexDirection="column">
-									{/* First line: selector + title + time */}
+									{/* First line: selector + recent indicator + title */}
 									<Box>
 										<Text color={isSelected ? 'cyan' : undefined} bold={isSelected}>
 											{isSelected ? '▶ ' : '  '}
 										</Text>
+										<Text color={recent ? 'green' : 'gray'}>{recent ? '● ' : '○ '}</Text>
 										<Text color={isSelected ? 'cyan' : undefined} bold={isSelected}>
-											{truncate(session.lastCommand || session.id, 60)}
+											{truncate(session.lastCommand || session.id, 55)}
 										</Text>
-										<Text dimColor> ({time})</Text>
 									</Box>
-									{/* Second line: directory (dimmed) */}
-									<Box marginLeft={2}>
-										<Text dimColor>{session.directory}</Text>
+									{/* Second line: time + directory */}
+									<Box marginLeft={4}>
+										<Text color={recent ? 'green' : 'gray'}>{time}</Text>
+										<Text dimColor> · {session.directory}</Text>
 									</Box>
 								</Box>
 							</Box>
@@ -171,7 +182,13 @@ export function SessionPicker({
 
 			{/* Footer */}
 			{!isLoading && sessions.length > 0 && (
-				<Box marginTop={1}>
+				<Box marginTop={1} flexDirection="column">
+					<Box>
+						<Text color="green">●</Text>
+						<Text dimColor> recent (&lt;5m) </Text>
+						<Text color="gray">○</Text>
+						<Text dimColor> older</Text>
+					</Box>
 					<Text dimColor>j/k: navigate | Enter: select | Esc: close</Text>
 				</Box>
 			)}
