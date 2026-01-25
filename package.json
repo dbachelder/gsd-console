@@ -2,6 +2,7 @@
 	"name": "gsd-tui",
 	"version": "0.1.0",
 	"description": "Terminal UI for viewing GSD project status",
+	"license": "MIT",
 	"module": "src/cli.tsx",
 	"type": "module",
 	"bin": {
@@ -23,7 +24,9 @@
 		"@types/bun": "latest",
 		"@types/node": "^25.0.10",
 		"@types/react": "^19.2.9",
+		"ink-testing-library": "^4.0.0",
 		"lefthook": "^2.0.15",
+		"memfs": "^4.56.10",
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
