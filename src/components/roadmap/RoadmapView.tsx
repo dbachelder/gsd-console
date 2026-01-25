@@ -18,6 +18,12 @@ interface RoadmapViewProps {
 	isPhaseHighlighted?: (phaseNumber: number) => boolean;
 	isPhaseFading?: (phaseNumber: number) => boolean;
 	showToast?: (message: string, type?: 'info' | 'success' | 'warning') => void;
+	/** Optional selected phase number for state restoration */
+	selectedPhaseNumber?: number;
+	/** Optional scroll offset for state restoration */
+	scrollOffset?: number;
+	/** Optional callback when scroll position changes */
+	onScrollOffsetChange?: (offset: number) => void;
 }
 
 export function RoadmapView({
@@ -28,6 +34,9 @@ export function RoadmapView({
 	isPhaseHighlighted,
 	isPhaseFading,
 	showToast,
+	selectedPhaseNumber: _selectedPhaseNumber,
+	scrollOffset: _scrollOffset,
+	onScrollOffsetChange: _onScrollOffsetChange,
 }: RoadmapViewProps) {
 	// Track which phases are expanded
 	const [expandedPhases, setExpandedPhases] = useState<Set<number>>(new Set());

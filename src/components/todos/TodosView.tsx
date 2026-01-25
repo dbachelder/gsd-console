@@ -17,6 +17,10 @@ interface TodosViewProps {
 	showToast?: (message: string, type?: 'info' | 'success' | 'warning') => void;
 	/** Called when selection changes, reports todo ID to parent */
 	onTodoSelect?: (todoId: string | undefined) => void;
+	/** Optional scroll offset for state restoration */
+	scrollOffset?: number;
+	/** Optional callback when scroll position changes */
+	onScrollOffsetChange?: (offset: number) => void;
 }
 
 export function TodosView({
@@ -26,6 +30,8 @@ export function TodosView({
 	isTodoFading,
 	showToast,
 	onTodoSelect,
+	scrollOffset: _scrollOffset,
+	onScrollOffsetChange: _onScrollOffsetChange,
 }: TodosViewProps) {
 	// Filter state: show completed todos or not
 	const [showCompleted, setShowCompleted] = useState(true);
