@@ -6,9 +6,6 @@
  */
 
 import { spawnSync } from 'node:child_process';
-import { readdir, readFile } from 'node:fs/promises';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
 import { createOpencodeClient } from '@opencode-ai/sdk';
 
 /** Default port for OpenCode server */
@@ -21,17 +18,6 @@ export interface SessionInfo {
 	lastCommand?: string; // Last prompt/command run
 	createdAt?: string;
 	updatedAt?: number; // Timestamp for sorting/filtering
-}
-
-/** Local session storage format */
-interface LocalSession {
-	id: string;
-	directory: string;
-	title: string;
-	time: {
-		created: number;
-		updated: number;
-	};
 }
 
 /** Default base URL for OpenCode server */
@@ -68,107 +54,42 @@ export async function detectServer(port = DEFAULT_PORT): Promise<boolean> {
 }
 
 /**
- * Read sessions from local storage.
- * OpenCode stores sessions in ~/.local/share/opencode/storage/session/
- */
-async function readLocalSessions(): Promise<SessionInfo[]> {
-	const storageDir = join(homedir(), '.local/share/opencode/storage/session');
-	const sessions: SessionInfo[] = [];
-
-	try {
-		const projectDirs = await readdir(storageDir);
-
-		for (const projectHash of projectDirs) {
-			const projectPath = join(storageDir, projectHash);
-			let files: string[];
-			try {
-				files = await readdir(projectPath);
-			} catch {
-				continue; // Skip if can't read directory
-			}
-
-			for (const file of files) {
-				if (!file.endsWith('.json')) continue;
-
-				try {
-					const content = await readFile(join(projectPath, file), 'utf8');
-					const session = JSON.parse(content) as LocalSession;
-					sessions.push({
-						id: session.id,
-						directory: session.directory,
-						lastCommand: session.title,
-						createdAt: new Date(session.time.created).toISOString(),
-						updatedAt: session.time.updated,
-					});
-				} catch {
-					// Skip invalid files
-				}
-			}
-		}
-	} catch {
-		// Storage dir doesn't exist
-	}
-
-	// Deduplicate by ID (in case of storage anomalies)
-	const seen = new Set<string>();
-	return sessions.filter((s) => {
-		if (seen.has(s.id)) return false;
-		seen.add(s.id);
-		return true;
-	});
-}
-
-/**
- * List all OpenCode sessions.
- * Tries SDK first (if server running), falls back to local storage.
+ * List all OpenCode sessions via SDK.
+ * Requires `opencode serve --port 4096` to be running.
+ * Returns empty array if server not available.
  */
 export async function listSessions(): Promise<SessionInfo[]> {
-	// First try SDK (for when `opencode serve` is running)
 	try {
 		const client = createClient();
 		const response = await client.session.list();
-		if (!response.error && response.data && response.data.length > 0) {
+		if (!response.error && response.data) {
 			return response.data.map((s) => ({
 				id: s.id,
 				directory: s.directory,
 				lastCommand: s.title,
 				createdAt: new Date(s.time.created * 1000).toISOString(),
+				updatedAt: s.time.updated * 1000,
 			}));
 		}
 	} catch {
-		// SDK failed, fall through to local storage
+		// Server not running
 	}
-
-	// Fall back to reading local storage directly
-	return readLocalSessions();
+	return [];
 }
 
-/** Maximum age for sessions to show (24 hours) */
-const MAX_SESSION_AGE_MS = 24 * 60 * 60 * 1000;
-
-/** Maximum number of recent sessions to show */
-const MAX_RECENT_SESSIONS = 10;
-
 /**
- * Get recent sessions for this project directory.
- * Filters to sessions updated in last 24 hours, limited to 10 most recent.
+ * Get sessions for this project directory.
+ * Filters to sessions in the same directory tree, sorted by most recent.
  */
 export async function getProjectSessions(projectDir: string): Promise<SessionInfo[]> {
 	const sessions = await listSessions();
-	const now = Date.now();
 
 	// Normalize paths: remove trailing slashes for consistent comparison
 	const normalizedProjectDir = projectDir.replace(/\/+$/, '');
 
-	// Filter by directory match AND recency
+	// Filter by directory match
 	const filtered = sessions.filter((s) => {
 		if (!s.directory) return false;
-
-		// Check recency (only sessions updated in last 24 hours)
-		if (s.updatedAt && now - s.updatedAt > MAX_SESSION_AGE_MS) {
-			return false;
-		}
-
 		const normalizedSessionDir = s.directory.replace(/\/+$/, '');
 
 		// Session is in project tree OR project is in session tree
@@ -178,10 +99,8 @@ export async function getProjectSessions(projectDir: string): Promise<SessionInf
 		);
 	});
 
-	// Sort by most recently updated and limit
-	return filtered
-		.sort((a, b) => (b.updatedAt ?? 0) - (a.updatedAt ?? 0))
-		.slice(0, MAX_RECENT_SESSIONS);
+	// Sort by most recently updated
+	return filtered.sort((a, b) => (b.updatedAt ?? 0) - (a.updatedAt ?? 0));
 }
 
 /**
