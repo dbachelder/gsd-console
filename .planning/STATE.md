@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 03.1 UI polish complete, ready for Phase 4
+**Current focus:** Phase 04 OpenCode Integration in progress
 
 ## Current Position
 
-Phase: 03.1 of 5 (UI Polish)
-Plan: 5 of 5 in current phase (final gap closure)
-Status: Phase complete
-Last activity: 2026-01-25 - Completed 03.1-05-PLAN.md (final gap closure)
+Phase: 04 of 5 (OpenCode Integration)
+Plan: 2 of 5 in current phase (terminal handoff)
+Status: In progress
+Last activity: 2026-01-25 - Completed 04-02-PLAN.md (terminal handoff)
 
-Progress: [██████████] 100%
+Progress: [████████░░] 86% (18/21 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 16
+- Total plans completed: 18
 - Average duration: 4 min
-- Total execution time: 58 min
+- Total execution time: 64 min
 
 **By Phase:**
 
@@ -31,9 +31,10 @@ Progress: [██████████] 100%
 | 2 | 3 | 8 min | 2.7 min |
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
+| 4 | 2 | 6 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 3 min, 4 min, 2 min, 4 min, 3 min
+- Last 5 plans: 4 min, 2 min, 4 min, 3 min, 3 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -85,10 +86,12 @@ Recent decisions affecting current work:
 - Fuzzy filtering via useFuzzySearchList from @nozbe/microfuzz/react (03.1-05)
 - Filter clears on Escape, second Escape closes picker (03.1-05)
 - Phase completion determines all success criteria checkbox state (03.1-05)
+- spawnOpencodeSession merged into Plan 01 commit during parallel execution (04-02)
+- Warning toast for failed/cancelled OpenCode sessions, not error (04-02)
 
 ### Pending Todos
 
-None - all Phase 03.1 todos addressed in plan 05.
+None - Phase 04 plans 03-05 pending.
 
 ### Roadmap Evolution
 
@@ -103,10 +106,10 @@ None - all Phase 03.1 todos addressed in plan 05.
 
 ### Blockers/Concerns
 
-None - Phase 03.1 complete. Ready for Phase 4.
+None - Phase 04 plans 01-02 complete. Plans 03-05 ready.
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 03.1-05-PLAN.md (Phase 03.1 final gap closure complete)
+Stopped at: Completed 04-02-PLAN.md (terminal handoff)
 Resume file: None
