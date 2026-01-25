@@ -14,9 +14,9 @@ export function parseRoadmap(content: string, phasesDir: string): Phase[] {
 	const phases: Phase[] = [];
 
 	// Split into phase sections (### Phase N: Name)
-	const goalPattern = /\*\*Goal\*\*:\s*(.+?)(?=\n)/;
-	const dependsPattern = /\*\*Depends on\*\*:\s*(.+?)(?=\n)/;
-	const requirementsPattern = /\*\*Requirements\*\*:\s*(.+?)(?=\n)/;
+	const goalPattern = /\*\*Goal\*\*:\s*(.+)?(?=\n|$)/;
+	const dependsPattern = /\*\*Depends on\*\*:\s*(.+)?(?=\n|$)/;
+	const requirementsPattern = /\*\*Requirements\*\*:\s*(.+)?(?=\n|$)/;
 	const successCriteriaPattern = /\*\*Success Criteria\*\*[\s\S]*?(?=\*\*Plans|###|$)/;
 	const plansPattern = /\*\*Plans\*\*:\s*(\d+)\s*plans?/;
 
@@ -24,7 +24,7 @@ export function parseRoadmap(content: string, phasesDir: string): Phase[] {
 	const sections = content.split(/(?=###\s+Phase)/);
 
 	for (const section of sections) {
-		const headerMatch = /###\s+Phase\s+([\d.]+):\s+(.+?)(?=\n)/.exec(section);
+		const headerMatch = /###\s+Phase\s+([\d.]+):\s+(.+?)(?=\\n|\n|$)/.exec(section);
 		if (!headerMatch) continue;
 
 		const phaseNumber = parseFloat(headerMatch[1] ?? '0');
@@ -32,15 +32,21 @@ export function parseRoadmap(content: string, phasesDir: string): Phase[] {
 
 		// Extract goal
 		const goalMatch = goalPattern.exec(section);
-		const goal = goalMatch?.[1]?.trim() ?? '';
+		const goal = goalMatch?.[1]?.replace(/\*\*/g, '').trim() ?? '';
 
 		// Extract depends on
 		const dependsMatch = dependsPattern.exec(section);
-		const dependsOn = dependsMatch?.[1]?.trim() ?? null;
+		const dependsOn = dependsMatch?.[1]?.replace(/\*\*/g, '').trim() ?? null;
 
 		// Extract requirements (comma-separated IDs)
 		const reqMatch = requirementsPattern.exec(section);
-		const requirements = reqMatch?.[1] ? reqMatch[1].split(',').map((r) => r.trim()) : [];
+		const requirements = reqMatch?.[1]
+			? reqMatch[1]
+					.replace(/\*\*/g, '')
+					.split(',')
+					.map((r) => r.trim())
+					.filter((r) => r.length > 0)
+			: [];
 
 		// Extract success criteria (numbered list)
 		const criteriaMatch = successCriteriaPattern.exec(section);

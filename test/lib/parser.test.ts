@@ -10,6 +10,36 @@ vi.mock('node:fs/promises', () => fs.promises);
 import { parseState, parseTodos, parseRoadmap, readPlanningFile } from '../../src/lib/parser.ts';
 import type { Phase, ProjectState } from '../../src/lib/types.ts';
 
+/*
+ * FAILING PARSER TESTS DOCUMENTATION
+ *
+ * Test failures identified for Plan 05-12:
+ *
+ * 1. Line 154 - "extracts success criteria from numbered list"
+ *    - Expected: ['User sees roadmap', 'User can expand phases', 'Todos display correctly']
+ *    - Actual: []
+ *    - Issue: Regex pattern doesn't match "**Success Criteria**" format in ROADMAP.md
+ *
+ * 2. Line 170 - "extracts plans total count"
+ *    - Expected: 4
+ *    - Actual: 0
+ *    - Issue: Regex pattern doesn't match "**Plans**: 4 plans" format in ROADMAP.md
+ *
+ * 3. Line 248 - "counts completed plans from SUMMARY files"
+ *    - Expected: plansTotal = 3
+ *    - Actual: 0
+ *    - Issue: Same plans count regex issue
+ *
+ * 4. Line 273 - "status is complete when all plans done"
+ *    - Expected: "complete"
+ *    - Actual: "in-progress"
+ *    - Issue: Status logic depends on plansTotal being 0, so phase never reaches "complete"
+ *
+ * Root cause: Parser regex patterns in parser.ts don't include ** bold markers.
+ * ROADMAP.md format: "**Plans**: 4 plans", "**Success Criteria** (what must be TRUE):"
+ * Parser patterns: "Plans: 4 plans", "Success Criteria:" (missing ** markers)
+ */
+
 describe('parseState', () => {
 	test('extracts phase information', () => {
 		const content = String.raw`
@@ -102,7 +132,7 @@ describe('parseRoadmap', () => {
 
 	test('extracts phase name, number, and goal', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Goal:** Build terminal UI`;
+**Goal**: Build terminal UI`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/.gitkeep': '',
@@ -117,7 +147,7 @@ describe('parseRoadmap', () => {
 
 	test('extracts depends on field', () => {
 		const roadmapContent = String.raw`### Phase 2: Real-time Updates
-**Depends on:** Phase 1`;
+**Depends on**: Phase 1`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/02-updates/.gitkeep': '',
@@ -129,7 +159,7 @@ describe('parseRoadmap', () => {
 
 	test('extracts requirements array', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Requirements:** DISP-01, DISP-02, NAV-01`;
+**Requirements**: DISP-01, DISP-02, NAV-01`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/.gitkeep': '',
@@ -141,10 +171,10 @@ describe('parseRoadmap', () => {
 
 	test('extracts success criteria from numbered list', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Success Criteria:**
-1. User sees roadmap
-2. User can expand phases
-3. Todos display correctly`;
+**Success Criteria** (what must be TRUE):
+  1. User sees roadmap
+  2. User can expand phases
+  3. Todos display correctly`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/.gitkeep': '',
@@ -160,7 +190,7 @@ describe('parseRoadmap', () => {
 
 	test('extracts plans total count', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Plans:** 4 plans`;
+**Plans**: 4 plans`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/.gitkeep': '',
@@ -172,7 +202,7 @@ describe('parseRoadmap', () => {
 
 	test('handles decimal phase numbers', () => {
 		const roadmapContent = String.raw`### Phase 3.1: UI Polish
-**Goal:** Fix UI issues`;
+**Goal**: Fix UI issues`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/03.1-polish/.gitkeep': '',
@@ -186,10 +216,10 @@ describe('parseRoadmap', () => {
 
 	test('handles multiple phases', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Goal:** Build TUI
+**Goal**: Build TUI
 
 ### Phase 2: Updates
-**Goal:** File watching`;
+**Goal**: File watching`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/.gitkeep': '',
@@ -204,7 +234,7 @@ describe('parseRoadmap', () => {
 
 	test('normalizes "Nothing (first phase)" depends on to null', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Depends on:** Nothing (first phase)`;
+**Depends on**: Nothing (first phase)`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/.gitkeep': '',
@@ -235,7 +265,7 @@ describe('parseRoadmap', () => {
 
 	test('counts completed plans from SUMMARY files', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Plans:** 3 plans`;
+**Plans**: 3 plans`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/01-01-SUMMARY.md': '# Summary',
@@ -250,7 +280,7 @@ describe('parseRoadmap', () => {
 
 	test('determines phase status based on progress', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Plans:** 3 plans`;
+**Plans**: 3 plans`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/01-01-PLAN.md': '# Plan',
@@ -262,7 +292,7 @@ describe('parseRoadmap', () => {
 
 	test('status is complete when all plans done', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Plans:** 2 plans`;
+**Plans**: 2 plans`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/01-01-SUMMARY.md': '# Summary',
@@ -302,8 +332,8 @@ describe('parseRoadmap', () => {
 
 	test('handles empty success criteria', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Goal:** Build TUI
-**Success Criteria:**
+**Goal**: Build TUI
+**Success Criteria** (what must be TRUE):
 No criteria yet.`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -317,7 +347,7 @@ No criteria yet.`;
 
 	test('handles empty requirements', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
-**Requirements:** `;
+**Requirements**: `;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/.gitkeep': '',
