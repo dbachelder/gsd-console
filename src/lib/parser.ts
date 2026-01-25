@@ -342,10 +342,18 @@ function readRoadmapPlans(roadmapPath: string, phaseId: string): Map<string, str
 	try {
 		const roadmapContent = readFileSync(roadmapPath, 'utf-8');
 
+		// Normalize phaseId: "01" -> "1", but keep "03.1" as-is (decimal phases stay padded)
+		// ROADMAP.md uses unpadded numbers like "Phase 1:" for integers, but "Phase 03.1:" for decimals
+		const isDecimal = phaseId.includes('.');
+		const unpadded = isDecimal ? phaseId : phaseId.replace(/^0+(\d)$/, '$1');
+		const escapedPhaseId = unpadded.replace(/\./g, '\\.');
+
 		// Find the phase section (handles both integer and decimal phases like "03.1")
-		// Escape dots in phaseId for regex matching
-		const escapedPhaseId = phaseId.replace(/\./g, '\\.');
-		const sectionRegex = new RegExp(`Phase ${escapedPhaseId}:.*?Plans:[\\s\\S]*?(?=###|$)`, 'i');
+		// Need to match across multiple lines between "Phase X:" and "Plans:" and then content until next ###
+		const sectionRegex = new RegExp(
+			`### Phase ${escapedPhaseId}:[\\s\\S]*?Plans:[\\s\\S]*?(?=###|$)`,
+			'i',
+		);
 		const section = roadmapContent.match(sectionRegex)?.[0] ?? '';
 
 		// Match plan lines: `- [x] 03.1-01-PLAN.md — Summary text`

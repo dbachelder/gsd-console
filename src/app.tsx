@@ -223,6 +223,7 @@ export default function App({ flags }: AppProps) {
 					onPhaseSelect={setSelectedPhaseNumber}
 					selectedTodoId={selectedTodoId}
 					onTodoSelect={setSelectedTodoId}
+					planningDir={planningDir}
 				/>
 			</Box>
 			<Footer activeTab={activeTab} onlyMode={flags.only} />

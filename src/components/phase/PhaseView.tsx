@@ -3,10 +3,12 @@
  * Detailed view of a single phase with goal, criteria, and requirements.
  */
 
+import { existsSync, readdirSync } from 'node:fs';
 import { Box, Text, useInput } from 'ink';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useVimNav } from '../../hooks/useVimNav.ts';
 import { getIndicatorIcons, getStatusColor, getStatusIcon } from '../../lib/icons.ts';
+import { type PlanInfo, parsePlanFiles } from '../../lib/parser.ts';
 import type { Phase } from '../../lib/types.ts';
 import { CriteriaList } from './CriteriaList.tsx';
 import { GoalSection } from './GoalSection.tsx';
@@ -25,10 +27,36 @@ interface PhaseViewProps {
 	scrollOffset?: number;
 	/** Optional callback when scroll position changes */
 	onScrollOffsetChange?: (offset: number) => void;
+	/** Planning directory path */
+	planningDir?: string;
 }
 
 // Detail levels
 type DetailLevel = 1 | 2 | 3;
+
+/**
+ * Find the phase directory name (e.g., "01-core-tui" for phase 1)
+ */
+function findPhaseDirectory(phasesDir: string, phaseNumber: number): string | null {
+	if (!existsSync(phasesDir)) return null;
+
+	const dirs = readdirSync(phasesDir, { withFileTypes: true })
+		.filter((d) => d.isDirectory())
+		.map((d) => d.name);
+
+	// Look for directory starting with phase number (01-, 03.1-, etc.)
+	const paddedNumber =
+		phaseNumber < 10 && !String(phaseNumber).includes('.') ? `0${phaseNumber}` : `${phaseNumber}`;
+	const numPrefix = `${phaseNumber}`;
+
+	for (const dir of dirs) {
+		if (dir.startsWith(`${paddedNumber}-`) || dir.startsWith(`${numPrefix}-`)) {
+			return dir;
+		}
+	}
+
+	return null;
+}
 
 export function PhaseView({
 	phase,
@@ -39,9 +67,24 @@ export function PhaseView({
 	onDetailLevelChange,
 	scrollOffset: _scrollOffset,
 	onScrollOffsetChange: _onScrollOffsetChange,
+	planningDir = '.planning',
 }: PhaseViewProps) {
 	// Cast to DetailLevel type (1-3) for internal use
 	const currentDetailLevel = (detailLevel as DetailLevel) || 1;
+
+	// Parse plan files for this phase
+	const planInfos: PlanInfo[] = useMemo(() => {
+		if (!phase) return [];
+		const phasesDir = `${planningDir}/phases`;
+		const phaseDirName = findPhaseDirectory(phasesDir, phase.number);
+		if (!phaseDirName) return [];
+		// Derive phaseId for ROADMAP lookup - e.g., "03.1" for decimal, "01" for integer
+		const phaseId =
+			phase.number < 10 && !String(phase.number).includes('.')
+				? `0${phase.number}`
+				: String(phase.number);
+		return parsePlanFiles(`${phasesDir}/${phaseDirName}`, phase.number, planningDir, phaseId);
+	}, [phase, planningDir]);
 
 	// Find current phase index
 	const currentIndex = phase ? allPhases.findIndex((p) => p.number === phase.number) : -1;
@@ -177,6 +220,25 @@ export function PhaseView({
 					</Box>
 				)}
 			</Box>
+
+			{/* Plan list */}
+			{planInfos.length > 0 && (
+				<Box flexDirection="column" marginTop={1}>
+					<Text bold dimColor>
+						Plans:
+					</Text>
+					{planInfos.map((plan) => (
+						<Box key={plan.id} paddingLeft={2}>
+							<Text dimColor>{plan.id}: </Text>
+							<Text>{plan.summary}</Text>
+							<Text dimColor>
+								{' '}
+								(Wave {plan.wave}, {plan.taskCount} task{plan.taskCount !== 1 ? 's' : ''})
+							</Text>
+						</Box>
+					))}
+				</Box>
+			)}
 
 			{/* Navigation hints */}
 			<Box marginTop={1}>

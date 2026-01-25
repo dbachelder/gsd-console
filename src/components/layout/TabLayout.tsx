@@ -27,6 +27,8 @@ interface TabLayoutProps {
 	onPhaseSelect: (phaseNumber: number) => void;
 	selectedTodoId?: string;
 	onTodoSelect?: (todoId: string | undefined) => void;
+	/** Planning directory path for plan file parsing */
+	planningDir?: string;
 }
 
 export function TabLayout({
@@ -43,6 +45,7 @@ export function TabLayout({
 	onPhaseSelect,
 	selectedTodoId: _selectedTodoId,
 	onTodoSelect,
+	planningDir = '.planning',
 }: TabLayoutProps) {
 	const isOnlyMode = Boolean(flags.only);
 
@@ -113,6 +116,7 @@ export function TabLayout({
 						onPhaseChange={onPhaseSelect}
 						detailLevel={detailLevel}
 						onDetailLevelChange={handleDetailLevelChange}
+						planningDir={planningDir}
 					/>
 				)}
 				{flags.only === 'todos' && (
@@ -156,6 +160,7 @@ export function TabLayout({
 						onPhaseChange={onPhaseSelect}
 						detailLevel={detailLevel}
 						onDetailLevelChange={handleDetailLevelChange}
+						planningDir={planningDir}
 					/>
 				)}
 				{activeTab === 'todos' && (
