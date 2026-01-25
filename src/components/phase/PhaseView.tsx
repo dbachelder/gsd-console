@@ -4,7 +4,7 @@
  */
 
 import { Box, Text, useInput } from 'ink';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useVimNav } from '../../hooks/useVimNav.ts';
 import { getIndicatorIcons, getStatusColor, getStatusIcon } from '../../lib/icons.ts';
 import type { Phase } from '../../lib/types.ts';
@@ -17,13 +17,31 @@ interface PhaseViewProps {
 	allPhases: Phase[];
 	isActive: boolean;
 	onPhaseChange?: (phaseNumber: number) => void;
+	/** Controlled detail level (1-3) */
+	detailLevel: number;
+	/** Callback when detail level changes */
+	onDetailLevelChange: (level: number) => void;
+	/** Optional scroll offset for state restoration */
+	scrollOffset?: number;
+	/** Optional callback when scroll position changes */
+	onScrollOffsetChange?: (offset: number) => void;
 }
 
 // Detail levels
 type DetailLevel = 1 | 2 | 3;
 
-export function PhaseView({ phase, allPhases, isActive, onPhaseChange }: PhaseViewProps) {
-	const [detailLevel, setDetailLevel] = useState<DetailLevel>(1);
+export function PhaseView({
+	phase,
+	allPhases,
+	isActive,
+	onPhaseChange,
+	detailLevel,
+	onDetailLevelChange,
+	scrollOffset: _scrollOffset,
+	onScrollOffsetChange: _onScrollOffsetChange,
+}: PhaseViewProps) {
+	// Cast to DetailLevel type (1-3) for internal use
+	const currentDetailLevel = (detailLevel as DetailLevel) || 1;
 
 	// Find current phase index
 	const currentIndex = phase ? allPhases.findIndex((p) => p.number === phase.number) : -1;
@@ -73,7 +91,8 @@ export function PhaseView({ phase, allPhases, isActive, onPhaseChange }: PhaseVi
 			} else if (input === ']') {
 				navigateNext();
 			} else if (input === 'd') {
-				setDetailLevel((prev) => ((prev % 3) + 1) as DetailLevel);
+				const nextLevel = ((currentDetailLevel % 3) + 1) as DetailLevel;
+				onDetailLevelChange?.(nextLevel);
 			}
 		},
 		{ isActive },

@@ -79,6 +79,7 @@ Recent decisions affecting current work:
 1. **Display actual plan files in TUI** (ui) — TUI shows phases/todos but doesn't display PLAN.md files
 2. **Preserve tab state when switching views** (ui) — Selected phase and toggle state lost when switching between tabs
 3. **Remove detail toggle from roadmap** (ui) — Repurpose 'd' key for /gsd-discuss-phase command
+4. **Fix UI shift on first navigation** (ui) — Slight UI shift occurs on first navigation after opening
 
 ### Roadmap Evolution
 
