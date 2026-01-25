@@ -59,6 +59,7 @@ Recent decisions affecting current work:
 
 1. **Pin help bar to bottom and improve styling** (ui) — Footer should anchor to bottom of terminal viewport
 2. **Improve tab styling** (ui) — Better visual hierarchy for tab bar
+3. **Display actual plan files in TUI** (ui) — TUI shows phases/todos but doesn't display PLAN.md files
 
 ### Blockers/Concerns
 
