@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 05 Test Coverage - parser tests in progress
+**Current focus:** Phase 05 Test Coverage - hook tests complete
 
 ## Current Position
 
 Phase: 05 of 5 (Test Coverage)
-Plan: 2 of 10 in current phase (parser tests and fixtures)
+Plan: 3 of 10 in current phase (core hooks tests)
 Status: In progress
-Last activity: 2026-01-25 - Completed 05-02-PLAN.md (parser tests and fixtures)
+Last activity: 2026-01-25 - Completed 05-03-PLAN.md (core hooks tests)
 
-Progress: [██████████░] 92% (24/26 plans)
+Progress: [██████████░] 92% (25/26 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 24
+- Total plans completed: 25
 - Average duration: 4 min
-- Total execution time: 89 min
+- Total execution time: 93 min
 
 **By Phase:**
 
@@ -107,6 +107,8 @@ Recent decisions affecting current work:
 - test/setup.ts exports vol for fixtures, individual tests mock modules (05-01)
 - Bun's preload cannot import 'bun/test' directly - tests use vi.mock() inline per file (05-01)
 - Memfs filesystem mocking via vol.fromJSON() and beforeEach vol.reset() (05-02)
+- Component wrapper pattern for hook tests with ink-testing-library (05-03)
+- useVimNav coverage 59% acceptable given re-render limitations of wrapper pattern (05-03)
 
 ### Pending Todos
 
@@ -140,5 +142,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 05-02-PLAN.md (parser tests and fixtures)
+Stopped at: Completed 05-03-PLAN.md (core hooks tests)
 Resume file: None
