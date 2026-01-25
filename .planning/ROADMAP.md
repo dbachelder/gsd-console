@@ -46,10 +46,11 @@ Plans:
   1. TUI refreshes automatically when any .planning/ file is saved
   2. Rapid file saves do not cause flicker (debounced)
   3. Recently changed items show a visual indicator (e.g., highlight, icon)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01-PLAN.md - File watcher and change highlight hooks
+- [ ] 02-02-PLAN.md - UI integration (spinner, highlights, wiring)
 
 ### Phase 3: Actions and Editing
 **Goal**: User can execute GSD commands and edit todos without leaving TUI
@@ -88,6 +89,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Core TUI | 4/4 | Complete | 2026-01-25 |
-| 2. Real-time Updates | 0/1 | Not started | - |
+| 2. Real-time Updates | 0/2 | Not started | - |
 | 3. Actions and Editing | 0/2 | Not started | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
