@@ -5,21 +5,81 @@
 
 import { Spinner } from '@inkjs/ui';
 import { Box, Text, useApp, useInput } from 'ink';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Footer } from './components/layout/Footer.tsx';
 import { Header } from './components/layout/Header.tsx';
 import { HelpOverlay } from './components/layout/HelpOverlay.tsx';
 import { TabLayout } from './components/layout/TabLayout.tsx';
+import { useChangeHighlight } from './hooks/useChangeHighlight.ts';
+import { useFileWatcher } from './hooks/useFileWatcher.ts';
 import { useGsdData } from './hooks/useGsdData.ts';
-import type { CliFlags } from './lib/types.ts';
+import type { CliFlags, GsdData } from './lib/types.ts';
 
 interface AppProps {
 	flags: CliFlags;
 }
 
+/**
+ * Derive affected item IDs from changed file paths.
+ * Maps file changes to item IDs that should be highlighted.
+ */
+function deriveAffectedItemIds(files: string[], data: GsdData): string[] {
+	const ids: string[] = [];
+
+	for (const file of files) {
+		// ROADMAP.md affects all phases
+		if (file.includes('ROADMAP.md')) {
+			for (const p of data.phases) {
+				ids.push(`phase-${p.number}`);
+			}
+		}
+		// Phase-specific files affect that phase
+		// Match patterns like "phases/01-xxx/" or "phases/1-xxx/"
+		const phaseMatch = /phases\/(\d+)-/.exec(file);
+		if (phaseMatch?.[1]) {
+			ids.push(`phase-${parseInt(phaseMatch[1], 10)}`);
+		}
+		// STATE.md or todos/*.md affects todos
+		if (file.includes('STATE.md') || file.includes('todos/')) {
+			for (const t of data.todos) {
+				ids.push(`todo-${t.id}`);
+			}
+		}
+	}
+
+	// Dedupe
+	return [...new Set(ids)];
+}
+
 export default function App({ flags }: AppProps) {
 	const { exit } = useApp();
-	const data = useGsdData(flags.dir ?? '.planning');
+	const planningDir = flags.dir ?? '.planning';
+
+	// File watcher for automatic refresh
+	const { changedFiles, isRefreshing, lastRefresh } = useFileWatcher({
+		path: planningDir,
+		debounceMs: 300,
+		onError: (err) => console.error('File watcher error:', err),
+	});
+
+	// Load data with file watcher integration
+	const data = useGsdData(planningDir, lastRefresh ?? undefined, changedFiles);
+
+	// Change highlight tracking
+	const { markChanged, isHighlighted, isFading } = useChangeHighlight({
+		holdDurationMs: 5000,
+		fadeDurationMs: 500,
+	});
+
+	// Mark items as changed when files change
+	useEffect(() => {
+		if (changedFiles.length > 0 && !data.loading) {
+			const itemIds = deriveAffectedItemIds(changedFiles, data);
+			if (itemIds.length > 0) {
+				markChanged(itemIds);
+			}
+		}
+	}, [changedFiles, data, markChanged]);
 
 	// Help overlay state
 	const [showHelp, setShowHelp] = useState(false);
@@ -71,7 +131,11 @@ export default function App({ flags }: AppProps) {
 	if (showHelp) {
 		return (
 			<Box flexDirection="column">
-				<Header projectName={data.state.projectName} state={data.state} />
+				<Header
+					projectName={data.state.projectName}
+					state={data.state}
+					isRefreshing={isRefreshing}
+				/>
 				<HelpOverlay onClose={() => setShowHelp(false)} />
 			</Box>
 		);
@@ -80,8 +144,17 @@ export default function App({ flags }: AppProps) {
 	// Main app layout
 	return (
 		<Box flexDirection="column" flexGrow={1}>
-			<Header projectName={data.state.projectName} state={data.state} />
-			<TabLayout data={data} flags={flags} isActive={!showHelp} onTabChange={setActiveTab} />
+			<Header projectName={data.state.projectName} state={data.state} isRefreshing={isRefreshing} />
+			<TabLayout
+				data={data}
+				flags={flags}
+				isActive={!showHelp}
+				onTabChange={setActiveTab}
+				isPhaseHighlighted={(num) => isHighlighted(`phase-${num}`)}
+				isPhaseFading={(num) => isFading(`phase-${num}`)}
+				isTodoHighlighted={(id) => isHighlighted(`todo-${id}`)}
+				isTodoFading={(id) => isFading(`todo-${id}`)}
+			/>
 			<Footer activeTab={activeTab} onlyMode={flags.only} />
 		</Box>
 	);

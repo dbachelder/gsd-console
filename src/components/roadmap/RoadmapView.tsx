@@ -14,9 +14,17 @@ interface RoadmapViewProps {
 	phases: Phase[];
 	isActive: boolean;
 	onSelectPhase?: (phaseNumber: number) => void;
+	isPhaseHighlighted?: (phaseNumber: number) => boolean;
+	isPhaseFading?: (phaseNumber: number) => boolean;
 }
 
-export function RoadmapView({ phases, isActive, onSelectPhase }: RoadmapViewProps) {
+export function RoadmapView({
+	phases,
+	isActive,
+	onSelectPhase,
+	isPhaseHighlighted,
+	isPhaseFading,
+}: RoadmapViewProps) {
 	// Track which phases are expanded
 	const [expandedPhases, setExpandedPhases] = useState<Set<number>>(new Set());
 
@@ -122,6 +130,8 @@ export function RoadmapView({ phases, isActive, onSelectPhase }: RoadmapViewProp
 							isSelected={index === selectedIndex}
 							isExpanded={expandedPhases.has(phase.number)}
 							showIndicators={showIndicators}
+							isHighlighted={isPhaseHighlighted?.(phase.number)}
+							isFading={isPhaseFading?.(phase.number)}
 						/>
 					))
 				)}

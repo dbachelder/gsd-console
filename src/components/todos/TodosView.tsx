@@ -12,9 +12,11 @@ import { TodoItem } from './TodoItem.tsx';
 interface TodosViewProps {
 	todos: Todo[];
 	isActive: boolean;
+	isTodoHighlighted?: (todoId: string) => boolean;
+	isTodoFading?: (todoId: string) => boolean;
 }
 
-export function TodosView({ todos, isActive }: TodosViewProps) {
+export function TodosView({ todos, isActive, isTodoHighlighted, isTodoFading }: TodosViewProps) {
 	// Filter state: show completed todos or not
 	const [showCompleted, setShowCompleted] = useState(true);
 
@@ -78,6 +80,8 @@ export function TodosView({ todos, isActive }: TodosViewProps) {
 							todo={todo}
 							isSelected={index === selectedIndex}
 							showDetail={showDetail}
+							isHighlighted={isTodoHighlighted?.(todo.id)}
+							isFading={isTodoFading?.(todo.id)}
 						/>
 					))
 				)}

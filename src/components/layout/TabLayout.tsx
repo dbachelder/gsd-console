@@ -18,9 +18,22 @@ interface TabLayoutProps {
 	flags: CliFlags;
 	isActive?: boolean;
 	onTabChange?: (tab: TabId) => void;
+	isPhaseHighlighted?: (phaseNumber: number) => boolean;
+	isPhaseFading?: (phaseNumber: number) => boolean;
+	isTodoHighlighted?: (todoId: string) => boolean;
+	isTodoFading?: (todoId: string) => boolean;
 }
 
-export function TabLayout({ data, flags, isActive = true, onTabChange }: TabLayoutProps) {
+export function TabLayout({
+	data,
+	flags,
+	isActive = true,
+	onTabChange,
+	isPhaseHighlighted,
+	isPhaseFading,
+	isTodoHighlighted,
+	isTodoFading,
+}: TabLayoutProps) {
 	const isOnlyMode = Boolean(flags.only);
 
 	// Track selected phase number (for Phase view navigation)
@@ -53,7 +66,13 @@ export function TabLayout({ data, flags, isActive = true, onTabChange }: TabLayo
 		return (
 			<Box flexDirection="column" flexGrow={1}>
 				{flags.only === 'roadmap' && (
-					<RoadmapView phases={data.phases} isActive={isActive} onSelectPhase={handleSelectPhase} />
+					<RoadmapView
+						phases={data.phases}
+						isActive={isActive}
+						onSelectPhase={handleSelectPhase}
+						isPhaseHighlighted={isPhaseHighlighted}
+						isPhaseFading={isPhaseFading}
+					/>
 				)}
 				{flags.only === 'phase' && (
 					<PhaseView
@@ -63,7 +82,14 @@ export function TabLayout({ data, flags, isActive = true, onTabChange }: TabLayo
 						onPhaseChange={setSelectedPhaseNumber}
 					/>
 				)}
-				{flags.only === 'todos' && <TodosView todos={data.todos} isActive={isActive} />}
+				{flags.only === 'todos' && (
+					<TodosView
+						todos={data.todos}
+						isActive={isActive}
+						isTodoHighlighted={isTodoHighlighted}
+						isTodoFading={isTodoFading}
+					/>
+				)}
 			</Box>
 		);
 	}
@@ -77,7 +103,13 @@ export function TabLayout({ data, flags, isActive = true, onTabChange }: TabLayo
 			{/* Active view content */}
 			<Box flexDirection="column">
 				{activeTab === 'roadmap' && (
-					<RoadmapView phases={data.phases} isActive={isActive} onSelectPhase={handleSelectPhase} />
+					<RoadmapView
+						phases={data.phases}
+						isActive={isActive}
+						onSelectPhase={handleSelectPhase}
+						isPhaseHighlighted={isPhaseHighlighted}
+						isPhaseFading={isPhaseFading}
+					/>
 				)}
 				{activeTab === 'phase' && (
 					<PhaseView
@@ -87,7 +119,14 @@ export function TabLayout({ data, flags, isActive = true, onTabChange }: TabLayo
 						onPhaseChange={setSelectedPhaseNumber}
 					/>
 				)}
-				{activeTab === 'todos' && <TodosView todos={data.todos} isActive={isActive} />}
+				{activeTab === 'todos' && (
+					<TodosView
+						todos={data.todos}
+						isActive={isActive}
+						isTodoHighlighted={isTodoHighlighted}
+						isTodoFading={isTodoFading}
+					/>
+				)}
 			</Box>
 		</Box>
 	);
