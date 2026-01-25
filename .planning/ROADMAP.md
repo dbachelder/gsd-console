@@ -131,8 +131,8 @@ Plans:
   - [ ] 05-12-PLAN.md — Fix 5 failing parser tests (Wave 2, 4 tasks) [gap closure]
   - [ ] 05-13-PLAN.md — Add parser coverage for uncovered functions (Wave 2, 4 tasks) [gap closure]
   - [x] 05-14-PLAN.md — Add tests for useCommandPalette hook (Wave 3, 4 tasks) [gap closure]
-  - [ ] 05-15-PLAN.md — Add tests for useExternalEditor hook (Wave 3, 5 tasks) [gap closure]
-  - [ ] 05-16-PLAN.md — Add tests for useGsdData hook (Wave 3, 4 tasks) [gap closure]
+  - [x] 05-15-PLAN.md — Add tests for useExternalEditor hook (Wave 3, 5 tasks) [gap closure]
+  - [x] 05-16-PLAN.md — Add tests for useGsdData hook (Wave 3, 4 tasks) [gap closure]
   - [ ] 05-17-PLAN.md — Add tests for useSessionActivity hook (Wave 4, 3 tasks) [gap closure]
   - [ ] 05-18-PLAN.md — Final verification (Wave 4, 4 tasks) [gap closure]
 

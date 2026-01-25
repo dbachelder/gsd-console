@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 05 Test Coverage - command palette and picker tests complete
+**Current focus:** Phase 05 Test Coverage - useGsdData hook tests complete
 
 ## Current Position
 
 Phase: 05 of 5 (Test Coverage)
-Plan: 14 of 18 in current phase
+Plan: 16 of 18 in current phase
 Status: In progress
-Last activity: 2026-01-25 - Completed 05-14-PLAN.md (add useCommandPalette tests)
+Last activity: 2026-01-25 - Completed 05-16-PLAN.md (add useGsdData hook tests)
 
-Progress: [█████████░░░░░] 92% (36/39 plans)
+Progress: [████████████] 97% (38/39 plans)
 
 ## Performance Metrics
 
@@ -150,10 +150,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
 | 4. OpenCode Integration | 7/7 | Complete | 2026-01-25 |
- | 5. Test Coverage | 12/18 | In progress | - |
+ | 5. Test Coverage | 16/18 | In progress | - |
 
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 05-14-PLAN.md (add useCommandPalette tests)
+Stopped at: Completed 05-16-PLAN.md (add useGsdData hook tests)
 Resume file: None
