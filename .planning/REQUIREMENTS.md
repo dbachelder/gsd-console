@@ -7,16 +7,16 @@
 
 ### Display
 
-- [ ] **DISP-01**: User sees roadmap overview with phases and progress indicators
-- [ ] **DISP-02**: User sees current phase details (goal, requirements, success criteria)
-- [ ] **DISP-03**: User sees todos list from planning docs
-- [ ] **DISP-04**: User sees visual indicators per phase (has plan, has context, needs verification, blocked, etc.)
+- [x] **DISP-01**: User sees roadmap overview with phases and progress indicators
+- [x] **DISP-02**: User sees current phase details (goal, requirements, success criteria)
+- [x] **DISP-03**: User sees todos list from planning docs
+- [x] **DISP-04**: User sees visual indicators per phase (has plan, has context, needs verification, blocked, etc.)
 
 ### Navigation
 
-- [ ] **NAV-01**: User can navigate between panels with keyboard (Tab, arrows)
-- [ ] **NAV-02**: User can use Vim keybindings (hjkl, gg, G, Ctrl+d/u)
-- [ ] **NAV-03**: User can scroll content (page up/down, arrow keys)
+- [x] **NAV-01**: User can navigate between panels with keyboard (Tab, arrows)
+- [x] **NAV-02**: User can use Vim keybindings (hjkl, gg, G, Ctrl+d/u)
+- [x] **NAV-03**: User can scroll content (page up/down, arrow keys)
 
 ### Real-time Updates
 
@@ -39,9 +39,9 @@
 
 ### Technical
 
-- [ ] **TECH-01**: Built with Ink (TypeScript/React) TUI framework
-- [ ] **TECH-02**: Parses STATE.md, ROADMAP.md, PROJECT.md, REQUIREMENTS.md
-- [ ] **TECH-03**: Works in split terminal pane alongside OpenCode
+- [x] **TECH-01**: Built with Ink (TypeScript/React) TUI framework
+- [x] **TECH-02**: Parses STATE.md, ROADMAP.md, PROJECT.md, REQUIREMENTS.md
+- [x] **TECH-03**: Works in split terminal pane alongside OpenCode
 
 ## v2 Requirements
 
@@ -80,16 +80,16 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DISP-01 | Phase 1 | Pending |
-| DISP-02 | Phase 1 | Pending |
-| DISP-03 | Phase 1 | Pending |
-| DISP-04 | Phase 1 | Pending |
-| NAV-01 | Phase 1 | Pending |
-| NAV-02 | Phase 1 | Pending |
-| NAV-03 | Phase 1 | Pending |
-| TECH-01 | Phase 1 | Pending |
-| TECH-02 | Phase 1 | Pending |
-| TECH-03 | Phase 1 | Pending |
+| DISP-01 | Phase 1 | Complete |
+| DISP-02 | Phase 1 | Complete |
+| DISP-03 | Phase 1 | Complete |
+| DISP-04 | Phase 1 | Complete |
+| NAV-01 | Phase 1 | Complete |
+| NAV-02 | Phase 1 | Complete |
+| NAV-03 | Phase 1 | Complete |
+| TECH-01 | Phase 1 | Complete |
+| TECH-02 | Phase 1 | Complete |
+| TECH-03 | Phase 1 | Complete |
 | RT-01 | Phase 2 | Pending |
 | RT-02 | Phase 2 | Pending |
 | RT-03 | Phase 2 | Pending |
