@@ -75,12 +75,13 @@ Plans:
 
 **Goal**: UI refinement for existing TUI — addressing visual polish and state issues from earlier phases
 **Depends on**: Phase 3
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [x] 03.1-01-PLAN.md — Sticky footer, tab styling, and header sizing fixes (Wave 1, 3 tasks)
 - [x] 03.1-02-PLAN.md — Tab state persistence and detail toggle removal (Wave 2, 3 tasks)
 - [x] 03.1-03-PLAN.md — Plan file display (summary, task count, wave info) (Wave 3, 3 tasks)
+- [ ] 03.1-04-PLAN.md — Roadmap state persistence fix (Wave 1, 3 tasks) [gap closure]
 
 ### Phase 4: OpenCode Integration
 **Goal**: TUI can spawn and coordinate with OpenCode sessions
@@ -105,5 +106,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Core TUI! | 4/4 | Complete | 2026-01-25 |
 | 2. Real-time Updates | 3/3 | Complete | 2026-01-24 |
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
-| 03.1: UI polish (INSERTED) | 3/3 | Complete | 2026-01-25 |
+| 03.1: UI polish (INSERTED) | 3/4 | In progress | - |
 | 4. OpenCode Integration | 0/1 | Not started | - |
