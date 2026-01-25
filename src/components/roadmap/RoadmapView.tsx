@@ -8,7 +8,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useVimNav } from '../../hooks/useVimNav.ts';
 import type { Phase } from '../../lib/types.ts';
 import { PhaseRow } from './PhaseRow.tsx';
-import { ProgressBar } from './ProgressBar.tsx';
 
 interface RoadmapViewProps {
 	phases: Phase[];
@@ -141,23 +140,8 @@ export function RoadmapView({
 		{ isActive },
 	);
 
-	// Calculate overall project progress
-	const totalPlans = phases.reduce((sum, p) => sum + p.plansTotal, 0);
-	const completedPlans = phases.reduce((sum, p) => sum + p.plansComplete, 0);
-	const overallPercent = totalPlans > 0 ? Math.round((completedPlans / totalPlans) * 100) : 0;
-
 	return (
 		<Box flexDirection="column" paddingX={1} flexGrow={1}>
-			{/* Overall progress header */}
-			<Box marginBottom={1}>
-				<Text bold>Project Progress: </Text>
-				<ProgressBar percent={overallPercent} width={20} />
-				<Text dimColor>
-					{' '}
-					({completedPlans}/{totalPlans} plans)
-				</Text>
-			</Box>
-
 			{/* Phase list */}
 			<Box flexDirection="column" borderStyle="single" paddingX={1}>
 				{phases.length === 0 ? (
