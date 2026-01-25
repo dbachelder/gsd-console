@@ -208,21 +208,23 @@ export default function App({ flags }: AppProps) {
 	return (
 		<Box flexDirection="column" flexGrow={1}>
 			<Header projectName={data.state.projectName} state={data.state} isRefreshing={isRefreshing} />
-			<TabLayout
-				data={data}
-				flags={flags}
-				isActive={!showHelp && palette.mode === 'closed' && !showFilePicker}
-				onTabChange={setActiveTab}
-				isPhaseHighlighted={(num) => isHighlighted(`phase-${num}`)}
-				isPhaseFading={(num) => isFading(`phase-${num}`)}
-				isTodoHighlighted={(id) => isHighlighted(`todo-${id}`)}
-				isTodoFading={(id) => isFading(`todo-${id}`)}
-				showToast={showToast}
-				selectedPhaseNumber={selectedPhaseNumber}
-				onPhaseSelect={setSelectedPhaseNumber}
-				selectedTodoId={selectedTodoId}
-				onTodoSelect={setSelectedTodoId}
-			/>
+			<Box flexDirection="column" flexGrow={1}>
+				<TabLayout
+					data={data}
+					flags={flags}
+					isActive={!showHelp && palette.mode === 'closed' && !showFilePicker}
+					onTabChange={setActiveTab}
+					isPhaseHighlighted={(num) => isHighlighted(`phase-${num}`)}
+					isPhaseFading={(num) => isFading(`phase-${num}`)}
+					isTodoHighlighted={(id) => isHighlighted(`todo-${id}`)}
+					isTodoFading={(id) => isFading(`todo-${id}`)}
+					showToast={showToast}
+					selectedPhaseNumber={selectedPhaseNumber}
+					onPhaseSelect={setSelectedPhaseNumber}
+					selectedTodoId={selectedTodoId}
+					onTodoSelect={setSelectedTodoId}
+				/>
+			</Box>
 			<Footer activeTab={activeTab} onlyMode={flags.only} />
 
 			{/* Command palette overlay */}
