@@ -61,7 +61,13 @@ export function CommandPalette({
 	const visibleCommands = filteredCommands.slice(0, MAX_VISIBLE_ITEMS);
 
 	return (
-		<Box flexDirection="column" borderStyle="round" borderColor="blue" paddingX={1}>
+		<Box
+			flexDirection="column"
+			borderStyle="round"
+			borderColor="blue"
+			paddingX={1}
+			backgroundColor="black"
+		>
 			<Box marginBottom={1}>
 				<Text color="blue" bold>
 					:

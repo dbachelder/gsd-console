@@ -48,7 +48,14 @@ export function FilePicker({ files, onSelect, onClose }: FilePickerProps) {
 	});
 
 	return (
-		<Box flexDirection="column" borderStyle="round" borderColor="cyan" paddingX={2} paddingY={1}>
+		<Box
+			flexDirection="column"
+			borderStyle="round"
+			borderColor="cyan"
+			paddingX={2}
+			paddingY={1}
+			backgroundColor="black"
+		>
 			{/* Title */}
 			<Box marginBottom={1}>
 				<Text bold color="cyan">
