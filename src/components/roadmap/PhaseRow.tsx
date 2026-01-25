@@ -24,8 +24,8 @@ export function PhaseRow({ phase, isSelected, isExpanded, showIndicators = true 
 	const planPercent =
 		phase.plansTotal > 0 ? Math.round((phase.plansComplete / phase.plansTotal) * 100) : 0;
 
-	// Get indicator icons string
-	const indicatorIcons = getIndicatorIcons(phase.indicators);
+	// Get indicator icons array
+	const indicators = getIndicatorIcons(phase.indicators);
 
 	return (
 		<Box flexDirection="column">
@@ -61,9 +61,14 @@ export function PhaseRow({ phase, isSelected, isExpanded, showIndicators = true 
 			</Box>
 
 			{/* Expanded content: indicator icons */}
-			{isExpanded && showIndicators && indicatorIcons && (
+			{isExpanded && showIndicators && (
 				<Box marginLeft={4}>
-					<Text dimColor>{indicatorIcons}</Text>
+					{indicators.map((ind, i) => (
+						<Text key={ind.label} dimColor={!ind.active}>
+							{ind.icon} {ind.label}
+							{i < indicators.length - 1 ? '  ' : ''}
+						</Text>
+					))}
 				</Box>
 			)}
 		</Box>

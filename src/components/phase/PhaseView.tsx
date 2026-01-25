@@ -92,7 +92,8 @@ export function PhaseView({ phase, allPhases, isActive, onPhaseChange }: PhaseVi
 
 	const statusIcon = getStatusIcon(phase.status);
 	const statusColor = getStatusColor(phase.status);
-	const indicatorIcons = getIndicatorIcons(phase.indicators);
+	const indicators = getIndicatorIcons(phase.indicators);
+	const hasActiveIndicators = indicators.some((ind) => ind.active);
 
 	return (
 		<Box flexDirection="column" paddingX={1}>
@@ -112,9 +113,17 @@ export function PhaseView({ phase, allPhases, isActive, onPhaseChange }: PhaseVi
 						| {phase.plansComplete}/{phase.plansTotal} plans complete
 					</Text>
 				</Box>
-				{indicatorIcons && (
+				{hasActiveIndicators && (
 					<Box>
-						<Text dimColor>Indicators: {indicatorIcons}</Text>
+						<Text dimColor>Indicators: </Text>
+						{indicators
+							.filter((ind) => ind.active)
+							.map((ind, i, arr) => (
+								<Text key={ind.label}>
+									{ind.icon} {ind.label}
+									{i < arr.length - 1 ? '  ' : ''}
+								</Text>
+							))}
 					</Box>
 				)}
 			</Box>

@@ -19,6 +19,9 @@ export const icons = {
 	hasResearch: '\uD83D\uDD2C', // Microscope emoji
 	needsVerification: '\u26A0', // Warning sign
 
+	// Placeholder for inactive indicators
+	placeholder: '\u25A1', // Empty square
+
 	// Navigation/UI
 	arrow: '\u25B6', // Right-pointing triangle
 	bullet: '\u2022', // Bullet point
@@ -72,19 +75,40 @@ export function formatProgressBar(
 	};
 }
 
-// Get indicator icons for a phase (with text labels)
+// Indicator state for rendering
+export interface IndicatorItem {
+	icon: string;
+	label: string;
+	active: boolean;
+}
+
+// Get indicator icons for a phase (returns structured data for rendering)
 export function getIndicatorIcons(indicators: {
 	hasContext: boolean;
 	hasPlan: boolean;
 	hasResearch: boolean;
 	needsVerification: boolean;
-}): string {
-	const parts: string[] = [];
-
-	if (indicators.hasResearch) parts.push(`${icons.hasResearch} Research`);
-	if (indicators.hasContext) parts.push(`${icons.hasContext} Context`);
-	if (indicators.hasPlan) parts.push(`${icons.hasPlan} Plan`);
-	if (indicators.needsVerification) parts.push(`${icons.needsVerification} Verify`);
-
-	return parts.join('  ');
+}): IndicatorItem[] {
+	return [
+		{
+			icon: indicators.hasResearch ? icons.hasResearch : icons.placeholder,
+			label: 'Research',
+			active: indicators.hasResearch,
+		},
+		{
+			icon: indicators.hasContext ? icons.hasContext : icons.placeholder,
+			label: 'Context',
+			active: indicators.hasContext,
+		},
+		{
+			icon: indicators.hasPlan ? icons.hasPlan : icons.placeholder,
+			label: 'Plan',
+			active: indicators.hasPlan,
+		},
+		{
+			icon: indicators.needsVerification ? icons.needsVerification : icons.placeholder,
+			label: 'Verify',
+			active: indicators.needsVerification,
+		},
+	];
 }
