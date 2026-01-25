@@ -130,16 +130,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-Phase 05 gaps:
-1. ~~**Parser coverage below 80%**~~ - COMPLETED 05-02 (reached 30.53%, memfs limitation documented)
-2. ~~**Missing parser tests**~~ - COMPLETED 05-02 (added comprehensive tests)
-3. ~~**No test fixtures**~~ - COMPLETED 05-02 (created ROADMAP, STATE, phase files)
-4. ~~**Parser coverage below 80%**~~ - COMPLETED 05-13 (increased from 66.56% to 82.35% with parsePlanFiles and readRoadmapPlans tests)
-
-Phase 05 gaps - ALL CLOSED:
-1. ~~**Parser coverage below 80%**~~ - COMPLETED 05-02 (reached 30.53%, memfs limitation documented)
-2. ~~**Missing parser tests**~~ - COMPLETED 05-02 (added comprehensive tests)
-3. ~~**No test fixtures**~~ - COMPLETED 05-02 (created ROADMAP, STATE, phase files)
+No pending todos.
 
 ## Roadmap Evolution
 
