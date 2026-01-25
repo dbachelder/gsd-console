@@ -9,6 +9,14 @@ import { createOpencodeClient } from '@opencode-ai/sdk';
 /** Default port for OpenCode server */
 export const DEFAULT_PORT = 4096;
 
+/** Session info for display in picker */
+export interface SessionInfo {
+	id: string;
+	directory?: string; // Project directory
+	lastCommand?: string; // Last prompt/command run
+	createdAt?: string;
+}
+
 /** Default base URL for OpenCode server */
 const DEFAULT_BASE_URL = `http://127.0.0.1:${DEFAULT_PORT}`;
 
@@ -40,6 +48,40 @@ export async function detectServer(port = DEFAULT_PORT): Promise<boolean> {
 	} catch {
 		return false;
 	}
+}
+
+/**
+ * List all OpenCode sessions.
+ * Returns empty array if server not available.
+ */
+export async function listSessions(): Promise<SessionInfo[]> {
+	try {
+		const client = createClient();
+		const response = await client.session.list();
+		return (response.data ?? []).map((s) => ({
+			id: s.id,
+			directory: s.directory,
+			lastCommand: s.title, // Session title shows recent activity
+			createdAt: new Date(s.time.created * 1000).toISOString(),
+		}));
+	} catch {
+		return [];
+	}
+}
+
+/**
+ * Get sessions for directories containing .planning/.
+ * Filter to sessions in directory tree containing .planning/
+ */
+export async function getProjectSessions(projectDir: string): Promise<SessionInfo[]> {
+	const sessions = await listSessions();
+	// Filter to sessions whose directory starts with or equals projectDir
+	// This catches subdirectories of the current project
+	return sessions.filter((s) => {
+		if (!s.directory) return false;
+		// Session is in the same directory tree as our project
+		return s.directory.startsWith(projectDir) || projectDir.startsWith(s.directory);
+	});
 }
 
 /**
