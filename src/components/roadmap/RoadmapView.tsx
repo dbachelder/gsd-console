@@ -41,9 +41,6 @@ export function RoadmapView({
 	// Track which phases are expanded
 	const [expandedPhases, setExpandedPhases] = useState<Set<number>>(new Set());
 
-	// Track detail level (d key toggles)
-	const [showIndicators, setShowIndicators] = useState(true);
-
 	// Toggle expansion for selected phase
 	const toggleExpand = useCallback(
 		(index: number) => {
@@ -112,12 +109,11 @@ export function RoadmapView({
 		{ isActive },
 	);
 
-	// Handle d key for detail toggle, r key for reorder mode stub
+	// Handle r key for reorder mode stub
+	// Note: 'd' key is reserved for future /gsd-discuss-phase command
 	useInput(
 		(input) => {
-			if (input === 'd') {
-				setShowIndicators((prev) => !prev);
-			} else if (input === 'r') {
+			if (input === 'r') {
 				// Reorder mode stub - will be implemented in Phase 4
 				showToast?.('Phase reorder mode - will be implemented in Phase 4', 'info');
 			}
@@ -153,17 +149,12 @@ export function RoadmapView({
 							phase={phase}
 							isSelected={index === selectedIndex}
 							isExpanded={expandedPhases.has(phase.number)}
-							showIndicators={showIndicators}
+							showIndicators={true}
 							isHighlighted={isPhaseHighlighted?.(phase.number)}
 							isFading={isPhaseFading?.(phase.number)}
 						/>
 					))
 				)}
-			</Box>
-
-			{/* Detail toggle hint */}
-			<Box marginTop={1}>
-				<Text dimColor>Indicators: {showIndicators ? 'shown' : 'hidden'} (press d to toggle)</Text>
 			</Box>
 		</Box>
 	);
