@@ -320,3 +320,114 @@ export function readPlanningFile(filePath: string): {
 		return { content: '', data: {} };
 	}
 }
+
+/**
+ * Plan information extracted from PLAN.md files
+ */
+export interface PlanInfo {
+	id: string; // Plan number like "01", "02"
+	summary: string;
+	taskCount: number;
+	wave: number;
+}
+
+/**
+ * Extract plan summaries from ROADMAP.md
+ * Plan summaries live in ROADMAP.md (format: `- [ ] XX-YY-PLAN.md — Summary`),
+ * not in PLAN.md frontmatter.
+ */
+function readRoadmapPlans(roadmapPath: string, phaseId: string): Map<string, string> {
+	const summaryMap = new Map<string, string>();
+
+	try {
+		const roadmapContent = readFileSync(roadmapPath, 'utf-8');
+
+		// Find the phase section (handles both integer and decimal phases like "03.1")
+		// Escape dots in phaseId for regex matching
+		const escapedPhaseId = phaseId.replace(/\./g, '\\.');
+		const sectionRegex = new RegExp(`Phase ${escapedPhaseId}:.*?Plans:[\\s\\S]*?(?=###|$)`, 'i');
+		const section = roadmapContent.match(sectionRegex)?.[0] ?? '';
+
+		// Match plan lines: `- [x] 03.1-01-PLAN.md — Summary text`
+		const planRegex = /- \[.\] ([\d.]+-\d+-PLAN\.md)\s*[—-]\s*(.+)/g;
+		const matches = section.matchAll(planRegex);
+
+		for (const match of matches) {
+			const planFile = match[1] ?? ''; // e.g., "03.1-01-PLAN.md"
+			const summary = match[2] ?? ''; // e.g., "Sticky footer, tab styling..."
+			// Extract plan number from filename
+			const planIdMatch = planFile.match(/-(\d+)-PLAN\.md$/);
+			const planId = planIdMatch?.[1] ?? '';
+			if (planId && summary) summaryMap.set(planId, summary);
+		}
+	} catch {
+		// Return empty map if ROADMAP.md doesn't exist or parsing fails
+	}
+
+	return summaryMap;
+}
+
+/**
+ * Count task elements in PLAN.md content
+ */
+function parseTaskCount(content: string): number {
+	// Count <task> tags in PLAN.md content
+	const taskMatches = content.match(/<task/g);
+	return taskMatches?.length ?? 0;
+}
+
+/**
+ * Parse PLAN.md files in a phase directory to extract summary, task count, and wave info.
+ * Summaries come from ROADMAP.md, task count and wave come from PLAN.md files.
+ */
+export function parsePlanFiles(
+	phaseDir: string,
+	phaseNumber: number,
+	planningDir?: string,
+	phaseId?: string,
+): PlanInfo[] {
+	const plans: PlanInfo[] = [];
+	const baseDir = planningDir ?? '.planning';
+
+	try {
+		// Determine phaseId for ROADMAP lookup
+		// For decimal phases like 03.1, use the full ID; for integer phases, use padded number
+		const effectivePhaseId =
+			phaseId ?? (phaseNumber < 10 ? `0${phaseNumber}` : String(phaseNumber));
+
+		// Get plan summaries from ROADMAP.md
+		const roadmapPath = `${baseDir}/ROADMAP.md`;
+		const summaryMap = readRoadmapPlans(roadmapPath, effectivePhaseId);
+
+		// Find all PLAN.md files in phase directory
+		if (!existsSync(phaseDir)) return [];
+		const files = readdirSync(phaseDir);
+
+		// Match files like "01-01-PLAN.md", "03.1-02-PLAN.md"
+		const planFileRegex = /^[\d.]+-(\d+)-PLAN\.md$/i;
+
+		for (const file of files) {
+			const match = planFileRegex.exec(file);
+			if (!match) continue;
+
+			const planId = match[1] ?? ''; // e.g., "01", "02"
+			if (!planId) continue;
+
+			const filePath = `${phaseDir}/${file}`;
+			const { content, data } = readPlanningFile(filePath);
+
+			plans.push({
+				id: planId,
+				summary: summaryMap.get(planId) ?? 'No summary available',
+				taskCount: parseTaskCount(content),
+				wave: typeof data.wave === 'number' ? data.wave : 1,
+			});
+		}
+	} catch {
+		// Return empty array if phase directory doesn't exist or parsing fails
+		return [];
+	}
+
+	// Sort by plan ID
+	return plans.sort((a, b) => parseInt(a.id, 10) - parseInt(b.id, 10));
+}
