@@ -71,6 +71,7 @@ Recent decisions affecting current work:
 3. **Display actual plan files in TUI** (ui) — TUI shows phases/todos but doesn't display PLAN.md files
 4. **Preserve tab state when switching views** (ui) — Selected phase and toggle state lost when switching between tabs
 5. **Fix inconsistent header sizing** (ui) — Header size changes based on main content area
+6. **Remove detail toggle from roadmap** (ui) — Repurpose 'd' key for /gsd-discuss-phase command
 
 ### Roadmap Evolution
 
