@@ -20,6 +20,7 @@ export interface SessionInfo {
 	directory?: string; // Project directory
 	lastCommand?: string; // Last prompt/command run
 	createdAt?: string;
+	updatedAt?: number; // Timestamp for sorting/filtering
 }
 
 /** Local session storage format */
@@ -97,6 +98,7 @@ async function readLocalSessions(): Promise<SessionInfo[]> {
 						directory: session.directory,
 						lastCommand: session.title,
 						createdAt: new Date(session.time.created).toISOString(),
+						updatedAt: session.time.updated,
 					});
 				} catch {
 					// Skip invalid files
@@ -136,18 +138,32 @@ export async function listSessions(): Promise<SessionInfo[]> {
 	return readLocalSessions();
 }
 
+/** Maximum age for sessions to show (24 hours) */
+const MAX_SESSION_AGE_MS = 24 * 60 * 60 * 1000;
+
+/** Maximum number of recent sessions to show */
+const MAX_RECENT_SESSIONS = 10;
+
 /**
- * Get sessions for directories containing .planning/.
- * Filter to sessions in directory tree containing .planning/
+ * Get recent sessions for this project directory.
+ * Filters to sessions updated in last 24 hours, limited to 10 most recent.
  */
 export async function getProjectSessions(projectDir: string): Promise<SessionInfo[]> {
 	const sessions = await listSessions();
+	const now = Date.now();
 
 	// Normalize paths: remove trailing slashes for consistent comparison
 	const normalizedProjectDir = projectDir.replace(/\/+$/, '');
 
-	return sessions.filter((s) => {
+	// Filter by directory match AND recency
+	const filtered = sessions.filter((s) => {
 		if (!s.directory) return false;
+
+		// Check recency (only sessions updated in last 24 hours)
+		if (s.updatedAt && now - s.updatedAt > MAX_SESSION_AGE_MS) {
+			return false;
+		}
+
 		const normalizedSessionDir = s.directory.replace(/\/+$/, '');
 
 		// Session is in project tree OR project is in session tree
@@ -156,6 +172,11 @@ export async function getProjectSessions(projectDir: string): Promise<SessionInf
 			normalizedProjectDir.startsWith(normalizedSessionDir)
 		);
 	});
+
+	// Sort by most recently updated and limit
+	return filtered
+		.sort((a, b) => (b.updatedAt ?? 0) - (a.updatedAt ?? 0))
+		.slice(0, MAX_RECENT_SESSIONS);
 }
 
 /**
