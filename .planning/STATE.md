@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 
 Phase: 6 of 7 complete
 Status: All planned phases complete (Phase 7 needs planning)
-Last activity: 2026-01-26 - Completed Phase 6: Additional UI Polish
+Last activity: 2026-01-26 - Completed Phase 6 gap closure (06-05, 06-06)
 
 Progress: [████████████] 100% (47/47 plans)
 
@@ -140,6 +140,8 @@ Recent decisions affecting current work:
 - Rely on content structure (chevron, status icons, progress bars) for visual separation rather than whitespace (06-03)
 - Document Ink limitation rather than implement misleading scroll indicators (06-04)
 - Prefix viewport height state with underscore to indicate intentional non-use (06-04)
+- Use horizontal line characters (\\u2501, \\u2500) instead of block characters for progress bars (06-05)
+- Remove borderStyle from PhaseView to eliminate overflow issues with long phase content (06-06)
 
 
 
@@ -180,5 +182,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 ## Session Continuity
 
 Last session: 2026-01-26
-Stopped at: Completed Phase 6: Additional UI Polish
+Stopped at: Completed Phase 6 gap closure (06-05, 06-06)
 Resume file: None
