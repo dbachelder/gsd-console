@@ -30,7 +30,7 @@
 - [ ] **ACT-02**: User can open planning files in $EDITOR
 - [ ] **ACT-03**: User can access command palette with fuzzy search
 - [ ] **ACT-04**: User can connect to/spawn OpenCode session for complex workflows
-- [ ] **ACT-05**: User can queue multiple GSD commands for sequential execution in OpenCode
+- [x] **ACT-05**: User can queue multiple GSD commands for sequential execution in OpenCode
 
 ### Editing
 
@@ -98,14 +98,15 @@
 | ACT-03 | Phase 3 | Pending |
 | EDIT-01 | Phase 3 | Pending |
 | EDIT-02 | Phase 3 | Pending |
-| ACT-04 | Phase 4 | Pending |
+| ACT-04 | Phase 4 | Complete |
 | ACT-05 | Phase 4 | Pending |
+| ACT-05 | Phase 7 | Complete |
 
 **Coverage:**
-- v1 requirements: 18 total
-- Mapped to phases: 18
+- v1 requirements: 19 total
+- Mapped to phases: 19
 - Unmapped: 0 ✓
 
 ---
-*Requirements defined: 2025-01-24*
-*Last updated: 2025-01-24 after roadmap creation*
+*Requirements defined:2025-01-24*
+*Last updated: 2026-01-26 after Phase 7 completion*
