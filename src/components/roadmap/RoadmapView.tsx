@@ -164,6 +164,7 @@ export function RoadmapView({
 							isHighlighted={isPhaseHighlighted?.(phase.number)}
 							isFading={isPhaseFading?.(phase.number)}
 							fractionWidth={fractionWidth}
+							phaseNumWidth={phaseNumWidth}
 						/>
 					))
 				)}

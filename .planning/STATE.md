@@ -137,8 +137,8 @@ No pending todos.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 002 | Fix Phase 5 plan count discrepancy | 2026-01-25 | 1fef403 | [002-count-the-actual-number-of-plans-and-mak](./quick/002-count-the-actual-number-of-plans-and-mak/) |
-| 003 | Align phase titles with padding | 2026-01-26 | 38f77e5 | [003-align-phase-titles](./quick/003-align-phase-titles/) |
-| 003 | Align phase titles to max width | 2026-01-26 | 4e7ba56 | [003-align-phase-titles](./quick/003-align-phase-titles/) |
+| 003 | Align phase number prefixes to max width | 2026-01-26 | 4e7ba56 | [003-align-phase-numbers](./quick/003-align-phase-numbers/) |
+
 
 ## Roadmap Evolution
 
