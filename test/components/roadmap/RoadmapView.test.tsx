@@ -67,9 +67,10 @@ describe('RoadmapView', () => {
 			<RoadmapView phases={mockPhases} isActive={true} />,
 		);
 
-		expect(lastFrame()).toContain('Phase 1: Core TUI');
-		expect(lastFrame()).toContain('Phase 2: Real-time Updates');
-		expect(lastFrame()).toContain('Phase 3: Actions and Editing');
+		// PhaseRow renders just the phase number (e.g., "1: Core TUI")
+		expect(lastFrame()).toContain('1: Core TUI');
+		expect(lastFrame()).toContain('2: Real-time Updates');
+		expect(lastFrame()).toContain('3: Actions and Editing');
 	});
 
 	test('shows phase status indicators', () => {
@@ -144,7 +145,7 @@ describe('RoadmapView', () => {
 		);
 
 		// Should render without crashing even without goal
-		expect(lastFrame()).toContain('Phase 1: Phase Without Goal');
+		expect(lastFrame()).toContain('1: Phase Without Goal');
 	});
 
 	test('shows progress bars for each phase', () => {

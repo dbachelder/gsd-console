@@ -6,6 +6,7 @@
  */
 
 import { spawnSync } from 'node:child_process';
+import { appendFileSync } from 'node:fs';
 import { createOpencodeClient } from '@opencode-ai/sdk';
 import type { ExecutionTarget } from './types.ts';
 
@@ -20,6 +21,46 @@ export interface SessionInfo {
 	createdAt?: string;
 	updatedAt?: number; // Timestamp for sorting/filtering
 }
+
+/** Cached default model from OpenCode config */
+let cachedDefaultModel: string | null = null;
+
+/** Debug logging to file (enabled via GSD_DEBUG env var) */
+const debugEnabled = process.env.GSD_DEBUG === '1';
+const debugFile = process.env.GSD_DEBUG_FILE ?? '/tmp/gsd-tui-debug.log';
+
+function debugLog(message: string, data?: unknown): void {
+	if (!debugEnabled) return;
+
+	const timestamp = new Date().toISOString();
+	let dataStr = '';
+	if (data !== undefined) {
+		if (typeof data === 'string') {
+			dataStr = ` ${data}`;
+		} else if (data && typeof data === 'object') {
+			const keys = Object.keys(data).slice(0, 3);
+			dataStr = ` {${keys.join(', ')}${Object.keys(data).length > 3 ? ', ...' : ''}}`;
+		} else {
+			dataStr = ` ${String(data)}`;
+		}
+	}
+	const logLine = `[${timestamp}] ${message}${dataStr}\n`;
+
+	try {
+		appendFileSync(debugFile, logLine);
+	} catch {
+		// Ignore file write errors
+	}
+}
+
+/**
+ * Enable debug logging by setting GSD_DEBUG=1 environment variable.
+ * Logs will be written to /tmp/gsd-tui-debug.log (or GSD_DEBUG_FILE).
+ *
+ * Usage:
+ *   GSD_DEBUG=1 bun run dev
+ *   GSD_DEBUG=1 GSD_DEBUG_FILE=./debug.log bun start
+ */
 
 /**
  * Format a GSD command for the specified execution target.
@@ -122,36 +163,26 @@ export async function getProjectSessions(projectDir: string): Promise<SessionInf
 
 /**
  * Spawn an OpenCode session attached to the serve.
- * Uses `opencode attach` so the session can receive API calls.
+ * Uses `opencode run` CLI flags to send prompt directly, no fake stdin needed.
  * Exits TUI alternate screen, runs OpenCode, then returns.
  *
- * @param initialPrompt - Optional prompt to send after attaching
+ * @param initialPrompt - Optional prompt to send
  * @returns true if OpenCode exited successfully (status 0)
  */
 export async function spawnOpencodeSession(initialPrompt?: string): Promise<boolean> {
 	const serverUrl = `http://127.0.0.1:${DEFAULT_PORT}`;
-	let sessionId: string | undefined;
-
-	// If we have an initial prompt, create a session and send it first
-	if (initialPrompt) {
-		const newSessionId = await createSession(initialPrompt);
-		if (newSessionId) {
-			sessionId = newSessionId;
-			// Send the prompt to the new session
-			await sendPrompt(newSessionId, initialPrompt);
-		}
-	}
 
 	// Exit alternate screen (same pattern as useExternalEditor)
 	process.stdout.write('\x1b[?1049l');
 	process.stdout.write('\x1b[2J\x1b[H');
 
 	try {
-		// Use opencode attach to connect to serve (enables API injection)
-		const args = ['attach', serverUrl];
-		if (sessionId) {
-			args.push('-s', sessionId);
+		// Use opencode run with attach flag - sends prompt directly via CLI
+		const args = ['run'];
+		if (initialPrompt) {
+			args.push(initialPrompt);
 		}
+		args.push('--attach', serverUrl);
 
 		const result = spawnSync('opencode', args, {
 			stdio: 'inherit',
@@ -172,17 +203,77 @@ export async function spawnOpencodeSession(initialPrompt?: string): Promise<bool
 }
 
 /**
+ * Get default model from OpenCode config.
+ * Model format is "provider/model" (e.g., "anthropic/claude-2").
+ */
+async function getDefaultModel(): Promise<string | null> {
+	if (cachedDefaultModel !== null) {
+		return cachedDefaultModel;
+	}
+
+	try {
+		const client = createClient();
+		const response = await client.config.get();
+		debugLog('OpenCode config response', response);
+		if (!response.error && response.data?.model) {
+			cachedDefaultModel = response.data.model ?? null;
+			debugLog('Default model from config', cachedDefaultModel);
+			return cachedDefaultModel;
+		}
+	} catch {
+		// Server not running or config not available
+	}
+	return null;
+}
+
+/**
+ * Parse model string into provider and model ID.
+ * @param modelString - Model in format "provider/model" (e.g., "anthropic/claude-2")
+ * @returns Object with providerID and modelID, or null if invalid format
+ */
+function parseModel(modelString: string): { providerID: string; modelID: string } | null {
+	const parts = modelString.split('/');
+	if (parts.length === 2 && parts[0] && parts[1]) {
+		const [providerID, modelID] = parts;
+		return { providerID, modelID };
+	}
+	return null;
+}
+
+/**
  * Send a prompt to an OpenCode session.
  * Returns true if prompt was sent successfully.
  */
 export async function sendPrompt(sessionId: string, text: string): Promise<boolean> {
 	try {
 		const client = createClient();
+		const defaultModel = await getDefaultModel();
+
+		const body: {
+			parts: Array<{ type: 'text'; text: string }>;
+			model?: { providerID: string; modelID: string };
+		} = {
+			parts: [{ type: 'text', text }],
+		};
+
+		// If we have a default model, include it in prompt
+		if (defaultModel) {
+			const parsed = parseModel(defaultModel);
+			if (parsed) {
+				body.model = parsed;
+				debugLog('Including model in prompt', body.model);
+			} else {
+				debugLog('Failed to parse model string', defaultModel);
+			}
+		} else {
+			debugLog('No default model found in config');
+		}
+
+		debugLog('Sending prompt body', body);
+
 		await client.session.prompt({
 			path: { id: sessionId },
-			body: {
-				parts: [{ type: 'text', text }],
-			},
+			body,
 		});
 		return true;
 	} catch {

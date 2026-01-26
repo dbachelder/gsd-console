@@ -177,13 +177,11 @@ export function useBackgroundJobs({
 	 */
 	const handleError = useCallback(
 		(errorMsg: string, errorSessionId: string) => {
-			console.error('[DEBUG] handleError called with:', errorMsg, 'for session:', errorSessionId);
 			setJobs((prev) => {
 				const runningJob = prev.find(
 					(j) => j.status === 'running' && j.sessionId === errorSessionId,
 				);
 				if (runningJob) {
-					console.error('[DEBUG] Marking job as failed:', runningJob.command, 'error:', errorMsg);
 					showToast?.(`Background: ${runningJob.command} failed`, 'warning');
 
 					const output = currentOutputRef.current;
@@ -203,11 +201,6 @@ export function useBackgroundJobs({
 									}
 								: j,
 						),
-					);
-				} else {
-					console.error(
-						'[DEBUG] No running job found when error received for session:',
-						errorSessionId,
 					);
 				}
 				return prev;
@@ -240,29 +233,14 @@ export function useBackgroundJobs({
 				sessionId: jobSessionId,
 			};
 
-			console.error('[DEBUG] Adding job:', {
-				id: job.id,
-				command: job.command,
-				sessionId: jobSessionId,
-				explicitSessionId,
-				hookSessionId: sessionId,
-				isProcessing,
-			});
-
 			setJobs((prev) => pruneJobs([...prev, job]));
 			showToast?.(`Background: ${command} queued`, 'info');
 
 			// If session is available and no job running, trigger processing
 			// The next idle event will pick up the pending job
 			if (jobSessionId && !isProcessing) {
-				console.error('[DEBUG] Triggering handleIdle for job:', job.id, 'session:', jobSessionId);
 				// Trigger idle check - if session is already idle, this will start the job
 				handleIdle(jobSessionId);
-			} else {
-				console.error('[DEBUG] Not triggering handleIdle:', {
-					jobSessionId,
-					isProcessing,
-				});
 			}
 		},
 		[sessionId, isProcessing, showToast, handleIdle],

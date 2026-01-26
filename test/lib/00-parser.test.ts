@@ -14,7 +14,6 @@ import {
 	parseTodos,
 	readPlanningFile,
 } from '../../src/lib/parser.ts';
-import type { Phase, ProjectState } from '../../src/lib/types.ts';
 
 /*
  * FAILING PARSER TESTS DOCUMENTATION
@@ -391,7 +390,7 @@ describe('readPlanningFile', () => {
 			'.planning/bad.md': 'No frontmatter here\nJust content',
 		});
 
-		const { content, data } = readPlanningFile('.planning/bad.md');
+		const { content, data: _data } = readPlanningFile('.planning/bad.md');
 		// Should not crash, may return content without data
 		expect(content).toBeDefined();
 	});

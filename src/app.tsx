@@ -224,7 +224,7 @@ export default function App({ flags }: AppProps) {
 					break;
 
 				case 'interactive':
-					// Spawn new OpenCode session with this command
+					// Spawn new OpenCode session with this command via CLI
 					{
 						void (async () => {
 							const formattedCommand = formatGsdCommand(fullCommand, target);

@@ -79,6 +79,70 @@ App.tsx
 - **Unused vars:** Prefix with underscore (`_unusedParam`) or use `void expression`
 - **Git hooks:** Lefthook runs biome check and typecheck on pre-commit, commitlint on commit-msg
 
+## Testing Approach
+
+**Philosophy:** Use real data instead of mocks where possible, test behavior rather than hardcoded values.
+
+### Test Data Strategy
+
+- **`.planning/` directory is read-only test data** - Use actual planning files instead of memfs mocking
+  - Parser tests use memfs for isolated filesystem testing
+  - Hook tests read from real `.planning/` directory to test integration
+  - Tests won't break when adding phases/plans to the project
+
+### Mocking Guidelines
+
+- **Mock only what's necessary** - Most tests use real data, mocks only for error cases
+  - Don't mock parser functions in hook tests - let them read from `.planning/`
+  - Mock `node:fs` only for specific error scenarios (missing directory)
+  - Avoid mock conflicts between test files (e.g., parser tests vs hook tests)
+
+### Flexible Assertions
+
+- **Test behavior, not exact values** - Use `toBeGreaterThan(0)` instead of `toBe(5)`
+  - Tests remain valid when adding more phases: `expect(phases.length).toBeGreaterThan(0)`
+  - Tests remain valid when adding more plans: `expect(state.progress).toBeGreaterThanOrEqual(0)`
+  - Verify structure exists: `expect(phase).toHaveProperty('number')`
+
+### Example: Resilient Hook Test
+
+```tsx
+// ✅ Good: Flexible to project growth
+test('loads and parses planning documents successfully', async () => {
+  const data = useGsdData('.planning');
+  
+  // These assertions won't break when adding phases
+  expect(data.phases.length).toBeGreaterThan(0);
+  expect(data.phases[0]).toHaveProperty('number');
+  expect(data.phases[0]).toHaveProperty('name');
+});
+
+// ❌ Bad: Brittle to project growth
+test('loads 5 phases', async () => {
+  const data = useGsdData('.planning');
+  
+  // This breaks when you add a 6th phase
+  expect(data.phases).toBe(5);
+});
+```
+
+### Example: Parser Test with memfs
+
+```tsx
+// Parser tests use memfs for isolated testing
+import { fs } from 'memfs';
+vi.mock('node:fs', () => fs);
+
+test('parses phase from markdown', () => {
+  vol.fromJSON({
+    '.planning/ROADMAP.md': '### Phase 1: Test\n**Goal**: Build',
+  });
+  
+  const phases = parseRoadmap(content, '.planning/phases');
+  expect(phases).toHaveLength(1);
+});
+```
+
 ## Avoiding Flicker
 
 Terminal UI flicker typically comes from unnecessary re-renders. Key lessons:
