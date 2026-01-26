@@ -17,8 +17,6 @@ interface PhaseRowProps {
 	isFading?: boolean;
 	/** Total width to align fraction to (for right-alignment) */
 	fractionWidth?: number;
-	/** Total width to align "N: Title" to (for title alignment) */
-	phaseTitleWidth?: number;
 }
 
 export function PhaseRow({
@@ -29,7 +27,6 @@ export function PhaseRow({
 	isHighlighted = false,
 	isFading = false,
 	fractionWidth,
-	phaseTitleWidth,
 }: PhaseRowProps) {
 	const chevron = isExpanded ? '\u25BC' : '\u25B6'; // Down or Right triangle
 	const statusIcon = getStatusIcon(phase.status);
@@ -62,9 +59,7 @@ export function PhaseRow({
 						<Text color={statusColor}>[{statusIcon}] </Text>
 
 						{/* Phase name */}
-						<Text bold={isSelected}>
-							{`${phase.number}: ${phase.name}`.padStart(phaseTitleWidth ?? 0, ' ')}
-						</Text>
+						<Text bold={isSelected}>{`Phase ${phase.number}: ${phase.name}`}</Text>
 					</Text>
 				</Box>
 
