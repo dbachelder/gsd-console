@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 05 Test Coverage - 8 gap closure plans complete
+**Current focus:** Phase 04 gap closure complete - Phase 4 now 9/9 plans
 
 ## Current Position
 
-Phase: 05 of 5 (Test Coverage)
-Plan: 18 of 18 in current phase
+Phase: 04 of 5 (OpenCode Integration)
+Plan: 9 of 9 in current phase
 Status: Complete
-Last activity: 2026-01-26 - Completed quick task 004: Align phase number prefixes
+Last activity: 2026-01-26 - Completed 04-09: Fix headless execution mode
 
-Progress: [█████████████] 100% (45/45 plans)
+Progress: [█████████████] 100% (47/47 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 45
-- Average duration: 4.1 min
-- Total execution time: 185 min
+- Total plans completed: 47
+- Average duration: 4.2 min
+- Total execution time: 197 min
 
 **By Phase:**
 
@@ -31,7 +31,7 @@ Progress: [█████████████] 100% (45/45 plans)
 | 2 | 3 | 8 min | 2.7 min |
 | 3 | 4 | 15 min | 3.75 min |
 | 03.1 | 5 | 16 min | 3.2 min |
-| 4 | 7 | 26 min | 3.7 min |
+| 4 | 9 | 35 min | 3.9 min |
 | 5 | 18 | 123 min | 6.8 min |
 
 **Recent Trend:**
@@ -125,6 +125,14 @@ Recent decisions affecting current work:
 - useSessionActivity hook tested with 100% line coverage with vi.mock for sessionActivity module (05-17)
 - Bun test mock isolation limitation documented - parser 98.23% in isolation, 79.33% overall due to competing vi.mock() calls (05-18)
 - Phase 5 verified complete - 5/5 success criteria met with known tool limitation (05-18)
+- Session status display in footer using useSessionActivity hook (04-08)
+- Show session status indicator before keybinding hints (04-08)
+- Use cyan '●' for active sessions, gray '○' for idle sessions (04-08)
+- No display when no OpenCode server to avoid breaking existing footer (04-08)
+- Headless mode creates dedicated background sessions via createSession() (04-09)
+- Primary mode uses connected activeSessionId for execution (04-09)
+- BackgroundJob stores sessionId for per-job isolation (04-09)
+- handleIdle() uses job's sessionId for sendPrompt() call (04-09)
 
 
 
@@ -156,11 +164,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Real-time Updates | 3/3 | Complete | 2026-01-24 |
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
-| 4. OpenCode Integration | 7/7 | Complete | 2026-01-25 |
-  | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
+| 4. OpenCode Integration | 9/9 | Complete | 2026-01-26 |
+| 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
 
 ## Session Continuity
 
-Last session: 2026-01-25
-Stopped at: Completed 05-17-PLAN.md (useSessionActivity hook tests)
+Last session: 2026-01-26
+Stopped at: Completed 04-09: Fix headless execution mode
 Resume file: None
