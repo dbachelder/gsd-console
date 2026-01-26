@@ -4,8 +4,9 @@
  */
 
 import { existsSync, readdirSync } from 'node:fs';
+import process from 'node:process';
 import { Box, Text, useInput } from 'ink';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useVimNav } from '../../hooks/useVimNav.ts';
 import { getIndicatorIcons, getStatusColor, getStatusIcon } from '../../lib/icons.ts';
 import { type PlanInfo, parsePlanFiles } from '../../lib/parser.ts';
@@ -71,6 +72,11 @@ export function PhaseView({
 }: PhaseViewProps) {
 	// Cast to DetailLevel type (1-3) for internal use
 	const currentDetailLevel = (detailLevel as DetailLevel) || 1;
+
+	// Viewport height for content scrolling
+	// NOTE: Ink doesn't support true viewport clipping - content renders fully regardless of height
+	// This state tracks viewport size for future work around content slicing
+	const [_viewportHeight, _setViewportHeight] = useState(() => process.stdout.rows);
 
 	// Calculate max fraction width for right-alignment
 	const fractionWidth =
