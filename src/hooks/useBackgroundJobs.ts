@@ -19,7 +19,7 @@ interface UseBackgroundJobsReturn {
 	jobs: BackgroundJob[];
 	isProcessing: boolean;
 	activeCommand?: string;
-	add: (command: string) => void;
+	add: (command: string, explicitSessionId?: string) => void;
 	cancel: (jobId: string) => void;
 	clear: () => void;
 	error?: Error;
@@ -98,14 +98,15 @@ export function useBackgroundJobs({
 				setActiveCommand(pendingJob.command);
 
 				// Start the job asynchronously
-				if (sessionId) {
+				if (pendingJob.sessionId) {
 					setIsProcessing(true);
 					showToast?.(`Background: ${pendingJob.command} started`, 'info');
 
 					// Send prompt - handle failure
 					const jobId = pendingJob.id;
 					const jobCommand = pendingJob.command;
-					sendPrompt(sessionId, jobCommand).then((success) => {
+					const jobSessionId = pendingJob.sessionId;
+					sendPrompt(jobSessionId, jobCommand).then((success) => {
 						if (!success) {
 							// Mark job as failed
 							setJobs((current) =>
@@ -146,7 +147,7 @@ export function useBackgroundJobs({
 			setActiveCommand(undefined);
 			return prev;
 		});
-	}, [sessionId, showToast]);
+	}, [showToast]);
 
 	/**
 	 * Handle output from session.
@@ -206,12 +207,13 @@ export function useBackgroundJobs({
 	 * Add a command to the background job queue.
 	 */
 	const add = useCallback(
-		(command: string) => {
+		(command: string, explicitSessionId?: string) => {
 			const job: BackgroundJob = {
 				id: generateJobId(),
 				command,
 				status: 'pending',
 				queuedAt: Date.now(),
+				sessionId: explicitSessionId ?? sessionId,
 			};
 
 			setJobs((prev) => pruneJobs([...prev, job]));
@@ -219,7 +221,7 @@ export function useBackgroundJobs({
 
 			// If session is available and no job running, trigger processing
 			// The next idle event will pick up the pending job
-			if (sessionId && !isProcessing) {
+			if ((explicitSessionId ?? sessionId) && !isProcessing) {
 				// Trigger idle check - if session is already idle, this will start the job
 				handleIdle();
 			}

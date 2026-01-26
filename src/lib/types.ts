@@ -83,6 +83,7 @@ export interface BackgroundJob {
 	queuedAt: number;
 	startedAt?: number;
 	completedAt?: number;
+	sessionId?: string; // Optional explicit sessionId for this job
 }
 
 /** Background jobs state */
