@@ -42,9 +42,6 @@ export function RoadmapView({
 		phases.length > 0
 			? Math.max(...phases.map((p) => `${p.plansComplete}/${p.plansTotal}`.length))
 			: 5;
-	// Calculate max "Phase N:" width for alignment
-	const phasePrefixWidth =
-		phases.length > 0 ? Math.max(...phases.map((p) => `Phase ${p.number}:`.length)) : 0;
 	// Track which phases are expanded - initialize from props
 	const [expandedPhases, setExpandedPhases] = useState<Set<number>>(
 		() => new Set(initialExpandedPhases ?? []),
@@ -150,6 +147,8 @@ export function RoadmapView({
 
 	return (
 		<Box flexDirection="column" paddingX={1} flexGrow={1}>
+			{/* Phase list header */}
+			<Text bold>Phases:</Text>
 			{/* Phase list */}
 			<Box flexDirection="column" borderStyle="single" paddingX={1}>
 				{phases.length === 0 ? (
@@ -165,7 +164,6 @@ export function RoadmapView({
 							isHighlighted={isPhaseHighlighted?.(phase.number)}
 							isFading={isPhaseFading?.(phase.number)}
 							fractionWidth={fractionWidth}
-							phasePrefixWidth={phasePrefixWidth}
 						/>
 					))
 				)}

@@ -35,7 +35,7 @@ describe('PhaseRow', () => {
 			/>,
 		);
 
-		expect(lastFrame()).toContain('Phase 1: Core TUI');
+		expect(lastFrame()).toContain('1: Core TUI');
 	});
 
 	test('shows status indicator for complete phase', () => {
@@ -236,7 +236,7 @@ describe('PhaseRow', () => {
 		);
 
 		// Selected phase has background color (visible in terminal)
-		expect(lastFrame()).toContain('Phase 1: Core TUI');
+		expect(lastFrame()).toContain('1: Core TUI');
 	});
 
 	test('handles highlight background', () => {
@@ -252,7 +252,7 @@ describe('PhaseRow', () => {
 		);
 
 		// Highlighted phase should render (background color in terminal)
-		expect(lastFrame()).toContain('Phase 1: Core TUI');
+		expect(lastFrame()).toContain('1: Core TUI');
 	});
 
 	test('handles fading highlight', () => {
@@ -268,7 +268,7 @@ describe('PhaseRow', () => {
 		);
 
 		// Fading highlight should render (different background color)
-		expect(lastFrame()).toContain('Phase 1: Core TUI');
+		expect(lastFrame()).toContain('1: Core TUI');
 	});
 
 	test('pads plan fraction to default width of 2 when fractionWidth not provided', () => {
