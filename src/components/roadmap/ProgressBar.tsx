@@ -16,8 +16,8 @@ export function ProgressBar({ percent, width = 20, showPercent = true }: Progres
 	const filledCount = Math.round((clampedPercent / 100) * width);
 	const emptyCount = width - filledCount;
 
-	const filledChar = '\u2588'; // Full block
-	const emptyChar = '\u2591'; // Light shade
+	const filledChar = '\u2501'; // Box drawing heavy horizontal
+	const emptyChar = '\u2500'; // Box drawing light horizontal
 
 	return (
 		<Box>
