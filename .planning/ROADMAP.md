@@ -18,6 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: OpenCode Integration** - Spawn sessions and queue commands
 - [x] **Phase 5: Test Coverage** - Reproducible tests with mocked filesystem to reach 80%+ coverage
 - [ ] **Phase 6: Additional UI Polish** - Address remaining UI polish items from todo list (4/6 complete, gap closure in progress)
+- [ ] **Phase 7: Work Queue Removal** - Remove work queue feature and revert to 4-tab layout
 - [ ] **Phase 8: Comprehensive Fix For Broken Background Tasks** - comprehensive fix for broken background tasks
 - [ ] **Phase 9: Name Change And Public Readiness** - name change and public readiness
 
@@ -158,25 +159,23 @@ Plans:
 - [ ] 06-05-PLAN.md — Replace progress bar characters with horizontal lines [gap closure] (Wave 1, 1 task)
 - [ ] 06-06-PLAN.md — Remove bordered box from PhaseView [gap closure] (Wave 1, 1 task)
 
-### Phase 7: GSD Ralph Loop Command Queue
+### Phase 7: Work Queue Removal
 
-**Goal:** Queue up GSD commands for sequential execution in connected OpenCode sessions, with session management, queue editing, and status tracking
-**Status:** In Progress - Gap Closure
+**Goal:** Remove work queue feature and revert to 4-tab layout (OpenCode team releasing their own workqueue)
+**Status:** In Progress
 **Depends on:** Phase 6
-**Plans:** 4 plans
+**Plans:** 0 plans
 
 Plans:
-- [x] 07-01-PLAN.md — Queue state hook with useReducer (Wave 1, 2 tasks)
-- [x] 07-02-PLAN.md — Queue UI components (WorkQueueView, QueueEntry) (Wave 1, 2 tasks)
-- [x] 07-03-PLAN.md — Tab integration and 'w' key handler (Wave 2, 3 tasks)
-- [ ] 07-04-PLAN.md — Fix tab state control and 'w' key condition order (Wave 1, 3 tasks) [gap closure]
+- [ ] TBD (run /gsd-plan-phase 7 to break down)
 
 **Details:**
-- Use useReducer for queue state management (centralized logic)
-- Reuse BackgroundJob execution engine from Phase 4
-- Add new "Work Queue" tab to TabLayout (tab 5)
-- 'w' key intelligently opens queue or adds phase command based on context
-- Queue is session-only (no persistence)
+- Remove WorkQueue tab (was tab 5)
+- Revert to 4 tabs: roadmap, phase, todos, background
+- Remove 'w' key handler
+- Remove useWorkQueue hook
+- Remove WorkQueueView and QueueEntry components
+- Remove QueuedCommand types
 
 ### Phase 8: Comprehensive Fix For Broken Background Tasks
 
@@ -216,6 +215,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 4. OpenCode Integration | 9/9 | Complete | 2026-01-26 |
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
 | 6. Additional UI Polish | 4/6 | In Progress (gap closure) | - |
-| 7. GSD Ralph Loop Command Queue | 3/3 | Complete | 2026-01-26 |
+| 7. Work Queue Removal | 0/0 | Not planned | - |
 | 8. Comprehensive Fix For Broken Background Tasks | 0/0 | Not planned | - |
 | 9. Name Change And Public Readiness | 0/0 | Not planned | - |

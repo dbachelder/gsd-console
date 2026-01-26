@@ -22,7 +22,6 @@ import { useExternalEditor } from './hooks/useExternalEditor.ts';
 import { useFileWatcher } from './hooks/useFileWatcher.ts';
 import { useGsdData } from './hooks/useGsdData.ts';
 import { useToast } from './hooks/useToast.ts';
-import { useWorkQueue } from './hooks/useWorkQueue.ts';
 import type { Command } from './lib/commands.ts';
 import { commands } from './lib/commands.ts';
 import {
@@ -122,9 +121,9 @@ export default function App({ flags }: AppProps) {
 
 	// Track active tab for footer (passed up from TabLayout would be better,
 	// but for simplicity we'll default to roadmap and let Footer handle it)
-	const [activeTab, setActiveTab] = useState<
-		'roadmap' | 'phase' | 'todos' | 'background' | 'workqueue'
-	>(flags.only ?? 'roadmap');
+	const [activeTab, setActiveTab] = useState<'roadmap' | 'phase' | 'todos' | 'background'>(
+		flags.only ?? 'roadmap',
+	);
 
 	// Lifted selection state for editor integration
 	const [selectedPhaseNumber, setSelectedPhaseNumber] = useState<number>(flags.phase ?? 1);
@@ -165,9 +164,6 @@ export default function App({ flags }: AppProps) {
 		sessionId: activeSessionId,
 		showToast,
 	});
-
-	// Work Queue (user-managed GSD command queue)
-	const workQueue = useWorkQueue();
 
 	// Command palette - need to track filtered count for navigation bounds
 	const [filteredCount, setFilteredCount] = useState(commands.length);
@@ -306,30 +302,6 @@ export default function App({ flags }: AppProps) {
 					setSessionsLoading(false);
 				});
 			}
-			if (input === 'w') {
-				// Intelligent 'w' key behavior based on phase state
-				if (workQueue.queue.length > 0) {
-					// Open WorkQueue tab if commands are queued
-					setActiveTab('workqueue');
-					showToast(`WorkQueue: ${workQueue.queue.length} commands`, 'info');
-				} else if (activeTab === 'roadmap' && selectedPhaseNumber) {
-					// In Roadmap: add plan-phase command for current phase
-					const command = 'plan-phase';
-					const args = String(selectedPhaseNumber);
-					workQueue.add(command, args);
-					showToast(`Added: ${command} ${args}`, 'success');
-					setActiveTab('workqueue');
-				} else if (activeTab === 'phase' && selectedPhaseNumber) {
-					// In Phase: add plan-phase command for current phase
-					const command = 'plan-phase';
-					const args = String(selectedPhaseNumber);
-					workQueue.add(command, args);
-					showToast(`Added: ${command} ${args}`, 'success');
-					setActiveTab('workqueue');
-				} else {
-					showToast('No phase selected or queue empty', 'warning');
-				}
-			}
 		},
 		{ isActive: !isAnyOverlayOpen },
 	);
@@ -396,8 +368,6 @@ export default function App({ flags }: AppProps) {
 					planningDir={planningDir}
 					backgroundJobs={backgroundJobs}
 					onCancelJob={cancelBackgroundJob}
-					workQueue={workQueue.queue}
-					onQueueRemove={workQueue.remove}
 				/>
 			</Box>
 			<Footer activeTab={activeTab} onlyMode={flags.only} />

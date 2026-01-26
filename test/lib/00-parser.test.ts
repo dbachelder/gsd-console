@@ -47,7 +47,7 @@ import {
 
 describe('parseState', () => {
 	test('extracts phase information', () => {
-		const content = String.raw`
+		const content = `
 Phase: 2 of 4 (Core TUI)
 Progress: [##########] 50%
 Last activity: 2025-01-24 - Completed 01-01-PLAN.md
@@ -67,7 +67,7 @@ Last activity: 2025-01-24 - Completed 01-01-PLAN.md
 	});
 
 	test('extracts core value and project name', () => {
-		const content = String.raw`
+		const content = `
 **Core value:** See project status without leaving coding context
 **Current focus:** Phase 4 - OpenCode Integration
 `;
@@ -136,7 +136,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('extracts phase name, number, and goal', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Goal**: Build terminal UI`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -151,7 +151,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('extracts depends on field', () => {
-		const roadmapContent = String.raw`### Phase 2: Real-time Updates
+		const roadmapContent = `### Phase 2: Real-time Updates
 **Depends on**: Phase 1`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -163,7 +163,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('extracts requirements array', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Requirements**: DISP-01, DISP-02, NAV-01`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -175,7 +175,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('extracts success criteria from numbered list', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Success Criteria** (what must be TRUE):
   1. User sees roadmap
   2. User can expand phases
@@ -194,7 +194,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('extracts plans total count', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Plans**: 4 plans`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -206,7 +206,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('handles decimal phase numbers', () => {
-		const roadmapContent = String.raw`### Phase 3.1: UI Polish
+		const roadmapContent = `### Phase 3.1: UI Polish
 **Goal**: Fix UI issues`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -220,7 +220,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('handles multiple phases', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Goal**: Build TUI
 
 ### Phase 2: Updates
@@ -238,7 +238,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('normalizes "Nothing (first phase)" depends on to null', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Depends on**: Nothing (first phase)`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -250,7 +250,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('sets indicators by scanning phase directory', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI`;
+		const roadmapContent = `### Phase 1: Core TUI`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/PLAN.md': '# Plan',
@@ -269,7 +269,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('counts completed plans from SUMMARY files', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Plans**: 3 plans`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -284,7 +284,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('determines phase status based on progress', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Plans**: 3 plans`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -296,7 +296,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('status is complete when all plans done', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Plans**: 2 plans`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -309,7 +309,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('status is not-started with no progress', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI`;
+		const roadmapContent = `### Phase 1: Core TUI`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 			'.planning/phases/01-core-tui/.gitkeep': '',
@@ -320,7 +320,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('handles missing phase directory gracefully', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI`;
+		const roadmapContent = `### Phase 1: Core TUI`;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
 		});
@@ -336,7 +336,7 @@ describe('parseRoadmap', () => {
 	});
 
 	test('handles empty success criteria', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Goal**: Build TUI
 **Success Criteria** (what must be TRUE):
 No criteria yet.`;
@@ -351,7 +351,7 @@ No criteria yet.`;
 	});
 
 	test('handles empty requirements', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Requirements**: `;
 		vol.fromJSON({
 			'.planning/ROADMAP.md': roadmapContent,
@@ -402,7 +402,7 @@ describe('parsePlanFiles', () => {
 	});
 
 	test('reads plan files from phase directory', () => {
-		const roadmapContent = String.raw`### Phase 1: Core TUI
+		const roadmapContent = `### Phase 1: Core TUI
 **Plans**: 1 plan
 
 Plans:
