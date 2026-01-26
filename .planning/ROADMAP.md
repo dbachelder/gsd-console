@@ -164,18 +164,20 @@ Plans:
 **Goal:** Remove work queue feature and revert to 4-tab layout (OpenCode team releasing their own workqueue)
 **Status:** In Progress
 **Depends on:** Phase 6
-**Plans:** 0 plans
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 7 to break down)
+- [ ] 07-01-PLAN.md — Remove dead code remnants (executeQueuedCommand, EditContext type)
+- [ ] 07-02-PLAN.md — Verify removal is complete and update documentation
 
 **Details:**
-- Remove WorkQueue tab (was tab 5)
-- Revert to 4 tabs: roadmap, phase, todos, background
-- Remove 'w' key handler
-- Remove useWorkQueue hook
-- Remove WorkQueueView and QueueEntry components
-- Remove QueuedCommand types
+- Remove WorkQueue tab (was tab 5) - DONE
+- Revert to 4 tabs: roadmap, phase, todos, background - DONE
+- Remove 'w' key handler - DONE
+- Remove useWorkQueue hook - DONE
+- Remove WorkQueueView and QueueEntry components - DONE
+- Remove QueuedCommand types - DONE
+- Remove remaining dead code (executeQueuedCommand, EditContext type reference) - TODO
 
 ### Phase 8: Comprehensive Fix For Broken Background Tasks
 
@@ -215,6 +217,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 4. OpenCode Integration | 9/9 | Complete | 2026-01-26 |
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
 | 6. Additional UI Polish | 4/6 | In Progress (gap closure) | - |
-| 7. Work Queue Removal | 0/0 | Not planned | - |
+| 7. Work Queue Removal | 0/2 | In Progress | - |
 | 8. Comprehensive Fix For Broken Background Tasks | 0/0 | Not planned | - |
 | 9. Name Change And Public Readiness | 0/0 | Not planned | - |
