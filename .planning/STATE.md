@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 04 gap closure complete - Phase 4 now 9/9 plans
+**Current focus:** Phase 06 Additional UI Polish - Improving phase tab layout and footer
 
 ## Current Position
 
-Phase: 04 of 5 (OpenCode Integration)
-Plan: 9 of 9 in current phase
-Status: Complete
-Last activity: 2026-01-26 - Completed 04-09: Fix headless execution mode
+Phase: 06 of 7 (Additional UI Polish)
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-01-26 - Completed 06-02: Footer reorganization and deduplicated hints
 
-Progress: [█████████████] 100% (47/47 plans)
+Progress: [████████████░] 96% (49/51 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 47
+- Total plans completed: 49
 - Average duration: 4.2 min
-- Total execution time: 197 min
+- Total execution time: 208 min
 
 **By Phase:**
 
@@ -33,6 +33,7 @@ Progress: [█████████████] 100% (47/47 plans)
 | 03.1 | 5 | 16 min | 3.2 min |
 | 4 | 9 | 35 min | 3.9 min |
 | 5 | 18 | 123 min | 6.8 min |
+| 6 | 2 | 11 min | 5.5 min |
 
 **Recent Trend:**
 - Last 5 plans: 6 min, 4 min, 3 min, 7 min, 10 min
@@ -133,6 +134,9 @@ Recent decisions affecting current work:
 - Primary mode uses connected activeSessionId for execution (04-09)
 - BackgroundJob stores sessionId for per-job isolation (04-09)
 - handleIdle() uses job's sessionId for sendPrompt() call (04-09)
+- Use flexDirection="column" for two-line footer layout separating session status from keybinding hints (06-02)
+- Remove dimColor from nested idle indicator to maintain exactly 2 top-level Text elements in footer (06-02)
+- Eliminated redundant "[/]" hint from phase view keybinding hints (06-02)
 
 
 
@@ -152,6 +156,8 @@ Recent decisions affecting current work:
 
 - Phase 03.1 inserted after Phase 3: UI polish (URGENT)
 - Phase 5 added: Test Coverage - Reproducible tests with mocked filesystem to reach 80%+ coverage
+- Phase 6 added: Additional UI Polish - Address remaining UI polish items from todo list
+- Phase 7 added: GSD Ralph Loop Command Queue - Queue up GSD commands for sequential execution
 
 ## Progress
 
@@ -166,9 +172,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
 | 4. OpenCode Integration | 9/9 | Complete | 2026-01-26 |
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
+| 6. Additional UI Polish | 2/2 | Complete | 2026-01-26 |
 
 ## Session Continuity
 
 Last session: 2026-01-26
-Stopped at: Completed 04-09: Fix headless execution mode
+Stopped at: Completed 06-02: Footer reorganization and deduplicated hints
 Resume file: None

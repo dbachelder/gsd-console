@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Actions and Editing** - Execute GSD commands and edit todos inline
 - [x] **Phase 4: OpenCode Integration** - Spawn sessions and queue commands
 - [x] **Phase 5: Test Coverage** - Reproducible tests with mocked filesystem to reach 80%+ coverage
-- [ ] **Phase 6: Additional UI Polish** - Address remaining UI polish items from todo list
+- [x] **Phase 6: Additional UI Polish** - Address remaining UI polish items from todo list
 
 ## Phase Details
 
@@ -142,14 +142,16 @@ Plans:
 - Known limitation: Bun test mock isolation issue causes parser coverage drop in full suite (documented in VERIFICATION.md)
 
 ### Phase 6: Additional UI Polish
+**Status:** ✅ Complete
+**Completed:** 2026-01-26
 
 **Goal:** Address remaining UI polish items from todo list
 **Depends on:** Phase 5
 **Plans**: 2 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Phase tab scrollable content and progress bar spacing (Wave 1, 2 tasks)
-- [ ] 06-02-PLAN.md — Footer reorganization and deduplicated hints (Wave 1, 2 tasks)
+- [x] 06-01-PLAN.md — Phase tab scrollable content and progress bar spacing (Wave 1, 2 tasks)
+- [x] 06-02-PLAN.md — Footer reorganization and deduplicated hints (Wave 1, 2 tasks)
 
 ### Phase 7: GSD Ralph Loop Command Queue
 
@@ -166,7 +168,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -174,6 +176,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 2. Real-time Updates | 3/3 | Complete | 2026-01-24 |
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
-  | 4. OpenCode Integration | 7/9 | Gap closure pending | 2026-01-25 |
-  | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
+| 4. OpenCode Integration | 9/9 | Complete | 2026-01-26 |
+| 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
+| 6. Additional UI Polish | 2/2 | Complete | 2026-01-26 |
   | 6. Additional UI Polish | 0/2 | Planned | - |
