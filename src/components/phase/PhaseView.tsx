@@ -170,7 +170,7 @@ export function PhaseView({
 					</Text>
 					<Text dimColor>
 						{' '}
-						| {phase.plansComplete}/{phase.plansTotal} plans complete
+						| {String(phase.plansComplete).padStart(2, ' ')}/{phase.plansTotal} plans complete
 					</Text>
 				</Box>
 				{hasActiveIndicators && (
