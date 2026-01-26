@@ -18,7 +18,7 @@ export function parseRoadmap(content: string, phasesDir: string): Phase[] {
 	const dependsPattern = /\*\*Depends on\*\*:\s*(.+)?(?=\n|$)/;
 	const requirementsPattern = /\*\*Requirements\*\*:\s*(.+)?(?=\n|$)/;
 	const successCriteriaPattern = /\*\*Success Criteria\*\*[\s\S]*?(?=\*\*Plans|###|$)/;
-	const plansPattern = /\*\*Plans:\s*(\d+)\s*plans?/;
+	const plansPattern = /\*\*Plans\*\*:\s*(\d+)\s*plans?|\*\*Plans:\*\*\s*(\d+)\s*plans?/;
 
 	// Find all phase sections
 	const sections = content.split(/(?=###\s+Phase)/);
@@ -63,9 +63,9 @@ export function parseRoadmap(content: string, phasesDir: string): Phase[] {
 			}
 		}
 
-		// Extract plans count
+		// Extract plans count (handle two different ROADMAP.md formats)
 		const plansMatch = plansPattern.exec(section);
-		const plansTotal = plansMatch ? parseInt(plansMatch[1] ?? '0', 10) : 0;
+		const plansTotal = plansMatch ? parseInt(plansMatch[1] ?? plansMatch[2] ?? '0', 10) : 0;
 
 		// Determine phase directory name
 		const phaseDirName = findPhaseDirectory(phasesDir, phaseNumber, phaseName);
