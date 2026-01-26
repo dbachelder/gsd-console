@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 08-comprehensive-fix-for-broken-background-tasks
 source: 08-01-SUMMARY.md
 started: 2026-01-26T21:15:00Z
@@ -56,13 +56,41 @@ skipped: 2
 
 - truth: "Jobs transition from pending → running → complete without getting stuck"
   status: failed
-  reason: "User reported: the job is created as pending, but nothing seems to happen then..."
+  reason: "User reported:  job is created as pending, but nothing seems to happen then..."
   severity: blocker
   test: 1
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "Newly created OpenCode sessions never emit session.idle events because they start in idle state. Job processing system waits for idle events that never fire."
+  artifacts:
+    - path: "src/hooks/useBackgroundJobs.ts"
+      issue: "add() function creates pending jobs but doesn't trigger job startup for newly created sessions"
+    - path: "src/hooks/useSessionEvents.ts"
+      issue: "Only triggers onIdle callback when session.idle event fires, not for initial idle state"
+    - path: "src/app.tsx"
+      issue: "Headless mode creates idle session then queues job without triggering job processing"
+  missing:
+    - "Add proactive job startup trigger when jobs are added for newly created sessions"
+    - "Check if session is idle after creation and start job immediately rather than waiting for idle event"
+    - "Don't mark jobs as running before sendPrompt completes to avoid blocking subsequent jobs on failure"
+  debug_session: ".planning/debug/background-jobs-stuck-pending.md"
+
+- truth: "Jobs execute sequentially, one at a time"
+  status: failed
+  reason: "User reported: they queue up.. but nothing is moving forward"
+  severity: blocker
+  test: 2
+  root_cause: "Jobs wait for session.idle event that never fires for newly created sessions. Same core issue as test 1 - jobs never start, so sequential processing cannot occur."
+  artifacts:
+    - path: "src/hooks/useBackgroundJobs.ts"
+      issue: "No useEffect to trigger pending job startup for idle sessions"
+    - path: "src/hooks/useSessionEvents.ts"
+      issue: "Only triggers onIdle callback when session.idle event fires, not for initial idle state"
+    - path: "src/app.tsx"
+      issue: "Headless mode creates idle sessions then queues jobs without triggering job processing"
+  missing:
+    - "Add useEffect in useBackgroundJobs to proactively start pending jobs when their sessions are idle"
+    - "Check for pending jobs with idle sessions and trigger handleIdle immediately"
+    - "Don't mark jobs as running before sendPrompt completes"
+  debug_session: ".planning/debug/job-queue-stuck.md"
 
 - truth: "Jobs execute sequentially, one at a time"
   status: failed
