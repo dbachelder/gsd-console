@@ -1,0 +1,67 @@
+---
+status: diagnosed
+trigger: "execution-mode-ignored"
+created: 2025-01-25T00:00:00.000Z
+updated: 2025-01-25T00:00:08.000Z
+---
+
+## Current Focus
+
+hypothesis: Headless mode and primary mode both use the same background job system with `activeSessionId`, making them functionally identical when a session is connected
+test: Verify that `useBackgroundJobs` sends all jobs to `activeSessionId` regardless of execution mode
+expecting: Will find that headless mode doesn't create a separate background session
+next_action: Trace through handleModeSelect -> addBackgroundJob -> useBackgroundJobs.sendPrompt
+
+## Symptoms
+
+expected: In command palette, type a queueable command (e.g., 'add-todo'), press Enter. Execution mode prompt appears with 3 options: (h)eadless, (i)nteractive, (p)rimary. Selecting (h) should add to background job queue.
+actual: User reports: "I did Headless and it still sent's command to primary"
+errors: None reported
+reproduction: User types "add-todo foo bar", presses Enter, selects "h" for Headless mode
+started: Unknown
+
+## Eliminated
+
+## Evidence
+
+- timestamp: 2025-01-25T00:00:01.000Z
+  checked: CommandPalette.tsx execution flow
+  found: CommandPalette calls onExecute(command, showToast, args) when Enter pressed (line 72)
+  implication: Execution path starts from CommandPalette
+
+- timestamp: 2025-01-25T00:00:02.000Z
+  checked: App.tsx handleCommandSelect function
+  found: For queueable commands, sets pendingCommand, pendingArgs, showModePrompt=true (lines 174-176)
+  implication: Triggers ExecutionModePrompt to appear
+
+- timestamp: 2025-01-25T00:00:03.000Z
+  checked: App.tsx handleModeSelect function (lines 189-235)
+  found: For headless mode: calls addBackgroundJob(fullCommand) (line 201). For primary mode: also calls addBackgroundJob(fullCommand) (line 227). Both use the same function!
+  implication: HEADLESS: addBackgroundJob(command) → PRIMARY: addBackgroundJob(command) - identical paths
+
+- timestamp: 2025-01-25T00:00:04.000Z
+  checked: App.tsx useBackgroundJobs initialization (line 157-160)
+  found: useBackgroundJobs({ sessionId: activeSessionId, showToast })
+  implication: Background jobs hook is initialized with activeSessionId
+
+- timestamp: 2025-01-25T00:00:05.000Z
+  checked: useBackgroundJobs.ts add function (lines 208-228)
+  found: Queues job, triggers processing if sessionId available. Uses closure's sessionId from props
+  implication: Job will be sent to sessionId (activeSessionId when connected)
+
+- timestamp: 2025-01-25T00:00:06.000Z
+  checked: useBackgroundJobs.ts handleIdle function (lines 67-149)
+  found: When processing pending job, calls sendPrompt(sessionId, jobCommand) (line 108). sessionId is from closure
+  implication: Job always sent to sessionId passed to useBackgroundJobs (which is activeSessionId)
+
+- timestamp: 2025-01-25T00:00:07.000Z
+  checked: opencode.ts sendPrompt function (lines 161-174)
+  found: Sends prompt to specific sessionId via SDK
+  implication: Confirms that sessionId parameter determines where prompt goes
+
+## Resolution
+
+root_cause: In app.tsx, both headless and primary execution modes call `addBackgroundJob(fullCommand)` (lines 201 and 227), which sends commands to the same sessionId. The useBackgroundJobs hook is initialized with `sessionId: activeSessionId` (line 158), so both modes send commands to the primary session. Headless mode should create a separate background session instead of using the active session.
+fix: In app.tsx handleModeSelect, for headless mode: create a new session via createSession(), then pass that session ID to a separate background job queue or modify useBackgroundJobs to accept a sessionId per job.
+verification: Not verified (diagnosis mode)
+files_changed: []

@@ -7,7 +7,13 @@ vi.mock('node:fs', () => fs);
 vi.mock('node:fs/promises', () => fs.promises);
 
 // Import parser AFTER mocks are configured
-import { parseState, parseTodos, parseRoadmap, readPlanningFile, parsePlanFiles } from '../../src/lib/parser.ts';
+import {
+	parsePlanFiles,
+	parseRoadmap,
+	parseState,
+	parseTodos,
+	readPlanningFile,
+} from '../../src/lib/parser.ts';
 import type { Phase, ProjectState } from '../../src/lib/types.ts';
 
 /*
@@ -391,12 +397,12 @@ describe('readPlanningFile', () => {
 	});
 });
 
-describe("parsePlanFiles", () => {
+describe('parsePlanFiles', () => {
 	beforeEach(() => {
 		vol.reset();
 	});
 
-	test("reads plan files from phase directory", () => {
+	test('reads plan files from phase directory', () => {
 		const roadmapContent = String.raw`### Phase 1: Core TUI
 **Plans**: 1 plan
 
@@ -404,14 +410,14 @@ Plans:
 - [ ] 01-01-PLAN.md - Test plan`;
 
 		vol.fromJSON({
-			".planning/ROADMAP.md": roadmapContent,
-			".planning/phases/01-core-tui/01-01-PLAN.md": "---\nplan: 1\n---\n",
+			'.planning/ROADMAP.md': roadmapContent,
+			'.planning/phases/01-core-tui/01-01-PLAN.md': '---\nplan: 1\n---\n',
 		});
 
-		const plans = parsePlanFiles(".planning/phases/01-core-tui", 1, ".planning");
+		const plans = parsePlanFiles('.planning/phases/01-core-tui', 1, '.planning');
 
 		expect(plans).toHaveLength(1);
-		expect(plans[0]?.id).toBe("01");
-		expect(plans[0]?.summary).toBe("Test plan");
+		expect(plans[0]?.id).toBe('01');
+		expect(plans[0]?.summary).toBe('Test plan');
 	});
 });

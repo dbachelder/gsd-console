@@ -17,7 +17,7 @@ interface PhaseRowProps {
 	isFading?: boolean;
 	/** Total width to align fraction to (for right-alignment) */
 	fractionWidth?: number;
-	/** Width to align "Phase N:" prefix to (for title number alignment) */
+	/** Width to align "N:" prefix to (for title number alignment) */
 	phaseNumWidth?: number;
 }
 
@@ -63,7 +63,7 @@ export function PhaseRow({
 
 						{/* Phase name */}
 						<Text bold={isSelected}>
-							{`Phase ${phase.number}: ${phase.name}`.padStart(phaseNumWidth ?? 0, ' ')}
+							{`${phase.number}:`.padEnd(phaseNumWidth ?? 3, ' ')} {phase.name}
 						</Text>
 					</Text>
 				</Box>

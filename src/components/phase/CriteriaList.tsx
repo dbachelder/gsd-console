@@ -30,10 +30,10 @@ export function CriteriaList({
 			<Box flexDirection="column" marginLeft={2}>
 				{criteria.map((criterion, index) => (
 					// biome-ignore lint/suspicious/noArrayIndexKey: criteria are static content, order doesn't change
-					<Text key={index} wrap="wrap">
+					<Text key={index}>
 						<Text dimColor>{index + 1}. </Text>
-						<Text color={phaseComplete ? 'green' : 'gray'}>{phaseComplete ? '[✓] ' : '[ ] '}</Text>
-						{criterion}
+						<Text color={phaseComplete ? 'green' : 'gray'}>{phaseComplete ? '[✓]' : '[ ]'}</Text>
+						<Text> {criterion}</Text>
 					</Text>
 				))}
 			</Box>

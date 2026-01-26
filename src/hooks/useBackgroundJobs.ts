@@ -56,98 +56,112 @@ export function useBackgroundJobs({
 	// Track output for current running job
 	const currentOutputRef = useRef<string>('');
 
-	// Track whether we have a job in 'running' state (not just processed idle)
-	const hasRunningJob = jobs.some((j) => j.status === 'running');
+	// Collect all unique session IDs from jobs for event subscription
+	const jobSessionIds = Array.from(
+		new Set(
+			jobs
+				.filter((j) => j.sessionId && (j.status === 'pending' || j.status === 'running'))
+				.map((j) => j.sessionId)
+				.filter((id): id is string => id !== undefined),
+		),
+	);
 
 	/**
 	 * Handle session idle event.
 	 * If a job is running, mark it complete.
 	 * If pending jobs exist, start the next one.
 	 */
-	const handleIdle = useCallback(() => {
-		setJobs((prev) => {
-			// Find running job - mark it complete
-			const runningJob = prev.find((j) => j.status === 'running');
-			if (runningJob) {
-				const output = currentOutputRef.current;
-				currentOutputRef.current = ''; // Reset for next job
-
-				showToast?.(`Background: ${runningJob.command} complete`, 'success');
-
-				// Clear active command
-				setActiveCommand(undefined);
-
-				return pruneJobs(
-					prev.map((j) =>
-						j.id === runningJob.id
-							? {
-									...j,
-									status: 'complete' as const,
-									completedAt: Date.now(),
-									output: output || undefined,
-								}
-							: j,
-					),
+	const handleIdle = useCallback(
+		(idleSessionId: string) => {
+			setJobs((prev) => {
+				// Find running job for this session - mark it complete
+				const runningJob = prev.find(
+					(j) => j.status === 'running' && j.sessionId === idleSessionId,
 				);
-			}
+				if (runningJob) {
+					const output = currentOutputRef.current;
+					currentOutputRef.current = ''; // Reset for next job
 
-			// Find next pending job - start it
-			const pendingJob = prev.find((j) => j.status === 'pending');
-			if (pendingJob) {
-				// Set active command
-				setActiveCommand(pendingJob.command);
+					showToast?.(`Background: ${runningJob.command} complete`, 'success');
 
-				// Start the job asynchronously
-				if (pendingJob.sessionId) {
-					setIsProcessing(true);
-					showToast?.(`Background: ${pendingJob.command} started`, 'info');
+					// Clear active command
+					setActiveCommand(undefined);
 
-					// Send prompt - handle failure
-					const jobId = pendingJob.id;
-					const jobCommand = pendingJob.command;
-					const jobSessionId = pendingJob.sessionId;
-					sendPrompt(jobSessionId, jobCommand).then((success) => {
-						if (!success) {
-							// Mark job as failed
-							setJobs((current) =>
-								pruneJobs(
-									current.map((j) =>
-										j.id === jobId
-											? {
-													...j,
-													status: 'failed' as const,
-													error: 'Failed to send prompt to session',
-													completedAt: Date.now(),
-												}
-											: j,
-									),
-								),
-							);
-							showToast?.(`Background: ${jobCommand} failed`, 'warning');
-							setIsProcessing(false);
-							setActiveCommand(undefined);
-						}
-					});
+					return pruneJobs(
+						prev.map((j) =>
+							j.id === runningJob.id
+								? {
+										...j,
+										status: 'complete' as const,
+										completedAt: Date.now(),
+										output: output || undefined,
+									}
+								: j,
+						),
+					);
 				}
 
-				// Mark as running
-				return prev.map((j) =>
-					j.id === pendingJob.id
-						? {
-								...j,
-								status: 'running' as const,
-								startedAt: Date.now(),
-							}
-						: j,
-				);
-			}
+				// Find next pending job - start it
+				// Note: May be from a different session than the one that just went idle
+				// This is intentional - we process jobs sequentially across all sessions
+				const pendingJob = prev.find((j) => j.status === 'pending');
+				if (pendingJob) {
+					// Set active command
+					setActiveCommand(pendingJob.command);
 
-			// No more jobs to process
-			setIsProcessing(false);
-			setActiveCommand(undefined);
-			return prev;
-		});
-	}, [showToast]);
+					// Start the job asynchronously
+					if (pendingJob.sessionId) {
+						setIsProcessing(true);
+						showToast?.(`Background: ${pendingJob.command} started`, 'info');
+
+						// Send prompt - handle failure
+						const jobId = pendingJob.id;
+						const jobCommand = pendingJob.command;
+						const jobSessionId = pendingJob.sessionId;
+						sendPrompt(jobSessionId, jobCommand).then((success) => {
+							if (!success) {
+								// Mark job as failed
+								setJobs((current) =>
+									pruneJobs(
+										current.map((j) =>
+											j.id === jobId
+												? {
+														...j,
+														status: 'failed' as const,
+														error: 'Failed to send prompt to session',
+														completedAt: Date.now(),
+													}
+												: j,
+										),
+									),
+								);
+								showToast?.(`Background: ${jobCommand} failed`, 'warning');
+								setIsProcessing(false);
+								setActiveCommand(undefined);
+							}
+						});
+					}
+
+					// Mark as running
+					return prev.map((j) =>
+						j.id === pendingJob.id
+							? {
+									...j,
+									status: 'running' as const,
+									startedAt: Date.now(),
+								}
+							: j,
+					);
+				}
+
+				// No more jobs to process
+				setIsProcessing(false);
+				setActiveCommand(undefined);
+				return prev;
+			});
+		},
+		[showToast],
+	);
 
 	/**
 	 * Handle output from session.
@@ -162,10 +176,12 @@ export function useBackgroundJobs({
 	 * Mark running job as failed.
 	 */
 	const handleError = useCallback(
-		(errorMsg: string) => {
-			console.error('[DEBUG] handleError called with:', errorMsg);
+		(errorMsg: string, errorSessionId: string) => {
+			console.error('[DEBUG] handleError called with:', errorMsg, 'for session:', errorSessionId);
 			setJobs((prev) => {
-				const runningJob = prev.find((j) => j.status === 'running');
+				const runningJob = prev.find(
+					(j) => j.status === 'running' && j.sessionId === errorSessionId,
+				);
 				if (runningJob) {
 					console.error('[DEBUG] Marking job as failed:', runningJob.command, 'error:', errorMsg);
 					showToast?.(`Background: ${runningJob.command} failed`, 'warning');
@@ -189,7 +205,10 @@ export function useBackgroundJobs({
 						),
 					);
 				} else {
-					console.error('[DEBUG] No running job found when error received');
+					console.error(
+						'[DEBUG] No running job found when error received for session:',
+						errorSessionId,
+					);
 				}
 				return prev;
 			});
@@ -200,11 +219,11 @@ export function useBackgroundJobs({
 
 	// Subscribe to session events
 	useSessionEvents({
-		sessionId,
+		sessionIds: jobSessionIds,
 		onIdle: handleIdle,
 		onOutput: handleOutput,
 		onError: handleError,
-		enabled: !!sessionId && (jobs.some((j) => j.status === 'pending') || hasRunningJob),
+		enabled: jobSessionIds.length > 0,
 	});
 
 	/**
@@ -236,9 +255,9 @@ export function useBackgroundJobs({
 			// If session is available and no job running, trigger processing
 			// The next idle event will pick up the pending job
 			if (jobSessionId && !isProcessing) {
-				console.error('[DEBUG] Triggering handleIdle for job:', job.id);
+				console.error('[DEBUG] Triggering handleIdle for job:', job.id, 'session:', jobSessionId);
 				// Trigger idle check - if session is already idle, this will start the job
-				handleIdle();
+				handleIdle(jobSessionId);
 			} else {
 				console.error('[DEBUG] Not triggering handleIdle:', {
 					jobSessionId,

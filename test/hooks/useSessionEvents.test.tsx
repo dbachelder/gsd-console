@@ -38,7 +38,7 @@ describe('useSessionEvents', () => {
 
 		const TestComponent = () => {
 			useSessionEvents({
-				sessionId: 'session-1',
+				sessionIds: ['session-1'],
 				enabled: true,
 			});
 
@@ -67,7 +67,7 @@ describe('useSessionEvents', () => {
 
 		const TestComponent = () => {
 			useSessionEvents({
-				sessionId: 'session-1',
+				sessionIds: ['session-1'],
 				enabled: false,
 			});
 
@@ -86,12 +86,12 @@ describe('useSessionEvents', () => {
 		unmount();
 	});
 
-	test('does not subscribe without sessionId', async () => {
+	test('does not subscribe without sessionIds', async () => {
 		let capturedSubscribed = false;
 
 		const TestComponent = () => {
 			useSessionEvents({
-				sessionId: undefined,
+				sessionIds: undefined,
 				enabled: true,
 			});
 
@@ -104,7 +104,7 @@ describe('useSessionEvents', () => {
 
 		await new Promise((resolve) => setTimeout(resolve, 50));
 
-		// Should not subscribe without sessionId
+		// Should not subscribe without sessionIds
 		expect(capturedSubscribed).toBe(false);
 
 		unmount();
@@ -115,7 +115,7 @@ describe('useSessionEvents', () => {
 
 		const TestComponent = () => {
 			useSessionEvents({
-				sessionId: 'session-1',
+				sessionIds: ['session-1'],
 				enabled: true,
 			});
 
@@ -141,8 +141,8 @@ describe('useSessionEvents', () => {
 
 		const TestComponent = () => {
 			useSessionEvents({
-				sessionId: 'session-1',
-				onIdle: () => {
+				sessionIds: ['session-1'],
+				onIdle: (_sessionId: string) => {
 					idleCalled = true;
 				},
 				enabled: true,
@@ -166,7 +166,7 @@ describe('useSessionEvents', () => {
 
 		const TestComponent = () => {
 			useSessionEvents({
-				sessionId: 'session-1',
+				sessionIds: ['session-1'],
 				onOutput: (text: string) => {
 					outputText += text;
 				},
@@ -191,8 +191,8 @@ describe('useSessionEvents', () => {
 
 		const TestComponent = () => {
 			useSessionEvents({
-				sessionId: 'session-1',
-				onError: (error: string) => {
+				sessionIds: ['session-1'],
+				onError: (_error: string, _sessionId: string) => {
 					errorReceived = true;
 				},
 				enabled: true,
@@ -219,7 +219,7 @@ describe('useSessionEvents', () => {
 
 		const TestComponent = () => {
 			useSessionEvents({
-				sessionId: 'session-1',
+				sessionIds: ['session-1'],
 				enabled: true,
 			});
 

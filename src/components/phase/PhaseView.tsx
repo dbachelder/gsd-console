@@ -208,20 +208,12 @@ export function PhaseView({
 						</Text>
 						{planInfos.map((plan) => (
 							<Box key={plan.id} flexDirection="column" paddingLeft={2}>
-								<Box>
+								<Text>
 									<Text color={plan.completed ? 'green' : undefined}>
-										[{plan.completed ? '✓' : ' '}]{' '}
+										[{plan.completed ? '✓' : ' '}]
 									</Text>
-									<Text>{plan.summary}</Text>
-								</Box>
-								{/* Wave/task info on second line at detail level 2+ */}
-								{detailLevel >= 2 && (
-									<Box paddingLeft={4}>
-										<Text dimColor>
-											(Wave {plan.wave}, {plan.taskCount} task{plan.taskCount !== 1 ? 's' : ''})
-										</Text>
-									</Box>
-								)}
+									<Text> {plan.summary}</Text>
+								</Text>
 							</Box>
 						))}
 					</Box>

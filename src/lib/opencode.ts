@@ -7,6 +7,7 @@
 
 import { spawnSync } from 'node:child_process';
 import { createOpencodeClient } from '@opencode-ai/sdk';
+import type { ExecutionTarget } from './types.ts';
 
 /** Default port for OpenCode server */
 export const DEFAULT_PORT = 4096;
@@ -18,6 +19,22 @@ export interface SessionInfo {
 	lastCommand?: string; // Last prompt/command run
 	createdAt?: string;
 	updatedAt?: number; // Timestamp for sorting/filtering
+}
+
+/**
+ * Format a GSD command for the specified execution target.
+ *
+ * @param command - The command name and args (e.g., "add-todo foo bar")
+ * @param target - Execution target (opencode or claude-code)
+ * @returns Formatted command with appropriate prefix
+ *
+ * @example
+ * formatGsdCommand("add-todo foo bar", "opencode") // "/gsd-add-todo foo bar"
+ * formatGsdCommand("add-todo foo bar", "claude-code") // "/gsd:add-todo foo bar"
+ */
+export function formatGsdCommand(command: string, target: ExecutionTarget): string {
+	const prefix = target === 'opencode' ? '/gsd-' : '/gsd:';
+	return `${prefix}${command}`;
 }
 
 /** Default base URL for OpenCode server */

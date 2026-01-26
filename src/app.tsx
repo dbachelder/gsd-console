@@ -26,11 +26,12 @@ import type { Command } from './lib/commands.ts';
 import { commands } from './lib/commands.ts';
 import {
 	createSession,
+	formatGsdCommand,
 	getProjectSessions,
 	type SessionInfo,
 	spawnOpencodeSession,
 } from './lib/opencode.ts';
-import type { CliFlags, ExecutionMode, GsdData } from './lib/types.ts';
+import type { CliFlags, ExecutionMode, ExecutionTarget, GsdData } from './lib/types.ts';
 
 interface AppProps {
 	flags: CliFlags;
@@ -190,6 +191,9 @@ export default function App({ flags }: AppProps) {
 	/**
 	 * Handle execution mode selection.
 	 * Routes command to appropriate execution path based on mode.
+	 *
+	 * TODO: Make execution target configurable (currently hardcoded to 'opencode').
+	 * Future: Add CLI flag or config file for target selection.
 	 */
 	const handleModeSelect = useCallback(
 		(mode: ExecutionMode) => {
@@ -200,14 +204,18 @@ export default function App({ flags }: AppProps) {
 			// Build full command with args (e.g., "plan-phase 4")
 			const fullCommand = pendingArgs ? `${commandName} ${pendingArgs}` : commandName;
 
+			// TODO: Make this configurable via CLI flag or config file
+			const target: ExecutionTarget = 'opencode';
+
 			switch (mode) {
 				case 'headless':
 					// Create new background session and add job to it
 					{
 						void (async () => {
-							const newSessionId = await createSession(`/gsd:${fullCommand}`);
+							const formattedCommand = formatGsdCommand(fullCommand, target);
+							const newSessionId = await createSession(formattedCommand);
 							if (newSessionId) {
-								addBackgroundJob(fullCommand, newSessionId);
+								addBackgroundJob(formattedCommand, newSessionId);
 							} else {
 								showToast('Failed to create background session', 'warning');
 							}
@@ -219,7 +227,8 @@ export default function App({ flags }: AppProps) {
 					// Spawn new OpenCode session with this command
 					{
 						void (async () => {
-							const success = await spawnOpencodeSession(`/gsd:${fullCommand}`);
+							const formattedCommand = formatGsdCommand(fullCommand, target);
+							const success = await spawnOpencodeSession(formattedCommand);
 							if (success) {
 								showToast('OpenCode session completed', 'success');
 							} else {
@@ -229,7 +238,7 @@ export default function App({ flags }: AppProps) {
 					}
 					break;
 
-				case 'primary':
+				case 'primary': {
 					// Send to existing connected session
 					if (!activeSessionId) {
 						showToast("No session connected. Press 'c' to connect.", 'warning');
@@ -237,9 +246,10 @@ export default function App({ flags }: AppProps) {
 						setPendingArgs(undefined);
 						return;
 					}
-					// For now, queue as background job with the connected session
-					addBackgroundJob(fullCommand);
+					const formattedCommand = formatGsdCommand(fullCommand, target);
+					addBackgroundJob(formattedCommand);
 					break;
+				}
 			}
 
 			setPendingCommand(null);

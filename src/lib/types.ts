@@ -96,3 +96,6 @@ export interface BackgroundJobsState {
 
 /** Execution mode for GSD commands */
 export type ExecutionMode = 'headless' | 'interactive' | 'primary';
+
+/** Execution target for commands (OpenCode or Claude Code) */
+export type ExecutionTarget = 'opencode' | 'claude-code';

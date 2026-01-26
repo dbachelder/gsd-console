@@ -39,7 +39,7 @@ export function RoadmapView({
 }: RoadmapViewProps) {
 	// Calculate max phase title width for right-alignment
 	const phaseNumWidth =
-		phases.length > 0 ? Math.max(...phases.map((p) => `Phase ${p.number}: ${p.name}`.length)) : 0;
+		phases.length > 0 ? Math.max(...phases.map((p) => `${p.number}:`.length)) : 3;
 	// Calculate max fraction width for right-alignment
 	const fractionWidth =
 		phases.length > 0
