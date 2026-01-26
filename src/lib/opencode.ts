@@ -296,3 +296,26 @@ export async function createSession(title?: string): Promise<string | null> {
 		return null;
 	}
 }
+
+/**
+ * Execute a queued command via BackgroundJob system.
+ * Queues command in useBackgroundJobs for headless execution.
+ */
+export async function executeQueuedCommand(
+	command: string,
+	args?: string,
+	sessionId?: string,
+	addBackgroundJob?: (cmd: string, id?: string) => void,
+): Promise<boolean> {
+	if (!addBackgroundJob) {
+		return false;
+	}
+
+	const fullCommand = args ? `${command} ${args}` : command;
+	const formattedCommand = formatGsdCommand(fullCommand, 'opencode');
+
+	// Add to BackgroundJob queue (reuses Phase 4 execution engine)
+	addBackgroundJob(formattedCommand, sessionId);
+
+	return true;
+}

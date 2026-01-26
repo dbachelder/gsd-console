@@ -22,6 +22,7 @@ import { useExternalEditor } from './hooks/useExternalEditor.ts';
 import { useFileWatcher } from './hooks/useFileWatcher.ts';
 import { useGsdData } from './hooks/useGsdData.ts';
 import { useToast } from './hooks/useToast.ts';
+import { useWorkQueue } from './hooks/useWorkQueue.ts';
 import type { Command } from './lib/commands.ts';
 import { commands } from './lib/commands.ts';
 import {
@@ -164,6 +165,9 @@ export default function App({ flags }: AppProps) {
 		sessionId: activeSessionId,
 		showToast,
 	});
+
+	// Work Queue (user-managed GSD command queue)
+	const workQueue = useWorkQueue();
 
 	// Command palette - need to track filtered count for navigation bounds
 	const [filteredCount, setFilteredCount] = useState(commands.length);
@@ -368,6 +372,8 @@ export default function App({ flags }: AppProps) {
 					planningDir={planningDir}
 					backgroundJobs={backgroundJobs}
 					onCancelJob={cancelBackgroundJob}
+					workQueue={workQueue.queue}
+					onQueueRemove={workQueue.remove}
 				/>
 			</Box>
 			<Footer activeTab={activeTab} onlyMode={flags.only} />
