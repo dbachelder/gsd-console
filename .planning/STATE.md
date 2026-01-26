@@ -154,7 +154,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-5 pending todos.
+1 pending todo.
 
 ### Quick Tasks Completed
 
