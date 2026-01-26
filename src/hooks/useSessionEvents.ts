@@ -89,25 +89,32 @@ export function useSessionEvents({
 
 					// Build informative error message even if error.message is missing
 					let errorMsg: string;
-					if (error && typeof error === 'object' && 'message' in error) {
-						errorMsg = String(error.message);
-					} else if (error) {
-						// Error object exists but has no message - include type and any other properties
-						const errorType =
-							error && typeof error === 'object' && 'type' in error
-								? String(error.type)
-								: typeof error;
-						const errorKeys =
-							error && typeof error === 'object'
-								? Object.keys(error)
-										.filter((k) => k !== 'type' && k !== 'message')
-										.slice(0, 3)
-										.join(', ')
-								: '';
+					if (error && typeof error === 'object') {
+						// OpenCode error structure: { name: string, data: { message: string } }
+						// Check for OpenCode's data.message first
+						if (
+							'data' in error &&
+							typeof error.data === 'object' &&
+							error.data !== null &&
+							'message' in error.data
+						) {
+							errorMsg = String(error.data.message);
+						}
+						// Fall back to standard Error.message property
+						else if ('message' in error) {
+							errorMsg = String(error.message);
+						}
+						// No message found - include type and available properties
+						else {
+							const errorType = 'name' in error ? String(error.name) : typeof error;
+							const errorKeys = Object.keys(error).slice(0, 3).join(', ');
 
-						errorMsg = errorKeys
-							? `Unknown error (${errorType}: ${errorKeys}...)`
-							: `Unknown error (${errorType})`;
+							errorMsg = errorKeys
+								? `Unknown error (${errorType}: ${errorKeys}...)`
+								: `Unknown error (${errorType})`;
+						}
+					} else if (error) {
+						errorMsg = String(error);
 					} else {
 						errorMsg = 'Unknown error (no error object provided)';
 					}
