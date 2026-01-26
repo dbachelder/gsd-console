@@ -15,10 +15,8 @@ interface PhaseRowProps {
 	showIndicators?: boolean;
 	isHighlighted?: boolean;
 	isFading?: boolean;
-	/** Width to pad plansComplete to (for alignment) */
-	maxPlansWidth?: number;
-	/** Width to pad plansTotal to (for alignment) */
-	maxPlansTotalWidth?: number;
+	/** Total width to align fraction to (for right-alignment) */
+	fractionWidth?: number;
 }
 
 export function PhaseRow({
@@ -28,8 +26,7 @@ export function PhaseRow({
 	showIndicators = true,
 	isHighlighted = false,
 	isFading = false,
-	maxPlansWidth,
-	maxPlansTotalWidth,
+	fractionWidth,
 }: PhaseRowProps) {
 	const chevron = isExpanded ? '\u25BC' : '\u25B6'; // Down or Right triangle
 	const statusIcon = getStatusIcon(phase.status);
@@ -73,8 +70,7 @@ export function PhaseRow({
 					<ProgressBar percent={planPercent} width={10} showPercent={false} />
 					<Text dimColor>
 						{' '}
-						{String(phase.plansComplete).padStart(maxPlansWidth ?? 2, ' ')}/{phase.plansTotal}
-						{' '.repeat((maxPlansTotalWidth ?? 2) - String(phase.plansTotal).length)}
+						{`${phase.plansComplete}/${phase.plansTotal}`.padStart(fractionWidth ?? 5, ' ')}
 					</Text>
 				</Box>
 			</Box>

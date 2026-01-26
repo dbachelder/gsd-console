@@ -90,13 +90,12 @@ describe('PhaseRow', () => {
 				phase={mockPhase}
 				isSelected={false}
 				isExpanded={false}
-				maxPlansWidth={2}
-				maxPlansTotalWidth={2}
+				fractionWidth={5}
 			/>,
 		);
 
-		// 4/4 = 100%
-		expect(lastFrame()).toContain('4/4');
+		// 4/4 = 100%, padded to width 5: " 4/4"
+		expect(lastFrame()).toContain(' 4/4');
 	});
 
 	test('shows partial progress for in-progress phase', () => {
@@ -112,6 +111,7 @@ describe('PhaseRow', () => {
 				phase={inProgressPhase}
 				isSelected={false}
 				isExpanded={false}
+				fractionWidth={4}
 			/>,
 		);
 
@@ -271,7 +271,7 @@ describe('PhaseRow', () => {
 		expect(lastFrame()).toContain('Phase 1: Core TUI');
 	});
 
-	test('pads plan fraction to default width of 2 when maxPlansWidth not provided', () => {
+	test('pads plan fraction to default width of 2 when fractionWidth not provided', () => {
 		const onePlanPhase: Phase = {
 			...mockPhase,
 			plansTotal: 1,
@@ -290,7 +290,7 @@ describe('PhaseRow', () => {
 		expect(lastFrame()).toContain(' 1/1');
 	});
 
-	test('pads plan fraction to custom maxPlansWidth when provided', () => {
+	test('pads plan fraction to custom fractionWidth when provided', () => {
 		const onePlanPhase: Phase = {
 			...mockPhase,
 			plansTotal: 1,
@@ -302,12 +302,12 @@ describe('PhaseRow', () => {
 				phase={onePlanPhase}
 				isSelected={false}
 				isExpanded={false}
-				maxPlansWidth={3}
+				fractionWidth={3}
 			/>,
 		);
 
-		// Should pad to width 3: "  1" (2 spaces + 1 digit = 3 chars)
-		expect(lastFrame()).toContain('  1/1');
+	// Should pad to width 3: fraction "1/1" (3 chars, no padding needed)
+		expect(lastFrame()).toContain('1/1');
 	});
 
 	test('does not pad when plansComplete already has max width', () => {
@@ -322,7 +322,7 @@ describe('PhaseRow', () => {
 				phase={eighteenPlanPhase}
 				isSelected={false}
 				isExpanded={false}
-				maxPlansWidth={2}
+				fractionWidth={2}
 			/>,
 		);
 
@@ -342,12 +342,12 @@ describe('PhaseRow', () => {
 				phase={partialPhase}
 				isSelected={false}
 				isExpanded={false}
-				maxPlansWidth={2}
+				fractionWidth={2}
 			/>,
 		);
 
-		// Should show " 1/18" with single-digit plansComplete padded to 2
-		expect(lastFrame()).toContain(' 1/18');
+	// Should show "1/18" - fraction is 4 chars, can't pad to width 2
+		expect(lastFrame()).toContain('1/18');
 	});
 
 	test('shows partial progress for "7/18"', () => {
@@ -362,7 +362,7 @@ describe('PhaseRow', () => {
 				phase={partialPhase}
 				isSelected={false}
 				isExpanded={false}
-				maxPlansWidth={2}
+				fractionWidth={2}
 			/>,
 		);
 
@@ -385,21 +385,43 @@ describe('PhaseRow', () => {
 			plansComplete: 18,
 		};
 
-		// Render with max width 2
+		// Render with fractionWidth 5 (max width for "18/18")
 		const smallFrame = render(
-			<PhaseRow phase={smallPhase} isSelected={false} isExpanded={false} maxPlansWidth={2} />,
+			<PhaseRow phase={smallPhase} isSelected={false} isExpanded={false} fractionWidth={5} />,
 		).lastFrame();
 		const largeFrame = render(
-			<PhaseRow phase={largePhase} isSelected={false} isExpanded={false} maxPlansWidth={2} />,
+			<PhaseRow phase={largePhase} isSelected={false} isExpanded={false} fractionWidth={5} />,
 		).lastFrame();
 
-		// Both should align: " 1/1" and "18/18"
-		expect(smallFrame).toContain(' 1/1');
-		expect(largeFrame).toContain('18/18');
-
-		// Verify both fractions are rendered in the same relative position
-		// by checking that the fraction string exists with proper spacing
+		// Both fractions should be present
 		expect(smallFrame).toContain('1/1');
 		expect(largeFrame).toContain('18/18');
 	});
+
+	test('right-aligns fractions with same fractionWidth', () => {
+		const onePlanPhase: Phase = {
+			...mockPhase,
+			plansTotal: 1,
+			plansComplete: 1,
+		};
+
+		const eighteenPlanPhase: Phase = {
+			...mockPhase,
+			plansTotal: 18,
+			plansComplete: 18,
+		};
+
+		// Render with fractionWidth 5
+		const oneFrame = render(
+			<PhaseRow phase={onePlanPhase} isSelected={false} isExpanded={false} fractionWidth={5} />,
+		).lastFrame();
+		const eighteenFrame = render(
+			<PhaseRow phase={eighteenPlanPhase} isSelected={false} isExpanded={false} fractionWidth={5} />,
+		).lastFrame();
+
+		// Both should have same width for right-alignment
+		expect(oneFrame).toContain(' 1/1');
+		expect(eighteenFrame).toContain('18/18');
+	});
 });
+

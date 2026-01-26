@@ -72,12 +72,11 @@ export function PhaseView({
 	// Cast to DetailLevel type (1-3) for internal use
 	const currentDetailLevel = (detailLevel as DetailLevel) || 1;
 
-	// Calculate max plans complete width for alignment
-	const maxPlansWidth =
-		allPhases.length > 0 ? Math.max(...allPhases.map((p) => String(p.plansComplete).length)) : 2;
-	// Calculate max plans total width for alignment
-	const maxPlansTotalWidth =
-		allPhases.length > 0 ? Math.max(...allPhases.map((p) => String(p.plansTotal).length)) : 2;
+	// Calculate max fraction width for right-alignment
+	const fractionWidth =
+		allPhases.length > 0
+			? Math.max(...allPhases.map((p) => `${p.plansComplete}/${p.plansTotal}`.length))
+			: 5;
 
 	// Parse plan files for this phase
 	const planInfos: PlanInfo[] = useMemo(() => {
@@ -177,8 +176,8 @@ export function PhaseView({
 					</Text>
 					<Text dimColor>
 						{' '}
-						| {String(phase.plansComplete).padStart(maxPlansWidth, ' ')}/{phase.plansTotal}
-						{' '.repeat(maxPlansTotalWidth - String(phase.plansTotal).length)} plans complete
+						| {`${phase.plansComplete}/${phase.plansTotal}`.padStart(fractionWidth, ' ')} plans
+						complete
 					</Text>
 				</Box>
 				{hasActiveIndicators && (
