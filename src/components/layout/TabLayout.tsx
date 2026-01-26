@@ -164,7 +164,7 @@ export function TabLayout({
 			<TabBar activeTab={activeTab} />
 
 			{/* Active view content */}
-			<Box flexDirection="column">
+			<Box flexDirection="column" flexGrow={1}>
 				{activeTab === 'roadmap' && (
 					<RoadmapView
 						phases={data.phases}

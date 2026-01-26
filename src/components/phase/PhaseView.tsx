@@ -196,7 +196,7 @@ export function PhaseView({
 			</Box>
 
 			{/* Phase content */}
-			<Box flexDirection="column" borderStyle="single" paddingX={1}>
+			<Box flexDirection="column" borderStyle="single" paddingX={1} flexGrow={1}>
 				{/* Level 1: Goal + Success Criteria */}
 				<GoalSection goal={phase.goal} />
 
@@ -248,14 +248,6 @@ export function PhaseView({
 						</Text>
 					</Box>
 				)}
-			</Box>
-
-			{/* Navigation hints */}
-			<Box marginTop={1}>
-				<Text dimColor>
-					Phase {currentIndex + 1}/{allPhases.length} | Detail level: {detailLevel}/3 | [: prev | ]:
-					next | d: toggle detail
-				</Text>
 			</Box>
 		</Box>
 	);
