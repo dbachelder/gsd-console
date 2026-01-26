@@ -6,34 +6,43 @@
 <domain>
 ## Phase Boundary
 
-Build a Work Queue system for sequential GSD command execution in connected OpenCode sessions. Users can add commands to a queue via intelligent shortcuts, remove commands, and view queue status in a dedicated tab. Commands are sent to the primary OpenCode session with status tracking.
+Build a Work Queue system for sequential GSD command execution in connected OpenCode sessions. Users can add commands via intelligent shortcuts, remove commands, view queue status in a dedicated tab, and track execution progress. Queue is ephemeral - lives only during TUI session.
 
 </domain>
 
 <decisions>
 ## Implementation Decisions
 
-### Queue editing operations
-- Basic operations only: add commands, remove items (no reordering or editing)
-- Add commands via 'w' shortcut with intelligent behavior based on phase state:
-  - If phase unplanned and unexecuted: `/gsd-plan-phase {N}`, `/clear`, `/gsd-execute-phase {N}`, `/clear`
-  - If phase planned but not executed: `/gsd-execute-phase {N}`, `/clear`
-- Remove commands via delete key
-- Queue displayed in new "Work Queue" tab showing all commands sent to primary session
+### Execution error handling
+- Stop execution immediately when a command fails
+- Show full details + suggestion when execution stops (command, error, retry hint)
+- Mark failed command in queue (don't clear queue or keep remaining)
+- Retry method: Claude's discretion (fits best with TUI patterns)
+
+### Status display granularity
+- Each queued command shows: status icon + command text (e.g., "/gsd-plan-phase 7")
+- Queue list with status icons per item is sufficient (no separate progress display needed)
+- No command output shown during execution (only status icons update)
+- Keep all commands in queue after completion (full history with status icons)
+
+### Queue persistence
+- No persistence - queue is session-only (dies when TUI exits)
+- No export capability needed
+- Queue lives in memory only during TUI session
 
 ### Claude's Discretion
-- Queue persistence (auto-save on changes, or session-only?)
+- Retry method after fixing error
 - Visual styling of Work Queue tab
-- Keyboard shortcuts for queue navigation
+- Keyboard shortcuts for queue navigation and control
 
 </decisions>
 
 <specifics>
 ## Specific Ideas
 
-- Work Queue should be intelligent - context-aware based on what phase you're on when you hit 'w'
-- The '/clear' commands are intentional - fresh context window for each phase operation
-- Queue shows "all commands sent to primary session" - includes executed and pending
+- Queue is a list with status icons (pending, running, completed, failed) in front of each item
+- The 'w' shortcut is intelligent based on phase state (planning vs execution)
+- /clear commands are intentional - fresh context window for each phase operation
 
 </specifics>
 
