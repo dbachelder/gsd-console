@@ -159,13 +159,19 @@ Plans:
 
 **Goal:** Queue up GSD commands for sequential execution in connected OpenCode sessions, with session management, queue editing, and status tracking
 **Depends on:** Phase 6
-**Plans:** 0 plans
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 7 to break down)
+- [ ] 07-01-PLAN.md — Queue state hook with useReducer (Wave 1, 2 tasks)
+- [ ] 07-02-PLAN.md — Queue UI components (WorkQueueView, QueueEntry) (Wave 1, 2 tasks)
+- [ ] 07-03-PLAN.md — Tab integration and 'w' key handler (Wave 2, 3 tasks)
 
 **Details:**
-[To be added during planning]
+- Use useReducer for queue state management (centralized logic)
+- Reuse BackgroundJob execution engine from Phase 4
+- Add new "Work Queue" tab to TabLayout (tab 5)
+- 'w' key intelligently opens queue or adds phase command based on context
+- Queue is session-only (no persistence)
 
 ## Progress
 
@@ -181,3 +187,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 4. OpenCode Integration | 9/9 | Complete | 2026-01-26 |
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
 | 6. Additional UI Polish | 2/4 | Gap closure | 2026-01-26 |
+| 7. GSD Ralph Loop Command Queue | 0/3 | Ready to execute | - |
