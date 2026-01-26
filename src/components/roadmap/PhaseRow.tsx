@@ -69,6 +69,7 @@ export function PhaseRow({
 				<Box>
 					<ProgressBar percent={planPercent} width={10} showPercent={false} />
 					<Text dimColor>
+						{' '}
 						{String(phase.plansComplete).padStart(maxPlansWidth ?? 2, ' ')}/{phase.plansTotal}
 					</Text>
 				</Box>

@@ -328,6 +328,46 @@ describe('PhaseRow', () => {
 		expect(lastFrame()).toContain('18/18');
 	});
 
+	test('shows partial progress with padding for "1/18"', () => {
+		const partialPhase: Phase = {
+			...mockPhase,
+			plansTotal: 18,
+			plansComplete: 1,
+		};
+
+		const { lastFrame } = render(
+			<PhaseRow
+				phase={partialPhase}
+				isSelected={false}
+				isExpanded={false}
+				maxPlansWidth={2}
+			/>,
+		);
+
+		// Should show " 1/18" with single-digit plansComplete padded to 2
+		expect(lastFrame()).toContain(' 1/18');
+	});
+
+	test('shows partial progress for "7/18"', () => {
+		const partialPhase: Phase = {
+			...mockPhase,
+			plansTotal: 18,
+			plansComplete: 7,
+		};
+
+		const { lastFrame } = render(
+			<PhaseRow
+				phase={partialPhase}
+				isSelected={false}
+				isExpanded={false}
+				maxPlansWidth={2}
+			/>,
+		);
+
+		// Should show " 7/18" with single-digit plansComplete padded to 2
+		expect(lastFrame()).toContain(' 7/18');
+	});
+
 	test('aligns fractions across phases with different completion counts', () => {
 		const smallPhase: Phase = {
 			...mockPhase,
