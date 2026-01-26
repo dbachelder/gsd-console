@@ -46,7 +46,7 @@ export function PhaseRow({
 	const indicators = getIndicatorIcons(phase.indicators);
 
 	return (
-		<Box flexDirection="column" backgroundColor={highlightBg}>
+		<Box flexDirection="column" backgroundColor={highlightBg} marginBottom={1}>
 			{/* Main phase row */}
 			<Box justifyContent="space-between">
 				{/* Left side: chevron, status, name */}
