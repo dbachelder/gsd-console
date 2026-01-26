@@ -24,7 +24,12 @@ import { useGsdData } from './hooks/useGsdData.ts';
 import { useToast } from './hooks/useToast.ts';
 import type { Command } from './lib/commands.ts';
 import { commands } from './lib/commands.ts';
-import { getProjectSessions, type SessionInfo, spawnOpencodeSession } from './lib/opencode.ts';
+import {
+	createSession,
+	getProjectSessions,
+	type SessionInfo,
+	spawnOpencodeSession,
+} from './lib/opencode.ts';
 import type { CliFlags, ExecutionMode, GsdData } from './lib/types.ts';
 
 interface AppProps {
@@ -197,8 +202,17 @@ export default function App({ flags }: AppProps) {
 
 			switch (mode) {
 				case 'headless':
-					// Add to background jobs for headless execution
-					addBackgroundJob(fullCommand);
+					// Create new background session and add job to it
+					{
+						void (async () => {
+							const newSessionId = await createSession(`/gsd:${fullCommand}`);
+							if (newSessionId) {
+								addBackgroundJob(fullCommand, newSessionId);
+							} else {
+								showToast('Failed to create background session', 'warning');
+							}
+						})();
+					}
 					break;
 
 				case 'interactive':
