@@ -4,6 +4,7 @@
  */
 
 import { Box, Text } from 'ink';
+import { useSessionActivity } from '../../hooks/useSessionActivity.ts';
 
 type TabId = 'roadmap' | 'phase' | 'todos' | 'background';
 
@@ -51,6 +52,7 @@ const commonHints: Hint[] = [
 export function Footer({ activeTab = 'roadmap', onlyMode }: FooterProps) {
 	const currentTab = onlyMode ?? activeTab;
 	const contextHints = viewHints[currentTab] ?? viewHints.roadmap;
+	const activity = useSessionActivity();
 
 	// Tab navigation hints (only in tabbed mode)
 	const tabHints: Hint[] = onlyMode ? [] : [{ key: 'Tab', action: 'tabs' }];
@@ -60,6 +62,15 @@ export function Footer({ activeTab = 'roadmap', onlyMode }: FooterProps) {
 	return (
 		<Box marginTop={1} paddingX={1}>
 			<Text dimColor>
+				{/* Show active session activity */}
+				{activity?.isActive && activity.currentActivity && (
+					<Text color="cyan" bold>
+						● {activity.currentActivity} |{' '}
+					</Text>
+				)}
+				{activity && !activity.isActive && activity.title && (
+					<Text dimColor>○ {activity.title.slice(0, 8)}... | </Text>
+				)}
 				{allHints.map((hint, index) => (
 					<Text key={hint.key}>
 						{index > 0 && ' | '}
