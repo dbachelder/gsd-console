@@ -130,7 +130,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-No pending todos.
+1 pending todo.
 
 ### Quick Tasks Completed
 
