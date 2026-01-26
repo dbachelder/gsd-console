@@ -6,7 +6,7 @@
 import { existsSync, readdirSync } from 'node:fs';
 import process from 'node:process';
 import { Box, Text, useInput } from 'ink';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useVimNav } from '../../hooks/useVimNav.ts';
 import { getIndicatorIcons, getStatusColor, getStatusIcon } from '../../lib/icons.ts';
 import { type PlanInfo, parsePlanFiles } from '../../lib/parser.ts';
@@ -95,6 +95,15 @@ export function PhaseView({
 		const phaseId = phase.number < 10 ? `0${phase.number}` : String(phase.number);
 		return parsePlanFiles(`${phasesDir}/${phaseDirName}`, phase.number, planningDir, phaseId);
 	}, [phase, planningDir]);
+
+	// Track terminal resize for viewport recalculation
+	useEffect(() => {
+		const updateHeight = () => _setViewportHeight(process.stdout.rows);
+		process.stdout.on('resize', updateHeight);
+		return () => {
+			process.stdout.off('resize', updateHeight);
+		};
+	}, []);
 
 	// Find current phase index
 	const currentIndex = phase ? allPhases.findIndex((p) => p.number === phase.number) : -1;
