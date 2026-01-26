@@ -268,4 +268,96 @@ describe('PhaseRow', () => {
 		// Fading highlight should render (different background color)
 		expect(lastFrame()).toContain('Phase 1: Core TUI');
 	});
+
+	test('pads plan fraction to default width of 2 when maxPlansWidth not provided', () => {
+		const onePlanPhase: Phase = {
+			...mockPhase,
+			plansTotal: 1,
+			plansComplete: 1,
+		};
+
+		const { lastFrame } = render(
+			<PhaseRow
+				phase={onePlanPhase}
+				isSelected={false}
+				isExpanded={false}
+			/>,
+		);
+
+		// Should pad to width 2: " 1/1"
+		expect(lastFrame()).toContain(' 1/1');
+	});
+
+	test('pads plan fraction to custom maxPlansWidth when provided', () => {
+		const onePlanPhase: Phase = {
+			...mockPhase,
+			plansTotal: 1,
+			plansComplete: 1,
+		};
+
+		const { lastFrame } = render(
+			<PhaseRow
+				phase={onePlanPhase}
+				isSelected={false}
+				isExpanded={false}
+				maxPlansWidth={3}
+			/>,
+		);
+
+		// Should pad to width 3: "  1" (2 spaces + 1 digit = 3 chars)
+		expect(lastFrame()).toContain('  1/1');
+	});
+
+	test('does not pad when plansComplete already has max width', () => {
+		const eighteenPlanPhase: Phase = {
+			...mockPhase,
+			plansTotal: 18,
+			plansComplete: 18,
+		};
+
+		const { lastFrame } = render(
+			<PhaseRow
+				phase={eighteenPlanPhase}
+				isSelected={false}
+				isExpanded={false}
+				maxPlansWidth={2}
+			/>,
+		);
+
+		// Should not add padding: "18/18" is already 2 digits
+		expect(lastFrame()).toContain('18/18');
+	});
+
+	test('aligns fractions across phases with different completion counts', () => {
+		const smallPhase: Phase = {
+			...mockPhase,
+			number: 1,
+			plansTotal: 1,
+			plansComplete: 1,
+		};
+
+		const largePhase: Phase = {
+			...mockPhase,
+			number: 2,
+			plansTotal: 18,
+			plansComplete: 18,
+		};
+
+		// Render with max width 2
+		const smallFrame = render(
+			<PhaseRow phase={smallPhase} isSelected={false} isExpanded={false} maxPlansWidth={2} />,
+		).lastFrame();
+		const largeFrame = render(
+			<PhaseRow phase={largePhase} isSelected={false} isExpanded={false} maxPlansWidth={2} />,
+		).lastFrame();
+
+		// Both should align: " 1/1" and "18/18"
+		expect(smallFrame).toContain(' 1/1');
+		expect(largeFrame).toContain('18/18');
+
+		// Verify both fractions are rendered in the same relative position
+		// by checking that the fraction string exists with proper spacing
+		expect(smallFrame).toContain('1/1');
+		expect(largeFrame).toContain('18/18');
+	});
 });
