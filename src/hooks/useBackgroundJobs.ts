@@ -95,7 +95,8 @@ function startPendingJob(
 
 	debugLog(`[startPendingJob] Calling sendPrompt for job ${jobId}`);
 
-	sendPrompt(jobSessionId, jobCommand)
+	// Force opencode/big-pickle model for GSD commands since OpenCode config has no default
+	sendPrompt(jobSessionId, jobCommand, 'opencode/big-pickle')
 		.then((success) => {
 			debugLog(`[startPendingJob] sendPrompt returned: ${success ? 'success' : 'failed'}`);
 

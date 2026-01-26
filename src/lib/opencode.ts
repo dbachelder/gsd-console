@@ -245,10 +245,14 @@ function parseModel(modelString: string): { providerID: string; modelID: string 
  * Send a prompt to an OpenCode session.
  * Returns true if prompt was sent successfully.
  */
-export async function sendPrompt(sessionId: string, text: string): Promise<boolean> {
+export async function sendPrompt(
+	sessionId: string,
+	text: string,
+	forceModel?: string,
+): Promise<boolean> {
 	try {
 		const client = createClient();
-		const defaultModel = await getDefaultModel();
+		const defaultModel = forceModel ?? (await getDefaultModel());
 
 		const body: {
 			parts: Array<{ type: 'text'; text: string }>;
