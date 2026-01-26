@@ -60,17 +60,21 @@ export function Footer({ activeTab = 'roadmap', onlyMode }: FooterProps) {
 	const allHints = [...contextHints, ...tabHints, ...commonHints];
 
 	return (
-		<Box marginTop={1} paddingX={1}>
+		<Box flexDirection="column" marginTop={1} paddingX={1}>
+			{/* Session status line */}
 			<Text dimColor>
-				{/* Show active session activity */}
 				{activity?.isActive && activity.currentActivity && (
 					<Text color="cyan" bold>
-						● {activity.currentActivity} |{' '}
+						● {activity.currentActivity}
 					</Text>
 				)}
 				{activity && !activity.isActive && activity.title && (
-					<Text dimColor>○ {activity.title.slice(0, 8)}... | </Text>
+					<Text>○ {activity.title.slice(0, 8)}...</Text>
 				)}
+			</Text>
+
+			{/* Keybinding hints line */}
+			<Text dimColor>
 				{allHints.map((hint, index) => (
 					<Text key={hint.key}>
 						{index > 0 && ' | '}
