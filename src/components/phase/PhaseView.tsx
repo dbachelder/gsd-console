@@ -211,7 +211,7 @@ export function PhaseView({
 			</Box>
 
 			{/* Phase content */}
-			<Box flexDirection="column" borderStyle="single" paddingX={1} flexGrow={1}>
+			<Box flexDirection="column" paddingX={1} flexGrow={1}>
 				{/* Level 1: Goal + Success Criteria */}
 				<GoalSection goal={phase.goal} />
 
