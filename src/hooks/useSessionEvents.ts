@@ -77,10 +77,41 @@ export function useSessionEvents({
 				} else if (typedEvent.type === 'session.error') {
 					if (typedEvent.properties.sessionID === sessionId) {
 						const error = typedEvent.properties.error;
-						const errorMsg =
-							error && typeof error === 'object' && 'message' in error
-								? String(error.message)
-								: 'Unknown error';
+
+						// Build informative error message even if error.message is missing
+						let errorMsg: string;
+						if (error && typeof error === 'object' && 'message' in error) {
+							errorMsg = String(error.message);
+						} else if (error) {
+							// Error object exists but has no message - include type and any other properties
+							const errorType =
+								error && typeof error === 'object' && 'type' in error
+									? String(error.type)
+									: typeof error;
+							const errorKeys =
+								error && typeof error === 'object'
+									? Object.keys(error)
+											.filter((k) => k !== 'type' && k !== 'message')
+											.slice(0, 3)
+											.join(', ')
+									: '';
+
+							errorMsg = errorKeys
+								? `Unknown error (${errorType}: ${errorKeys}...)`
+								: `Unknown error (${errorType})`;
+						} else {
+							errorMsg = 'Unknown error (no error object provided)';
+						}
+
+						// DEBUG: Log full error object for investigation
+						console.error('[DEBUG] session.error event:', {
+							sessionId: typedEvent.properties.sessionID,
+							error,
+							errorMsg,
+							errorKeys: error && typeof error === 'object' ? Object.keys(error) : 'not an object',
+							errorType: typeof error,
+						});
+
 						onErrorRef.current?.(errorMsg);
 					}
 				} else if (typedEvent.type === 'message.part.updated') {
