@@ -152,8 +152,8 @@ Plans:
 Plans:
 - [x] 06-01-PLAN.md — Phase tab scrollable content and progress bar spacing (Wave 1, 2 tasks)
 - [x] 06-02-PLAN.md — Footer reorganization and deduplicated hints (Wave 1, 2 tasks)
-- [ ] 06-03-PLAN.md — Fix progress bar spacing gap [gap closure] (Wave 1, 1 task)
-- [ ] 06-04-PLAN.md — Implement phase content scrolling [gap closure] (Wave 1, 3 tasks)
+- [ ] 06-03-PLAN.md — Reduce progress bar spacing [gap closure] (Wave 1, 1 task)
+- [ ] 06-04-PLAN.md — Track viewport height and document scrolling limitation [gap closure] (Wave 1, 3 tasks)
 
 ### Phase 7: GSD Ralph Loop Command Queue
 
