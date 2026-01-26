@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: OpenCode Integration** - Spawn sessions and queue commands
 - [x] **Phase 5: Test Coverage** - Reproducible tests with mocked filesystem to reach 80%+ coverage
 - [ ] **Phase 6: Additional UI Polish** - Address remaining UI polish items from todo list (4/6 complete, gap closure in progress)
-- [ ] **Phase 7: Work Queue Removal** - Remove work queue feature and revert to 4-tab layout
+- [x] **Phase 7: Work Queue Removal** - Remove work queue feature and revert to 4-tab layout
 - [ ] **Phase 8: Comprehensive Fix For Broken Background Tasks** - comprehensive fix for broken background tasks
 - [ ] **Phase 9: Name Change And Public Readiness** - name change and public readiness
 
@@ -162,13 +162,14 @@ Plans:
 ### Phase 7: Work Queue Removal
 
 **Goal:** Remove work queue feature and revert to 4-tab layout (OpenCode team releasing their own workqueue)
-**Status:** In Progress
+**Status:** Complete
+**Completed:** 2026-01-26
 **Depends on:** Phase 6
 **Plans:** 2 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Remove dead code remnants (executeQueuedCommand, EditContext type)
-- [ ] 07-02-PLAN.md — Verify removal is complete and update documentation
+- [x] 07-01-PLAN.md — Remove dead code remnants (executeQueuedCommand, EditContext type)
+- [x] 07-02-PLAN.md — Verify removal is complete and update documentation
 
 **Details:**
 - Remove WorkQueue tab (was tab 5) - DONE
@@ -177,7 +178,9 @@ Plans:
 - Remove useWorkQueue hook - DONE
 - Remove WorkQueueView and QueueEntry components - DONE
 - Remove QueuedCommand types - DONE
-- Remove remaining dead code (executeQueuedCommand, EditContext type reference) - TODO
+- Remove remaining dead code (executeQueuedCommand, EditContext type reference) - DONE
+- Verify codebase clean - DONE
+- Update STATE.md and ROADMAP.md - DONE
 
 ### Phase 8: Comprehensive Fix For Broken Background Tasks
 
@@ -217,6 +220,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 4. OpenCode Integration | 9/9 | Complete | 2026-01-26 |
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
 | 6. Additional UI Polish | 4/6 | In Progress (gap closure) | - |
-| 7. Work Queue Removal | 0/2 | In Progress | - |
+| 7. Work Queue Removal | 2/2 | Complete | 2026-01-26 |
 | 8. Comprehensive Fix For Broken Background Tasks | 0/0 | Not planned | - |
 | 9. Name Change And Public Readiness | 0/0 | Not planned | - |
