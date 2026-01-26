@@ -90,6 +90,8 @@ describe('PhaseRow', () => {
 				phase={mockPhase}
 				isSelected={false}
 				isExpanded={false}
+				maxPlansWidth={2}
+				maxPlansTotalWidth={2}
 			/>,
 		);
 

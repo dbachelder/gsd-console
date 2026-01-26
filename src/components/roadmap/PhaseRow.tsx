@@ -15,8 +15,10 @@ interface PhaseRowProps {
 	showIndicators?: boolean;
 	isHighlighted?: boolean;
 	isFading?: boolean;
-	/** Width to pad plan fraction to (for alignment) */
+	/** Width to pad plansComplete to (for alignment) */
 	maxPlansWidth?: number;
+	/** Width to pad plansTotal to (for alignment) */
+	maxPlansTotalWidth?: number;
 }
 
 export function PhaseRow({
@@ -27,6 +29,7 @@ export function PhaseRow({
 	isHighlighted = false,
 	isFading = false,
 	maxPlansWidth,
+	maxPlansTotalWidth,
 }: PhaseRowProps) {
 	const chevron = isExpanded ? '\u25BC' : '\u25B6'; // Down or Right triangle
 	const statusIcon = getStatusIcon(phase.status);
@@ -71,6 +74,7 @@ export function PhaseRow({
 					<Text dimColor>
 						{' '}
 						{String(phase.plansComplete).padStart(maxPlansWidth ?? 2, ' ')}/{phase.plansTotal}
+						{' '.repeat((maxPlansTotalWidth ?? 2) - String(phase.plansTotal).length)}
 					</Text>
 				</Box>
 			</Box>

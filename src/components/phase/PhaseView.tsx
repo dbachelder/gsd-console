@@ -75,6 +75,9 @@ export function PhaseView({
 	// Calculate max plans complete width for alignment
 	const maxPlansWidth =
 		allPhases.length > 0 ? Math.max(...allPhases.map((p) => String(p.plansComplete).length)) : 2;
+	// Calculate max plans total width for alignment
+	const maxPlansTotalWidth =
+		allPhases.length > 0 ? Math.max(...allPhases.map((p) => String(p.plansTotal).length)) : 2;
 
 	// Parse plan files for this phase
 	const planInfos: PlanInfo[] = useMemo(() => {
@@ -174,8 +177,8 @@ export function PhaseView({
 					</Text>
 					<Text dimColor>
 						{' '}
-						| {String(phase.plansComplete).padStart(maxPlansWidth, ' ')}/{phase.plansTotal} plans
-						complete
+						| {String(phase.plansComplete).padStart(maxPlansWidth, ' ')}/{phase.plansTotal}
+						{' '.repeat(maxPlansTotalWidth - String(phase.plansTotal).length)} plans complete
 					</Text>
 				</Box>
 				{hasActiveIndicators && (

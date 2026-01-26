@@ -40,6 +40,9 @@ export function RoadmapView({
 	// Calculate max plans complete width for alignment
 	const maxPlansWidth =
 		phases.length > 0 ? Math.max(...phases.map((p) => String(p.plansComplete).length)) : 2;
+	// Calculate max plans total width for alignment
+	const maxPlansTotalWidth =
+		phases.length > 0 ? Math.max(...phases.map((p) => String(p.plansTotal).length)) : 2;
 	// Track which phases are expanded - initialize from props
 	const [expandedPhases, setExpandedPhases] = useState<Set<number>>(
 		() => new Set(initialExpandedPhases ?? []),
@@ -160,6 +163,7 @@ export function RoadmapView({
 							isHighlighted={isPhaseHighlighted?.(phase.number)}
 							isFading={isPhaseFading?.(phase.number)}
 							maxPlansWidth={maxPlansWidth}
+							maxPlansTotalWidth={maxPlansTotalWidth}
 						/>
 					))
 				)}
