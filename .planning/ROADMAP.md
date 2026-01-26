@@ -109,7 +109,9 @@ Plans:
 **Status:** ✅ Complete
 **Completed:** 2026-01-25
 
-**Plans:**
+**Plans**: 18 plans
+
+Plans:
 - [x] 05-01-PLAN.md — Testing dependencies and memfs setup (Wave 1, 3 tasks)
 - [x] 05-02-PLAN.md — Parser tests and fixtures (Wave 2, 2 tasks)
 - [x] 05-03-PLAN.md — Core hooks tests (Wave 3, 4 tasks)
