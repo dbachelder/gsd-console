@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Actions and Editing** - Execute GSD commands and edit todos inline
 - [x] **Phase 4: OpenCode Integration** - Spawn sessions and queue commands
 - [x] **Phase 5: Test Coverage** - Reproducible tests with mocked filesystem to reach 80%+ coverage
-- [x] **Phase 6: Additional UI Polish** - Address remaining UI polish items from todo list
+- [ ] **Phase 6: Additional UI Polish** - Address remaining UI polish items from todo list (4/6 complete, gap closure in progress)
 
 ## Phase Details
 
@@ -142,18 +142,19 @@ Plans:
 - Known limitation: Bun test mock isolation issue causes parser coverage drop in full suite (documented in VERIFICATION.md)
 
 ### Phase 6: Additional UI Polish
-**Status:** Complete
-**Completed:** 2026-01-26
+**Status:** In Progress - Gap Closure
 
 **Goal:** Address remaining UI polish items from todo list
 **Depends on:** Phase 5
-**Plans**: 4 plans
+**Plans**: 6 plans
 
 Plans:
 - [x] 06-01-PLAN.md — Phase tab scrollable content and progress bar spacing (Wave 1, 2 tasks)
 - [x] 06-02-PLAN.md — Footer reorganization and deduplicated hints (Wave 1, 2 tasks)
 - [x] 06-03-PLAN.md — Reduce progress bar spacing [gap closure] (Wave 1, 1 task)
 - [x] 06-04-PLAN.md — Track viewport height and document scrolling limitation [gap closure] (Wave 1, 3 tasks)
+- [ ] 06-05-PLAN.md — Replace progress bar characters with horizontal lines [gap closure] (Wave 1, 1 task)
+- [ ] 06-06-PLAN.md — Remove bordered box from PhaseView [gap closure] (Wave 1, 1 task)
 
 ### Phase 7: GSD Ralph Loop Command Queue
 
@@ -186,5 +187,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
 | 4. OpenCode Integration | 9/9 | Complete | 2026-01-26 |
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
-| 6. Additional UI Polish | 4/4 | Complete | 2026-01-26 |
+| 6. Additional UI Polish | 4/6 | In Progress (gap closure) | - |
 | 7. GSD Ralph Loop Command Queue | 0/3 | Ready to execute | - |
