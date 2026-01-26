@@ -7,9 +7,10 @@ import { Box, Text } from 'ink';
 import { useCallback, useEffect, useRef } from 'react';
 import { useTabNav } from '../../hooks/useTabNav.ts';
 import { type TabId, useTabState } from '../../hooks/useTabState.ts';
-import type { BackgroundJob, CliFlags, GsdData } from '../../lib/types.ts';
+import type { BackgroundJob, CliFlags, GsdData, QueuedCommand } from '../../lib/types.ts';
 import { BackgroundView } from '../background/BackgroundView.tsx';
 import { PhaseView } from '../phase/PhaseView.tsx';
+import { WorkQueueView } from '../queue/WorkQueueView.tsx';
 import { RoadmapView } from '../roadmap/RoadmapView.tsx';
 import { TodosView } from '../todos/TodosView.tsx';
 
@@ -34,6 +35,10 @@ interface TabLayoutProps {
 	backgroundJobs?: BackgroundJob[];
 	/** Callback to cancel a background job */
 	onCancelJob?: (jobId: string) => void;
+	/** Work Queue state */
+	workQueue?: QueuedCommand[];
+	/** Callback to remove command from queue */
+	onQueueRemove?: (id: string) => void;
 }
 
 export function TabLayout({
@@ -53,6 +58,8 @@ export function TabLayout({
 	planningDir = '.planning',
 	backgroundJobs = [],
 	onCancelJob,
+	workQueue = [],
+	onQueueRemove,
 }: TabLayoutProps) {
 	const isOnlyMode = Boolean(flags.only);
 
@@ -62,7 +69,7 @@ export function TabLayout({
 
 	// Tab navigation using hook
 	const { activeTab, setActiveTab } = useTabNav<TabId>({
-		tabs: ['roadmap', 'phase', 'todos', 'background'],
+		tabs: ['roadmap', 'phase', 'todos', 'background', 'workqueue'],
 		initialTab: flags.only ?? 'roadmap',
 		isActive: isActive && !isOnlyMode,
 	});
@@ -208,6 +215,14 @@ export function TabLayout({
 						showToast={showToast}
 					/>
 				)}
+				{activeTab === 'workqueue' && (
+					<WorkQueueView
+						queue={workQueue}
+						isActive={isActive}
+						onQueueRemove={onQueueRemove ?? (() => {})}
+						showToast={showToast}
+					/>
+				)}
 			</Box>
 		</Box>
 	);
@@ -223,6 +238,7 @@ function TabBar({ activeTab }: TabBarProps) {
 		{ id: 'phase', label: 'Phase', key: '2' },
 		{ id: 'todos', label: 'Todos', key: '3' },
 		{ id: 'background', label: 'Background', key: '4' },
+		{ id: 'workqueue', label: 'WorkQueue', key: '5' },
 	];
 
 	return (

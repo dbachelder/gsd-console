@@ -6,7 +6,7 @@
 import { Box, Text } from 'ink';
 import { useSessionActivity } from '../../hooks/useSessionActivity.ts';
 
-type TabId = 'roadmap' | 'phase' | 'todos' | 'background';
+type TabId = 'roadmap' | 'phase' | 'todos' | 'background' | 'workqueue';
 
 interface FooterProps {
 	activeTab?: TabId;
@@ -39,9 +39,14 @@ const viewHints: Record<TabId, Hint[]> = {
 		{ key: 'Enter', action: 'expand' },
 		{ key: 'x', action: 'cancel' },
 	],
+	workqueue: [
+		{ key: '\u2191\u2193', action: 'navigate' },
+		{ key: 'Enter', action: 'remove' },
+	],
 };
 
 const commonHints: Hint[] = [
+	{ key: 'w', action: 'WorkQueue' },
 	{ key: 'c', action: 'connect' },
 	{ key: ':', action: 'commands' },
 	{ key: '?', action: 'help' },
