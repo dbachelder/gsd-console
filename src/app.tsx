@@ -306,6 +306,30 @@ export default function App({ flags }: AppProps) {
 					setSessionsLoading(false);
 				});
 			}
+			if (input === 'w') {
+				// Intelligent 'w' key behavior based on phase state
+				if (workQueue.queue.length > 0) {
+					// Open WorkQueue tab if commands are queued
+					setActiveTab('workqueue');
+					showToast(`WorkQueue: ${workQueue.queue.length} commands`, 'info');
+				} else if (activeTab === 'roadmap' && selectedPhaseNumber) {
+					// In Roadmap: add plan-phase command for current phase
+					const command = 'plan-phase';
+					const args = String(selectedPhaseNumber);
+					workQueue.add(command, args);
+					showToast(`Added: ${command} ${args}`, 'success');
+					setActiveTab('workqueue');
+				} else if (activeTab === 'phase' && selectedPhaseNumber) {
+					// In Phase: add plan-phase command for current phase
+					const command = 'plan-phase';
+					const args = String(selectedPhaseNumber);
+					workQueue.add(command, args);
+					showToast(`Added: ${command} ${args}`, 'success');
+					setActiveTab('workqueue');
+				} else {
+					showToast('No phase selected or queue empty', 'warning');
+				}
+			}
 		},
 		{ isActive: !isAnyOverlayOpen },
 	);
