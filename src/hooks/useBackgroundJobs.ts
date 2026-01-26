@@ -4,8 +4,8 @@
  * Per CONTEXT.md: Keep last 5 success + 5 errors, auto-prune older.
  */
 
-import { useCallback, useRef, useState } from 'react';
-import { sendPrompt } from '../lib/opencode.ts';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { debugLog, sendPrompt } from '../lib/opencode.ts';
 import type { BackgroundJob } from '../lib/types.ts';
 import { useSessionEvents } from './useSessionEvents.ts';
 import type { ToastType } from './useToast.ts';
@@ -41,6 +41,124 @@ function pruneJobs(jobs: BackgroundJob[]): BackgroundJob[] {
 }
 
 /**
+ * Start a pending job if one exists and no other job is currently running.
+ * This is used both by session.idle events and proactive startup for newly created sessions.
+ */
+function startPendingJob(
+	jobs: BackgroundJob[],
+	setJobs: (updater: (prev: BackgroundJob[]) => BackgroundJob[]) => void,
+	showToast?: (msg: string, type?: ToastType) => void,
+	onProcessingChange?: (processing: boolean) => void,
+	onActiveCommandChange?: (command?: string) => void,
+): void {
+	// Check if there are any pending jobs
+	const pendingJob = jobs.find((j) => j.status === 'pending');
+	if (!pendingJob) return;
+
+	debugLog(
+		`[startPendingJob] Found pending job: ${pendingJob.id}, sessionId: ${pendingJob.sessionId}`,
+	);
+
+	// Check if any job is currently running (across all sessions)
+	const runningJob = jobs.find((j) => j.status === 'running');
+	if (runningJob) return; // Wait for current job to complete
+
+	// Check if the pending job has a session ID
+	if (!pendingJob.sessionId) {
+		// Job without session ID - mark as failed
+		setJobs((prev) =>
+			pruneJobs(
+				prev.map((j) =>
+					j.id === pendingJob.id
+						? {
+								...j,
+								status: 'failed' as const,
+								error: 'No session ID assigned',
+								completedAt: Date.now(),
+							}
+						: j,
+				),
+			),
+		);
+		showToast?.(`Background: ${pendingJob.command} failed - no session`, 'warning');
+		return;
+	}
+
+	// Start the job asynchronously
+	showToast?.(`Background: ${pendingJob.command} started`, 'info');
+	onProcessingChange?.(true);
+	onActiveCommandChange?.(pendingJob.command);
+
+	const jobId = pendingJob.id;
+	const jobCommand = pendingJob.command;
+	const jobSessionId = pendingJob.sessionId;
+
+	debugLog(`[startPendingJob] Calling sendPrompt for job ${jobId}`);
+
+	sendPrompt(jobSessionId, jobCommand)
+		.then((success) => {
+			debugLog(`[startPendingJob] sendPrompt returned: ${success ? 'success' : 'failed'}`);
+
+			if (!success) {
+				// Mark job as failed
+				setJobs((current) =>
+					pruneJobs(
+						current.map((j) =>
+							j.id === jobId
+								? {
+										...j,
+										status: 'failed' as const,
+										error: 'Failed to send prompt to session',
+										completedAt: Date.now(),
+									}
+								: j,
+						),
+					),
+				);
+				showToast?.(`Background: ${jobCommand} failed`, 'warning');
+				onProcessingChange?.(false);
+				onActiveCommandChange?.(undefined);
+				return;
+			}
+
+			// Mark job as running ONLY after sendPrompt succeeds
+			debugLog(`[startPendingJob] Marking job ${jobId} as running`);
+			setJobs((current) =>
+				current.map((j) =>
+					j.id === jobId
+						? {
+								...j,
+								status: 'running' as const,
+								startedAt: Date.now(),
+							}
+						: j,
+				),
+			);
+		})
+		.catch((error) => {
+			// Handle promise rejection errors
+			debugLog(`[startPendingJob] sendPrompt threw error:`, error);
+			setJobs((current) =>
+				pruneJobs(
+					current.map((j) =>
+						j.id === jobId
+							? {
+									...j,
+									status: 'failed' as const,
+									error: error instanceof Error ? error.message : 'Unknown error',
+									completedAt: Date.now(),
+								}
+							: j,
+					),
+				),
+			);
+			showToast?.(`Background: ${jobCommand} failed`, 'warning');
+			onProcessingChange?.(false);
+			onActiveCommandChange?.(undefined);
+		});
+}
+
+/**
  * Hook to manage background jobs for headless execution in OpenCode.
  * Jobs are processed sequentially when session becomes idle.
  */
@@ -56,6 +174,26 @@ export function useBackgroundJobs({
 	// Track output for current running job
 	const currentOutputRef = useRef<string>('');
 
+	/**
+	 * Proactive job startup - check for pending jobs and start them if no job is running.
+	 * This ensures jobs execute immediately for newly created sessions that are already idle,
+	 * instead of waiting for session.idle events that never fire.
+	 */
+	useEffect(() => {
+		const pendingJob = jobs.find((j) => j.status === 'pending');
+		const runningJob = jobs.find((j) => j.status === 'running');
+
+		// Debug log for proactive startup
+		if (pendingJob) {
+			const msg = runningJob
+				? `[useBackgroundJobs] Pending job found (${pendingJob.id}) but job running, waiting...`
+				: `[useBackgroundJobs] Starting pending job: ${pendingJob.id} (${pendingJob.command})`;
+			debugLog(msg);
+		}
+
+		startPendingJob(jobs, setJobs, showToast, setIsProcessing, setActiveCommand);
+	}, [jobs, showToast]);
+
 	// Collect all unique session IDs from jobs for event subscription
 	const jobSessionIds = Array.from(
 		new Set(
@@ -69,7 +207,7 @@ export function useBackgroundJobs({
 	/**
 	 * Handle session idle event.
 	 * If a job is running, mark it complete.
-	 * If pending jobs exist, start the next one.
+	 * The useEffect hook will proactively start the next pending job if one exists.
 	 */
 	const handleIdle = useCallback(
 		(idleSessionId: string) => {
@@ -101,62 +239,8 @@ export function useBackgroundJobs({
 					);
 				}
 
-				// Find next pending job - start it
-				// Note: May be from a different session than the one that just went idle
-				// This is intentional - we process jobs sequentially across all sessions
-				const pendingJob = prev.find((j) => j.status === 'pending');
-				if (pendingJob) {
-					// Set active command
-					setActiveCommand(pendingJob.command);
-
-					// Start the job asynchronously
-					if (pendingJob.sessionId) {
-						setIsProcessing(true);
-						showToast?.(`Background: ${pendingJob.command} started`, 'info');
-
-						// Send prompt - handle failure
-						const jobId = pendingJob.id;
-						const jobCommand = pendingJob.command;
-						const jobSessionId = pendingJob.sessionId;
-						sendPrompt(jobSessionId, jobCommand).then((success) => {
-							if (!success) {
-								// Mark job as failed
-								setJobs((current) =>
-									pruneJobs(
-										current.map((j) =>
-											j.id === jobId
-												? {
-														...j,
-														status: 'failed' as const,
-														error: 'Failed to send prompt to session',
-														completedAt: Date.now(),
-													}
-												: j,
-										),
-									),
-								);
-								showToast?.(`Background: ${jobCommand} failed`, 'warning');
-								setIsProcessing(false);
-								setActiveCommand(undefined);
-							}
-						});
-					}
-
-					// Mark as running
-					return prev.map((j) =>
-						j.id === pendingJob.id
-							? {
-									...j,
-									status: 'running' as const,
-									startedAt: Date.now(),
-								}
-							: j,
-					);
-				}
-
-				// No more jobs to process
-				setIsProcessing(false);
-				setActiveCommand(undefined);
+				// No running job for this session - nothing to complete
+				// The useEffect hook will handle starting pending jobs
 				return prev;
 			});
 		},

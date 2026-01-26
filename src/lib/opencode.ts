@@ -29,7 +29,8 @@ let cachedDefaultModel: string | null = null;
 const debugEnabled = process.env.GSD_DEBUG === '1';
 const debugFile = process.env.GSD_DEBUG_FILE ?? '/tmp/gsd-tui-debug.log';
 
-function debugLog(message: string, data?: unknown): void {
+/** Debug logging function - exported for use in other modules */
+export function debugLog(message: string, data?: unknown): void {
 	if (!debugEnabled) return;
 
 	const timestamp = new Date().toISOString();
