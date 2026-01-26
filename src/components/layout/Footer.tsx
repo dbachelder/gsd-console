@@ -27,7 +27,6 @@ const viewHints: Record<TabId, Hint[]> = {
 	],
 	phase: [
 		{ key: '\u2191\u2193', action: 'scroll' },
-		{ key: '[/]', action: 'switch phase' },
 		{ key: 'e', action: 'edit' },
 	],
 	todos: [
