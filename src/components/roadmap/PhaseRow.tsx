@@ -4,7 +4,7 @@
  */
 
 import { Box, Text } from 'ink';
-import { getIndicatorIcons, getStatusColor, getStatusIcon } from '../../lib/icons.ts';
+import { getIndicatorIcons, getStatusIcon } from '../../lib/icons.ts';
 import type { Phase } from '../../lib/types.ts';
 import { ProgressBar } from './ProgressBar.tsx';
 
