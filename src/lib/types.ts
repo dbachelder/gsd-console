@@ -94,6 +94,21 @@ export interface BackgroundJobsState {
 	error?: Error;
 }
 
+/** Work Queue command status */
+export type QueuedCommandStatus = 'pending' | 'running' | 'complete' | 'failed';
+
+/** A queued command in the user-managed work queue */
+export interface QueuedCommand {
+	id: string;
+	command: string;
+	args?: string;
+	status: QueuedCommandStatus;
+	queuedAt: number;
+	startedAt?: number;
+	completedAt?: number;
+	error?: string;
+}
+
 /** Execution mode for GSD commands */
 export type ExecutionMode = 'headless' | 'interactive' | 'primary';
 
