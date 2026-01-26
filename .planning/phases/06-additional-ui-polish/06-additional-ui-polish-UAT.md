@@ -1,64 +1,68 @@
 ---
 status: complete
 phase: 06-additional-ui-polish
-source: 06-01-SUMMARY.md, 06-02-SUMMARY.md
-started: 2026-01-26T09:00:00Z
-updated: 2026-01-26T09:20:00Z
+source: 06-01-SUMMARY.md, 06-02-SUMMARY.md, 06-03-SUMMARY.md, 06-04-SUMMARY.md
+started: 2026-01-26T16:20:00Z
+updated: 2026-01-26T16:32:00Z
 ---
 
 ## Current Test
+<!-- OVERWRITE each test - shows where we are -->
 
 [testing complete]
 
 ## Tests
 
-### 1. Progress bar visual spacing
-expected: Progress bars in roadmap view have visual separation between rows, making them easier to distinguish
+### 1. Progress bar row spacing
+expected: Progress bar rows in roadmap view have minimal vertical spacing (no excessive blank lines between phases)
 result: issue
-reported: "the gap is too big visually.. what can we do to make it smaller looking?"
-severity: cosmetic
-test: 1
-
-### 2. Phase tab content scrolling
-expected: Phase content can scroll within viewport while footer remains fixed at bottom of screen
-result: issue
-reported: "I don't see a way to scroll.. UI just gets all messed up when content area is bigger than allotted space, like section headers get partially over written, for example. or borders get overwritten."
+reported: "there is no space at all.. is there an option for a character we could use for progress that is centered, but doesn't go to the top and bottom of the line to give us illusion that they are not touching?"
 severity: major
-test: 2
 
-### 3. Footer two-line layout
-expected: Footer has two separate lines - session status on top, keybinding hints below - with clear visual separation
+### 2. Phase tab content scrolls with sticky footer
+expected: When phase tab content exceeds viewport height, it scrolls while the footer remains visible at bottom of screen
+result: issue
+reported: "phase 5 still exceeds the size of the box... let's just remove that box. we don't need it."
+severity: major
+
+### 3. Footer shows session status on separate line
+expected: Footer displays OpenCode session status indicator (● or ○) on its own line above keybinding hints
 result: pass
 
-### 4. No duplicate keybinding hints
-expected: No duplicate hints in footer; [ and ] phase switching hints removed from phase view
+### 4. Footer has no duplicate keybinding hints
+expected: Footer shows clean keybinding hints without redundant references to keys that are no longer relevant
 result: pass
+
+### 5. PhaseView acknowledges viewport tracking
+expected: PhaseView component tracks terminal viewport height (internal feature documented in code)
+result: skip
+reason: Internal implementation detail, not directly observable in UI
 
 ## Summary
 
-total: 4
+total: 5
 passed: 2
 issues: 2
 pending: 0
-skipped: 0
+skipped: 1
 
 ## Gaps
-
-- truth: "Progress bars have smaller, more subtle visual spacing between rows"
+- truth: "Progress bar rows have visual separation (not touching each other)"
   status: failed
-  reason: "User reported: gap is too big visually.. what can we do to make it smaller looking?"
-  severity: cosmetic
+  reason: "User reported: there is no space at all.. is there an option for a character we could use for progress that is centered, but doesn't go to the top and bottom of the line to give us illusion that they are not touching?"
+  severity: major
   test: 1
-  root_cause: "marginBottom={1} on line 49 adds 1 full line of vertical whitespace between each phase row. In terminal UIs, 1 line margin is visually large because it inserts a complete blank line between rows, making the interface feel sparse and consuming valuable vertical screen real estate. For 'smaller, more subtle' spacing, no margin or significantly reduced spacing (0-0.5) would be more appropriate."
-  artifacts: ["src/components/roadmap/PhaseRow.tsx"]
+  root_cause: ""
+  artifacts: []
   missing: []
-  debug_session: ".planning/debug/spacing-issue-2026-01-26.md"
-- truth: "Phase content scrolls within viewport without UI clipping or overflow"
+  debug_session: ""
+
+- truth: "Phase tab content fits within box or box is removed"
   status: failed
-  reason: "User reported: I don't see a way to scroll.. UI just gets all messed up when content area is bigger than allotted space, like section headers get partially over written, for example. or borders get overwritten."
+  reason: "User reported: phase 5 still exceeds the size of the box... let's just remove that box. we don't need it."
   severity: major
   test: 2
-  root_cause: "flexGrow={1} alone does not enable scrolling in Ink. When content exceeds viewport height, Ink renders all content beyond what fits, causing content to wrap around or overwrite other UI elements (borders, headers, footer). The useVimNav hook tracks scrollOffset but it is never captured or used to limit rendering. PhaseView and RoadmapView both calculate scrollOffset but render all content in full without slicing based on scroll position. To implement scrolling, the app needs: (1) viewport height calculation, (2) content slicing based on scrollOffset, (3) scroll offset state capture and management, (4) scroll indicators. Currently only #1 is partially present via flex layout, but #2-4 are missing entirely."
-  artifacts: ["src/App.tsx", "src/components/layout/TabLayout.tsx", "src/components/phase/PhaseView.tsx", "src/components/roadmap/RoadmapView.tsx", "src/hooks/useVimNav.ts", "src/hooks/useTabState.ts"]
-  missing: ["Viewport height calculation for content area", "Scroll offset capture from useVimNav return value", "Content rendering sliced by scroll offset", "Scroll indicators (↑/↓ or progress bar)", "Virtual line counting that accounts for text wrapping and nested box height"]
-  debug_session: ".planning/debug/scrolling-issue-2026-01-26.md"
+  root_cause: ""
+  artifacts: []
+  missing: []
+  debug_session: ""
