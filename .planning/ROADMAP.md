@@ -18,6 +18,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: OpenCode Integration** - Spawn sessions and queue commands
 - [x] **Phase 5: Test Coverage** - Reproducible tests with mocked filesystem to reach 80%+ coverage
 - [ ] **Phase 6: Additional UI Polish** - Address remaining UI polish items from todo list (4/6 complete, gap closure in progress)
+- [ ] **Phase 8: Comprehensive Fix For Broken Background Tasks** - comprehensive fix for broken background tasks
+- [ ] **Phase 9: Name Change And Public Readiness** - name change and public readiness
 
 ## Phase Details
 
@@ -159,15 +161,15 @@ Plans:
 ### Phase 7: GSD Ralph Loop Command Queue
 
 **Goal:** Queue up GSD commands for sequential execution in connected OpenCode sessions, with session management, queue editing, and status tracking
-**Status:** ✅ Complete
-**Completed:** 2026-01-26
+**Status:** In Progress - Gap Closure
 **Depends on:** Phase 6
-**Plans:** 3 plans
+**Plans:** 4 plans
 
 Plans:
 - [x] 07-01-PLAN.md — Queue state hook with useReducer (Wave 1, 2 tasks)
 - [x] 07-02-PLAN.md — Queue UI components (WorkQueueView, QueueEntry) (Wave 1, 2 tasks)
 - [x] 07-03-PLAN.md — Tab integration and 'w' key handler (Wave 2, 3 tasks)
+- [ ] 07-04-PLAN.md — Fix tab state control and 'w' key condition order (Wave 1, 3 tasks) [gap closure]
 
 **Details:**
 - Use useReducer for queue state management (centralized logic)
@@ -176,10 +178,34 @@ Plans:
 - 'w' key intelligently opens queue or adds phase command based on context
 - Queue is session-only (no persistence)
 
+### Phase 8: Comprehensive Fix For Broken Background Tasks
+
+**Goal:** Comprehensive fix for broken background tasks
+**Depends on:** Phase 7
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 8 to break down)
+
+**Details:**
+[To be added during planning]
+
+### Phase 9: Name Change And Public Readiness
+
+**Goal:** Name change and public readiness
+**Depends on:** Phase 8
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 9 to break down)
+
+**Details:**
+[To be added during planning]
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -191,3 +217,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
 | 6. Additional UI Polish | 4/6 | In Progress (gap closure) | - |
 | 7. GSD Ralph Loop Command Queue | 3/3 | Complete | 2026-01-26 |
+| 8. Comprehensive Fix For Broken Background Tasks | 0/0 | Not planned | - |
+| 9. Name Change And Public Readiness | 0/0 | Not planned | - |
