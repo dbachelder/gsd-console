@@ -235,15 +235,8 @@ export function useBackgroundJobs({
 
 			setJobs((prev) => pruneJobs([...prev, job]));
 			showToast?.(`Background: ${command} queued`, 'info');
-
-			// If session is available and no job running, trigger processing
-			// The next idle event will pick up the pending job
-			if (jobSessionId && !isProcessing) {
-				// Trigger idle check - if session is already idle, this will start the job
-				handleIdle(jobSessionId);
-			}
 		},
-		[sessionId, isProcessing, showToast, handleIdle],
+		[sessionId, showToast],
 	);
 
 	/**
