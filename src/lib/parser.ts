@@ -18,7 +18,7 @@ export function parseRoadmap(content: string, phasesDir: string): Phase[] {
 	const dependsPattern = /\*\*Depends on\*\*:\s*(.+)?(?=\n|$)/;
 	const requirementsPattern = /\*\*Requirements\*\*:\s*(.+)?(?=\n|$)/;
 	const successCriteriaPattern = /\*\*Success Criteria\*\*[\s\S]*?(?=\*\*Plans|###|$)/;
-	const plansPattern = /\*\*Plans\*\*:\s*(\d+)\s*plans?/;
+	const plansPattern = /\*\*Plans:\s*(\d+)\s*plans?/;
 
 	// Find all phase sections
 	const sections = content.split(/(?=###\s+Phase)/);
