@@ -142,18 +142,18 @@ Plans:
 - Known limitation: Bun test mock isolation issue causes parser coverage drop in full suite (documented in VERIFICATION.md)
 
 ### Phase 6: Additional UI Polish
-**Status:** In progress (gap closure)
-**Completed:** 2026-01-26 (gap closure in progress)
+**Status:** Complete
+**Completed:** 2026-01-26
 
 **Goal:** Address remaining UI polish items from todo list
 **Depends on:** Phase 5
-**Plans**: 4 plans (3 completed, 1 gap closure)
+**Plans**: 4 plans
 
 Plans:
 - [x] 06-01-PLAN.md — Phase tab scrollable content and progress bar spacing (Wave 1, 2 tasks)
 - [x] 06-02-PLAN.md — Footer reorganization and deduplicated hints (Wave 1, 2 tasks)
 - [x] 06-03-PLAN.md — Reduce progress bar spacing [gap closure] (Wave 1, 1 task)
-- [ ] 06-04-PLAN.md — Track viewport height and document scrolling limitation [gap closure] (Wave 1, 3 tasks)
+- [x] 06-04-PLAN.md — Track viewport height and document scrolling limitation [gap closure] (Wave 1, 3 tasks)
 
 ### Phase 7: GSD Ralph Loop Command Queue
 
@@ -186,5 +186,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
 | 4. OpenCode Integration | 9/9 | Complete | 2026-01-26 |
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
-| 6. Additional UI Polish | 3/4 | Gap closure | 2026-01-26 |
+| 6. Additional UI Polish | 4/4 | Complete | 2026-01-26 |
 | 7. GSD Ralph Loop Command Queue | 0/3 | Ready to execute | - |
