@@ -12,7 +12,7 @@ import { join } from 'node:path';
  * Context needed to determine which files can be edited.
  */
 export interface EditContext {
-	activeTab: 'roadmap' | 'phase' | 'todos' | 'background' | 'workqueue';
+	activeTab: 'roadmap' | 'phase' | 'todos' | 'background';
 	selectedPhase?: number;
 	selectedTodo?: string;
 	planningDir: string;
