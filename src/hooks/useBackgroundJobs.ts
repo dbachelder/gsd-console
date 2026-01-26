@@ -174,6 +174,9 @@ export function useBackgroundJobs({
 	// Track output for current running job
 	const currentOutputRef = useRef<string>('');
 
+	// Track timeout for running job to detect stuck jobs
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
 	/**
 	 * Proactive job startup - check for pending jobs and start them if no job is running.
 	 * This ensures jobs execute immediately for newly created sessions that are already idle,
@@ -192,6 +195,55 @@ export function useBackgroundJobs({
 		}
 
 		startPendingJob(jobs, setJobs, showToast, setIsProcessing, setActiveCommand);
+	}, [jobs, showToast]);
+
+	/**
+	 * Timeout mechanism for stuck jobs.
+	 * If a job runs longer than 2 minutes without going idle, mark it as failed.
+	 */
+	useEffect(() => {
+		const runningJob = jobs.find((j) => j.status === 'running');
+
+		// Clear existing timeout
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+			timeoutRef.current = null;
+		}
+
+		// Set timeout for running job
+		if (runningJob) {
+			debugLog(`[useBackgroundJobs] Setting 2-minute timeout for job ${runningJob.id}`);
+			timeoutRef.current = setTimeout(
+				() => {
+					debugLog(`[useBackgroundJobs] Job ${runningJob.id} timed out, marking as failed`);
+					setJobs((current) =>
+						pruneJobs(
+							current.map((j) =>
+								j.id === runningJob.id
+									? {
+											...j,
+											status: 'failed' as const,
+											error: 'Job timed out - session did not go idle within 2 minutes',
+											completedAt: Date.now(),
+										}
+									: j,
+							),
+						),
+					);
+					showToast?.(`Background: ${runningJob.command} timed out`, 'warning');
+					setIsProcessing(false);
+					setActiveCommand(undefined);
+				},
+				2 * 60 * 1000,
+			); // 2 minutes
+		}
+
+		// Cleanup timeout on unmount
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+		};
 	}, [jobs, showToast]);
 
 	// Collect all unique session IDs from jobs for event subscription
