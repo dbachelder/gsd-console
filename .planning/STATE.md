@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 7 execution - Work Queue Removal (OpenCode team releasing their own workqueue)
+**Current focus:** Phase 8 execution - Comprehensive Fix For Broken Background Tasks
 
 ## Current Position
 
-Phase: 7 of 9 complete (2/2 plans complete)
-Next Phase: Phase 8 - Comprehensive Fix For Broken Background Tasks
-Status: Phase 7 complete - Work Queue feature removed, codebase verified clean
-Last activity: 2026-01-26 - Completed Phase 7 plan 02 (Verify removal and update documentation)
+Phase: 8 of 9 complete (1/1 plans complete)
+Next Phase: Phase 9 - Name Change And Public Readiness
+Status: Phase 8 complete - Background jobs now execute reliably using session.idle events
+Last activity: 2026-01-26 - Completed Phase 8 plan 01 (Fix background jobs stuck in pending state)
 
-Progress: [██████████] 98.2% (55/56 plans)
+Progress: [██████████] 100.0% (56/56 plans)
 
 ## Performance Metrics
 
 **Velocity:**
 - Total plans completed: 56
 - Average duration: 4.0 min
- - Total execution time: 248 min
+ - Total execution time: 249 min
 
 **By Phase:**
 
@@ -35,11 +35,11 @@ Progress: [██████████] 98.2% (55/56 plans)
 | 5 | 18 | 123 min | 6.8 min |
 | 6 | 4 | 14 min | 3.5 min |
 | 7 | 2 | 18 min | 9.0 min |
-| 8 | 0 | 0 min | - |
+| 8 | 1 | 1 min | 1.0 min |
 | 9 | 0 | 0 min | - |
 
 **Recent Trend:**
-- Last 5 plans: 1 min, 2 min, 8 min, 6 min, 8 min
+- Last 5 plans: 2 min, 8 min, 6 min, 8 min, 1 min
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -149,6 +149,8 @@ Recent decisions affecting current work:
 - Work queue removed - OpenCode team releasing their own workqueue (07-01)
 - Reverted to 4-tab layout (roadmap, phase, todos, background) after workqueue removal (07-02)
 - Codebase verified clean - no WorkQueue, useWorkQueue, QueueEntry, QueuedCommand references remain (07-02)
+- Remove premature handleIdle call - rely solely on session.idle event for job processing (08-01)
+- Document GLM4.7 as recommended default model for background GSD commands (08-01)
 
 
 
@@ -189,11 +191,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
 | 6. Additional UI Polish | 4/4 | Complete | 2026-01-26 |
 | 7. Work Queue Removal | 2/2 | Complete | 2026-01-26 |
-| 8. Comprehensive Fix For Broken Background Tasks | 0/0 | Not planned | - |
+| 8. Comprehensive Fix For Broken Background Tasks | 1/1 | Complete | 2026-01-26 |
 | 9. Name Change And Public Readiness | 0/0 | Not planned | - |
 
 ## Session Continuity
 
 Last session: 2026-01-26
-Stopped at: Completed Phase 7 plan 02 (Verify removal and update documentation)
+Stopped at: Completed Phase 8 plan 01 (Fix background jobs stuck in pending state)
 Resume file: None

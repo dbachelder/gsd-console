@@ -201,6 +201,19 @@ To send commands to a running TUI session via API:
 | Interactive | Spawns `opencode attach` with initial prompt |
 | Primary | Sends prompt to connected session via SDK |
 
+### Default Model Configuration
+
+Background jobs use OpenCode's default model setting. GLM4.7 is the recommended model for background GSD commands:
+
+**Configure in `~/.opencode/opencode.json`:**
+```json
+{
+  "defaultModel": "glm-4.7"
+}
+```
+
+This is a server-side OpenCode configuration — the TUI uses whatever model OpenCode defaults to.
+
 ### Session Activity Monitoring
 
 Track active OpenCode sessions and display what they're currently doing.

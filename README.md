@@ -45,6 +45,21 @@ To execute commands via the "primary" mode (sending prompts to a connected TUI s
 
 **Key insight:** Without `attach`, API calls go to session storage but the TUI doesn't poll for external changes. Use `attach` to connect the TUI to the HTTP server for real-time communication.
 
+### Configuring Default Model
+
+Background jobs use OpenCode's default model setting. To configure GLM4.7 as the default model for background GSD commands:
+
+1. **Create or edit `~/.opencode/opencode.json`:**
+   ```json
+   {
+     "defaultModel": "glm-4.7"
+   }
+   ```
+
+2. **Restart OpenCode** if it's currently running
+
+This is a server-side OpenCode configuration — the TUI uses whatever model OpenCode defaults to.
+
 ### SDK Gotchas
 
 - **Timestamps are milliseconds** — `s.time.created` and `s.time.updated` are already in ms, don't multiply by 1000
