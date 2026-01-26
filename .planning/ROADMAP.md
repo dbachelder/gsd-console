@@ -93,7 +93,7 @@ Plans:
   1. User can spawn an OpenCode session from TUI for complex workflows
   2. User can queue multiple GSD commands for sequential execution in OpenCode
   3. User can connect to an existing OpenCode session
-**Plans**: 7 plans
+**Plans**: 9 plans
 
 Plans:
 - [x] 04-01-PLAN.md — SDK client setup and server detection (Wave 1, 3 tasks)
@@ -103,6 +103,8 @@ Plans:
 - [x] 04-05-PLAN.md — Queue UI integration and polish (Wave 4, 5 tasks + checkpoint)
 - [x] 04-06-PLAN.md — Footer 'c' hint and session detection fix (Wave 1, 2 tasks) [gap closure]
 - [x] 04-07-PLAN.md — Tab completion with arguments in command palette (Wave 1, 2 tasks) [gap closure]
+- [ ] 04-08-PLAN.md — Add session activity to Footer (Wave 1, 1 task) [gap closure]
+- [ ] 04-09-PLAN.md — Fix headless execution mode (Wave 1, 2 tasks) [gap closure]
 
 ### Phase 5: Test Coverage
 **Goal:** Reproducible tests with mocked filesystem to reach 80%+ line coverage
@@ -149,5 +151,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Real-time Updates | 3/3 | Complete | 2026-01-24 |
 | 3. Actions and Editing | 4/4 | Complete | 2026-01-25 |
 | 03.1: UI polish (INSERTED) | 5/5 | Complete | 2026-01-25 |
- | 4. OpenCode Integration | 7/7 | Complete | 2026-01-25 |
+  | 4. OpenCode Integration | 7/9 | Gap closure pending | 2026-01-25 |
   | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
