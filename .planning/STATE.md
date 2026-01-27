@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2025-01-24)
 
 ## Current Position
 
-Phase: 8 of 9 in progress (1/2 plans complete, gap closure)
+Phase: 8 of 9 complete (2/2 plans)
 Next Phase: Phase 9 - Name Change And Public Readiness
-Status: Phase 8 gap closure - Fixing jobs stuck in pending state for newly created sessions
-Last activity: 2026-01-26 - Created Phase 8 plan 02 (Add proactive job startup for idle sessions)
+Status: Phase 8 complete - All background job issues resolved with comprehensive fixes
+Last activity: 2026-01-26 - Completed Phase 8 plan 02 (Add proactive job startup for idle sessions)
 
-Progress: [████████░░] 98.2% (56/57 plans)
+Progress: [██████████] 100% (57/57 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 56
-- Average duration: 4.0 min
- - Total execution time: 249 min
+- Total plans completed: 57
+- Average duration: 4.6 min
+ - Total execution time: 615 min
 
 **By Phase:**
 
@@ -35,12 +35,12 @@ Progress: [████████░░] 98.2% (56/57 plans)
 | 5 | 18 | 123 min | 6.8 min |
 | 6 | 4 | 14 min | 3.5 min |
 | 7 | 2 | 18 min | 9.0 min |
-| 8 | 1 | 1 min | 1.0 min |
+| 8 | 2 | 366 min | 183.0 min |
 | 9 | 0 | 0 min | - |
 
 **Recent Trend:**
-- Last 5 plans: 2 min, 8 min, 6 min, 8 min, 1 min
-- Trend: Stable
+- Last 5 plans: 2 min, 8 min, 6 min, 1 min, 366 min
+- Trend: Outlier (Plan 08-02 required comprehensive debugging and fixes)
 
 *Updated after each plan completion*
 
@@ -151,13 +151,26 @@ Recent decisions affecting current work:
 - Codebase verified clean - no WorkQueue, useWorkQueue, QueueEntry, QueuedCommand references remain (07-02)
 - Remove premature handleIdle call - rely solely on session.idle event for job processing (08-01)
 - Document GLM4.7 as recommended default model for background GSD commands (08-01)
+- Use 'opencode/big-pickle' as default model for background GSD commands (08-02)
+- Mark jobs as in-progress before sendPrompt to prevent duplicate starts (08-02)
+- Add 30s timeout wrapper around sendPrompt to prevent hanging jobs (08-02)
+- Parse model string into providerID/modelID format for SDK compatibility (08-02)
+- Timeout wrapper pattern with Promise.race for async operations (08-02)
+- In-progress ref tracking for job state machine (08-02)
+- Proactive startup effect for idle sessions instead of waiting for session.idle events (08-02)
 
 
 
 
 ### Pending Todos
 
-1 pending todo.
+- bar1
+- baz3
+- foo1
+- foo2
+- tt1
+
+5 pending todos.
 
 ### Quick Tasks Completed
 
@@ -191,11 +204,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
 | 6. Additional UI Polish | 4/4 | Complete | 2026-01-26 |
 | 7. Work Queue Removal | 2/2 | Complete | 2026-01-26 |
-| 8. Comprehensive Fix For Broken Background Tasks | 1/1 | Complete | 2026-01-26 |
+| 8. Comprehensive Fix For Broken Background Tasks | 2/2 | Complete | 2026-01-26 |
 | 9. Name Change And Public Readiness | 0/0 | Not planned | - |
 
 ## Session Continuity
 
 Last session: 2026-01-26
-Stopped at: Completed Phase 8 plan 01 (Fix background jobs stuck in pending state)
+Stopped at: Completed Phase 8 plan 02 (Add proactive job startup for idle sessions)
 Resume file: None
