@@ -1,85 +1,44 @@
 # GSD Console
 
-Terminal UI for viewing GSD project status. Displays roadmap progress, phase details, and todos in a keyboard-navigable interface.
+```
+   ____   ____    ____       ____                            _
+  / ___| / ___|  |  _ \     / ___|  ___   _ __   ___   ___  | |  ___
+ | |  _  \___ \  | | | |   | |     / _ \ | '_ \ / __| / _ \ | | / _ \
+ | |_| |  ___) | | |_| |   | |___ | (_) || | | |\__ \| (_) || ||  __/
+  \____| |____/  |____/     \____| \___/ |_| |_||___/ \___/ |_| \___|
+```
+
+Terminal UI for viewing GSD project status
+
+[![npm version](https://img.shields.io/npm/v/gsd-console.svg)](https://www.npmjs.com/package/gsd-console)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Features
+
+- Real-time roadmap and phase tracking
+- Vim-style keyboard navigation (j/k, gg/G, Ctrl+d/u)
+- File watching with live updates
+- OpenCode integration for coding agents
+- Command palette with fuzzy search
+- Background job queue for headless execution
 
 ## Compatibility
 
 **Works with any GSD `.planning/` directory.** If you have a project using the [GSD workflow](https://github.com/glittercowboy/get-shit-done), this TUI will display its roadmap, phases, and todos with live updates as files change.
 
-**For coding agent integration**, GSD Console supports [opencode](https://github.com/sst/opencode). With opencode installed, you can:
-- Spawn opencode sessions directly from the TUI
+**For coding agent integration**, GSD Console supports [OpenCode](https://github.com/sst/opencode). With OpenCode installed, you can:
+- Spawn OpenCode sessions directly from the TUI
 - Queue GSD commands for sequential execution
-- Connect to existing opencode sessions
+- Connect to existing OpenCode sessions
 
-Without opencode, the TUI works as a standalone viewer — you can still execute GSD CLI commands and edit planning files in your `$EDITOR`.
-
-## OpenCode Integration
-
-### Architecture
-
-GSD Console integrates with OpenCode for coding agent execution:
-
-| Component | Description |
-|-----------|-------------|
-| `opencode` | Standalone TUI, no HTTP API |
-| `opencode serve --port 4096` | Headless server with HTTP API |
-| `opencode attach http://localhost:4096` | TUI connected to server |
-
-Sessions are stored in `~/.local/share/opencode/storage/session/`. Both TUI and serve read/write to the same storage, but don't communicate in real-time unless using attach.
-
-### Connecting for Primary Mode
-
-To execute commands via the "primary" mode (sending prompts to a connected TUI session):
-
-1. **Start the OpenCode server:**
-   ```bash
-   opencode serve --port 4096
-   ```
-
-2. **Attach the TUI to the server:**
-   ```bash
-   opencode attach http://localhost:4096
-   ```
-
-3. **Now API commands appear in the TUI** — both use the same server
-
-**Key insight:** Without `attach`, API calls go to session storage but the TUI doesn't poll for external changes. Use `attach` to connect the TUI to the HTTP server for real-time communication.
-
-### Configuring Default Model
-
-Background jobs use OpenCode's default model setting. To configure GLM4.7 as the default model for background GSD commands:
-
-1. **Create or edit `~/.opencode/opencode.json`:**
-   ```json
-   {
-     "defaultModel": "glm-4.7"
-   }
-   ```
-
-2. **Restart OpenCode** if it's currently running
-
-This is a server-side OpenCode configuration — the TUI uses whatever model OpenCode defaults to.
-
-### SDK Gotchas
-
-- **Timestamps are milliseconds** — `s.time.created` and `s.time.updated` are already in ms, don't multiply by 1000
-- **SDK requires serve running** — All SDK calls fail with ConnectionRefused if `opencode serve` isn't running
-- **Session list from SDK** — Returns active sessions only (not all historical like local storage)
-
-### Execution Modes
-
-| Mode | What it does |
-|------|--------------|
-| Headless | Adds to background job queue, runs via SDK |
-| Interactive | Spawns `opencode attach` with initial prompt |
-| Primary | Sends prompt to connected session via SDK (requires `opencode serve` + `attach`) |
+Without OpenCode, the TUI works as a standalone viewer -- you can still execute GSD CLI commands and edit planning files in your `$EDITOR`.
 
 ## Installation
 
 ### Prerequisites
 
-- **Bun** (required) — [install bun](https://bun.sh/)
-- **opencode** (optional) — [install opencode](https://opencode.ai/) for coding agent integration
+- **Bun** (required) -- [install Bun](https://bun.sh/)
+- **OpenCode** (optional) -- [install OpenCode](https://opencode.ai/) for coding agent integration
 
 ### From npm
 
@@ -96,30 +55,30 @@ bun install
 bun install -g .
 ```
 
-### For Development
-
-Use `bun link` to run `gsd-console` from anywhere while using the local source code:
+## Quick Start
 
 ```bash
-bun link
-```
+# Navigate to a project with a .planning/ directory
+cd my-gsd-project
 
-To unlink: `bun unlink`
+# Launch the TUI
+gsd-console
+```
 
 ## Usage
 
 ```bash
-# Run the TUI (local)
-bun run dev
-
-# Run globally
+# Full TUI with tabs
 gsd-console
 
-# Or directly with bun
-bun start
+# Roadmap view only (great for tmux panes)
+gsd-console --only roadmap
 
-# Show help
-bun start --help
+# Phase detail view
+gsd-console --only phase -p 2
+
+# Todos view only
+gsd-console --only todos
 ```
 
 ### CLI Options
@@ -131,33 +90,67 @@ bun start --help
 | `--dir <path>` | `-d` | Path to .planning directory |
 | `--help` | `-h` | Show help |
 
-### Examples
-
-```bash
-# Full TUI with tabs
-gsd-console
-# or
-bun start
-
-# Roadmap view only (great for tmux panes)
-gsd-console --only roadmap
-
-# Phase 2 detail view
-gsd-console --only phase -p 2
-
-# Todos view only
-gsd-console --only todos
-```
-
-## Keyboard Navigation
+## Keyboard Shortcuts
 
 | Key | Action |
 |-----|--------|
 | `Tab` | Switch between tabs |
-| `1/2/3` | Jump to Roadmap/Phase/Todos tab |
+| `1/2/3/4` | Jump to Roadmap/Phase/Todos/Background tab |
 | `j/k` | Navigate up/down (Vim-style) |
+| `gg/G` | Jump to top/bottom |
+| `Ctrl+d/u` | Page down/up |
+| `Enter` | Expand/collapse or select |
+| `:` | Open command palette |
+| `c` | Connect to OpenCode session |
+| `e` | Open in external editor |
 | `q` | Quit |
 | `?` | Show help |
+
+## OpenCode Integration
+
+GSD Console integrates with OpenCode for coding agent execution.
+
+### Architecture
+
+| Component | Description |
+|-----------|-------------|
+| `opencode` | Standalone TUI, no HTTP API |
+| `opencode serve --port 4096` | Headless server with HTTP API |
+| `opencode attach http://localhost:4096` | TUI connected to server |
+
+### Connecting for Primary Mode
+
+To execute commands via the "primary" mode (sending prompts to a connected TUI session):
+
+1. **Start the OpenCode server:**
+   ```bash
+   opencode serve --port 4096
+   ```
+
+2. **Attach the TUI to the server:**
+   ```bash
+   opencode attach http://localhost:4096
+   ```
+
+3. **Now API commands appear in the TUI** -- both use the same server
+
+### Execution Modes
+
+| Mode | What it does |
+|------|--------------|
+| Headless | Adds to background job queue, runs via SDK |
+| Interactive | Spawns `opencode attach` with initial prompt |
+| Primary | Sends prompt to connected session via SDK |
+
+### Configuring Default Model
+
+Background jobs use OpenCode's default model setting. Configure in `~/.opencode/opencode.json`:
+
+```json
+{
+  "defaultModel": "glm-4.7"
+}
+```
 
 ## Development
 
@@ -181,30 +174,20 @@ bun test
 bun run test:coverage
 ```
 
-## Project Structure
+### For Development
 
-```
-src/
-  cli.tsx              # Entry point with CLI parsing
-  app.tsx              # Main app component
-  components/
-    layout/
-      Header.tsx       # Project name and progress
-      TabLayout.tsx    # Tab navigation
-      Footer.tsx       # Keybinding hints
-  hooks/
-    useGsdData.ts      # Load and parse planning docs
-  lib/
-    types.ts           # TypeScript interfaces
-    parser.ts          # Markdown/YAML parsing
-    icons.ts           # Status icons and colors
+Use `bun link` to run `gsd-console` from anywhere while using the local source code:
+
+```bash
+bun link
 ```
 
-## Tech Stack
+To unlink: `bun unlink`
 
-- **Runtime:** Bun
-- **UI Framework:** Ink (React for terminals)
-- **Language:** TypeScript (strict mode)
-- **Linting:** Biome
-- **Git Hooks:** Lefthook
-- **Testing:** Bun test runner
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and contribution guidelines.
+
+## License
+
+[MIT](LICENSE)
