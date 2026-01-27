@@ -143,25 +143,48 @@ function startPendingJob(
 			debugLog(`[startPendingJob] Calling sendPrompt for job ${jobId}`);
 
 			// Send to OpenCode with opencode/big-pickle model
-			await sendPrompt(jobSessionId, promptToSend, 'opencode/big-pickle');
+			const sendSuccess = await sendPrompt(jobSessionId, promptToSend, 'opencode/big-pickle');
 
 			// Only mark as running after successful send
-			debugLog(`[startPendingJob] Marking job ${jobId} as running (sendPrompt succeeded)`);
-			setJobs((current) =>
-				current.map((j) =>
-					j.id === jobId
-						? {
-								...j,
-								status: 'running' as const,
-								startedAt: Date.now(),
-							}
-						: j,
-				),
-			);
+			if (sendSuccess) {
+				debugLog(`[startPendingJob] Marking job ${jobId} as running (sendPrompt succeeded)`);
+				setJobs((current) =>
+					current.map((j) =>
+						j.id === jobId
+							? {
+									...j,
+									status: 'running' as const,
+									startedAt: Date.now(),
+								}
+							: j,
+					),
+				);
 
-			// Clear in-progress flag since job is now running
-			jobsInProgressRef.current.delete(jobId);
-			debugLog(`[startPendingJob] Prompt sent successfully, job ${jobId} is running`);
+				// Clear in-progress flag since job is now running
+				jobsInProgressRef.current.delete(jobId);
+				debugLog(`[startPendingJob] Prompt sent successfully, job ${jobId} is running`);
+			} else {
+				// sendPrompt failed but didn't throw - mark job as failed
+				debugLog(`[startPendingJob] sendPrompt returned false for job ${jobId}`);
+				jobsInProgressRef.current.delete(jobId);
+				setJobs((current) =>
+					pruneJobs(
+						current.map((j) =>
+							j.id === jobId
+								? {
+										...j,
+										status: 'failed' as const,
+										error: 'Failed to send prompt to session',
+										completedAt: Date.now(),
+									}
+								: j,
+						),
+					),
+				);
+				showToast?.(`Background: ${jobCommand} failed`, 'warning');
+				onProcessingChange?.(false);
+				onActiveCommandChange?.(undefined);
+			}
 		} catch (error) {
 			// Handle promise rejection errors
 			debugLog(`[startPendingJob] Error during job ${jobId}:`, error);
