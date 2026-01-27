@@ -1,6 +1,6 @@
 {
 	"name": "gsd-console",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "Terminal UI for GSD project status",
 	"license": "MIT",
 	"author": "Dan Nakov",
