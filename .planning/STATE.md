@@ -164,13 +164,15 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
+- 11111
 - bar1
 - baz3
 - foo1
 - foo2
+- test todo from test script
 - tt1
 
-5 pending todos.
+7 pending todos.
 
 ### Quick Tasks Completed
 
