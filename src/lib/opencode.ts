@@ -299,15 +299,19 @@ export async function sendPrompt(
 
 		const body: {
 			parts: Array<{ type: 'text'; text: string }>;
-			// Don't include model parameter - it's not supported by session.prompt()
-			// OpenCode SDK will use the session's configured model
+			model?: { providerID: string; modelID: string };
 		} = {
 			parts: [{ type: 'text', text }],
 		};
 
-		// Log prompt details (but don't include model in body)
 		if (defaultModel) {
-			debugLog(`Using model: ${defaultModel}`);
+			const parsed = parseModel(defaultModel);
+			if (parsed) {
+				body.model = parsed;
+				debugLog(`Using model: ${defaultModel}`);
+			} else {
+				debugLog(`Failed to parse model string: ${defaultModel}`);
+			}
 		} else {
 			debugLog('No default model found in config');
 		}
@@ -326,6 +330,15 @@ export async function sendPrompt(
 		debugLog('sendPrompt failed:', error);
 		return false;
 	}
+}
+
+function parseModel(modelString: string): { providerID: string; modelID: string } | null {
+	const parts = modelString.split('/');
+	if (parts.length === 2 && parts[0] && parts[1]) {
+		const [providerID, modelID] = parts;
+		return { providerID, modelID };
+	}
+	return null;
 }
 
 /**

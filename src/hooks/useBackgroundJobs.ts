@@ -170,7 +170,7 @@ function startPendingJob(
 			const sendSuccess = await sendPromptWithTimeout(
 				jobSessionId,
 				promptToSend,
-				undefined as string | undefined, // Let OpenCode use default model
+				'opencode/big-pickle',
 				30000, // 30 second timeout
 			);
 
