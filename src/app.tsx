@@ -152,6 +152,9 @@ export default function App({ flags }: AppProps) {
 	const [pendingCommand, setPendingCommand] = useState<Command | null>(null);
 	const [pendingArgs, setPendingArgs] = useState<string | undefined>(undefined);
 
+	// Track headless processing state to prevent race conditions
+	const [headlessProcessing, setHeadlessProcessing] = useState(false);
+
 	// Toast notifications
 	const { toasts, show: showToast } = useToast();
 
@@ -196,7 +199,7 @@ export default function App({ flags }: AppProps) {
 	 * Future: Add CLI flag or config file for target selection.
 	 */
 	const handleModeSelect = useCallback(
-		(mode: ExecutionMode) => {
+		async (mode: ExecutionMode) => {
 			setShowModePrompt(false);
 			if (!pendingCommand) return;
 
@@ -209,17 +212,24 @@ export default function App({ flags }: AppProps) {
 
 			switch (mode) {
 				case 'headless':
+					// Prevent race condition - don't start if already processing
+					if (headlessProcessing) {
+						showToast('Already creating background session, please wait', 'warning');
+						return;
+					}
+
 					// Create new background session and add job to it
-					{
-						void (async () => {
-							const formattedCommand = formatGsdCommand(fullCommand, target);
-							const newSessionId = await createSession(formattedCommand, process.cwd());
-							if (newSessionId) {
-								addBackgroundJob(formattedCommand, newSessionId);
-							} else {
-								showToast('Failed to create background session', 'warning');
-							}
-						})();
+					setHeadlessProcessing(true);
+					try {
+						const formattedCommand = formatGsdCommand(fullCommand, target);
+						const newSessionId = await createSession(formattedCommand, process.cwd());
+						if (newSessionId) {
+							addBackgroundJob(formattedCommand, newSessionId);
+						} else {
+							showToast('Failed to create background session', 'warning');
+						}
+					} finally {
+						setHeadlessProcessing(false);
 					}
 					break;
 
@@ -255,7 +265,7 @@ export default function App({ flags }: AppProps) {
 			setPendingCommand(null);
 			setPendingArgs(undefined);
 		},
-		[pendingCommand, pendingArgs, activeSessionId, addBackgroundJob, showToast],
+		[pendingCommand, pendingArgs, activeSessionId, addBackgroundJob, showToast, headlessProcessing],
 	);
 
 	/**

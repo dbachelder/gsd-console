@@ -285,20 +285,6 @@ async function getDefaultModel(): Promise<string | null> {
 }
 
 /**
- * Parse model string into provider and model ID.
- * @param modelString - Model in format "provider/model" (e.g., "anthropic/claude-2")
- * @returns Object with providerID and modelID, or null if invalid format
- */
-function parseModel(modelString: string): { providerID: string; modelID: string } | null {
-	const parts = modelString.split('/');
-	if (parts.length === 2 && parts[0] && parts[1]) {
-		const [providerID, modelID] = parts;
-		return { providerID, modelID };
-	}
-	return null;
-}
-
-/**
  * Send a prompt to an OpenCode session.
  * Returns true if prompt was sent successfully.
  */
@@ -313,32 +299,31 @@ export async function sendPrompt(
 
 		const body: {
 			parts: Array<{ type: 'text'; text: string }>;
-			model?: { providerID: string; modelID: string };
+			// Don't include model parameter - it's not supported by session.prompt()
+			// OpenCode SDK will use the session's configured model
 		} = {
 			parts: [{ type: 'text', text }],
 		};
 
-		// If we have a default model, include it in prompt
+		// Log prompt details (but don't include model in body)
 		if (defaultModel) {
-			const parsed = parseModel(defaultModel);
-			if (parsed) {
-				body.model = parsed;
-				debugLog('Including model in prompt', body.model);
-			} else {
-				debugLog('Failed to parse model string', defaultModel);
-			}
+			debugLog(`Using model: ${defaultModel}`);
 		} else {
 			debugLog('No default model found in config');
 		}
 
-		debugLog('Sending prompt body', body);
+		debugLog(
+			`Sending prompt to session ${sessionId} (${text.length} chars)`,
+			`${text.slice(0, 100)}...`,
+		);
 
 		await client.session.prompt({
 			path: { id: sessionId },
 			body,
 		});
 		return true;
-	} catch {
+	} catch (error) {
+		debugLog('sendPrompt failed:', error);
 		return false;
 	}
 }

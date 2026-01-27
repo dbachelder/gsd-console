@@ -47,7 +47,7 @@ function pruneJobs(jobs: BackgroundJob[]): BackgroundJob[] {
 async function sendPromptWithTimeout(
 	sessionId: string,
 	text: string,
-	model: string,
+	model: string | undefined,
 	timeoutMs: number = 30000, // 30 second timeout for sendPrompt
 ): Promise<boolean> {
 	try {
@@ -165,11 +165,12 @@ function startPendingJob(
 			onProcessingChange?.(true);
 			onActiveCommandChange?.(jobCommand);
 
-			// Send to OpenCode with opencode/big-pickle model, with 30s timeout
+			// Send to OpenCode, letting it use default model from config
+			// Don't force a model - let OpenCode use its configured default
 			const sendSuccess = await sendPromptWithTimeout(
 				jobSessionId,
 				promptToSend,
-				'opencode/big-pickle',
+				undefined as string | undefined, // Let OpenCode use default model
 				30000, // 30 second timeout
 			);
 
