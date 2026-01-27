@@ -169,10 +169,11 @@ Recent decisions affecting current work:
 - baz3
 - foo1
 - foo2
+- Prepare Phase 9 name change implementation
 - test todo from test script
 - tt1
 
-7 pending todos.
+8 pending todos.
 
 ### Quick Tasks Completed
 
