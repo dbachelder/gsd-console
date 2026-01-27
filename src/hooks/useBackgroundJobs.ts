@@ -43,6 +43,11 @@ function pruneJobs(jobs: BackgroundJob[]): BackgroundJob[] {
 /**
  * Start a pending job if one exists and no other job is currently running.
  * This is used both by session.idle events and proactive startup for newly created sessions.
+ *
+ * Sequential processing is guaranteed by checking for running jobs (lines 62-64) before starting new ones.
+ * Combined with the proactive useEffect (lines 84-97), this provides:
+ * - Immediate startup for first job (new idle session)
+ * - Sequential processing for subsequent jobs (session.idle event fires after each completes)
  */
 function startPendingJob(
 	jobs: BackgroundJob[],
