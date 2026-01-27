@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-24)
 
 **Core value:** See and manage GSD project state without leaving the coding context
-**Current focus:** Phase 8 execution - Comprehensive Fix For Broken Background Tasks
+**Current focus:** Phase 9 execution - Name Change And Public Readiness
 
 ## Current Position
 
-Phase: 8 of 9 complete (2/2 plans)
-Next Phase: Phase 9 - Name Change And Public Readiness
-Status: Phase 8 complete - All background job issues resolved with comprehensive fixes
-Last activity: 2026-01-26 - Completed quick task 004: Fix /gsd-add-todo command execution
+Phase: 9 of 9 (1/3 plans complete)
+Next Plan: Phase 9 Plan 02 - README and documentation update
+Status: In progress - Renamed gsd-tui to gsd-console
+Last activity: 2026-01-27 - Completed 09-01: Rename gsd-tui to gsd-console
 
-Progress: [██████████] 100% (57/57 plans)
+Progress: [█████████░] 95% (58/60 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 57
-- Average duration: 4.6 min
- - Total execution time: 615 min
+- Total plans completed: 58
+- Average duration: 4.5 min
+- Total execution time: 619 min
 
 **By Phase:**
 
@@ -36,7 +36,7 @@ Progress: [██████████] 100% (57/57 plans)
 | 6 | 4 | 14 min | 3.5 min |
 | 7 | 2 | 18 min | 9.0 min |
 | 8 | 2 | 366 min | 183.0 min |
-| 9 | 0 | 0 min | - |
+| 9 | 1 | 4 min | 4.0 min |
 
 **Recent Trend:**
 - Last 5 plans: 2 min, 8 min, 6 min, 1 min, 366 min
@@ -158,6 +158,8 @@ Recent decisions affecting current work:
 - Timeout wrapper pattern with Promise.race for async operations (08-02)
 - In-progress ref tracking for job state machine (08-02)
 - Proactive startup effect for idle sessions instead of waiting for session.idle events (08-02)
+- Bulk rename using sed across all source files (09-01)
+- Regenerate bun.lock rather than manual edit (09-01)
 
 
 
@@ -206,10 +208,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 6. Additional UI Polish | 4/4 | Complete | 2026-01-26 |
 | 7. Work Queue Removal | 2/2 | Complete | 2026-01-26 |
 | 8. Comprehensive Fix For Broken Background Tasks | 2/2 | Complete | 2026-01-26 |
-| 9. Name Change And Public Readiness | 0/0 | Not planned | - |
+| 9. Name Change And Public Readiness | 1/3 | In progress | - |
 
 ## Session Continuity
 
-Last session: 2026-01-26
-Stopped at: Completed Phase 8 plan 02 (Add proactive job startup for idle sessions)
+Last session: 2026-01-27
+Stopped at: Completed Phase 9 plan 01 (Rename gsd-tui to gsd-console)
 Resume file: None
