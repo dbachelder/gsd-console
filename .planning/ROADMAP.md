@@ -199,15 +199,23 @@ Background jobs stuck in pending state due to premature handleIdle() trigger whe
 
 ### Phase 9: Name Change And Public Readiness
 
-**Goal:** Name change and public readiness
+**Goal:** Rename project from 'GSD Status TUI' to 'GSD Console' and prepare for public npm release
 **Depends on:** Phase 8
-**Plans:** 0 plans
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 9 to break down)
+- [ ] 09-01-PLAN.md — Bulk rename gsd-tui to gsd-console across codebase (Wave 1, 3 tasks)
+- [ ] 09-02-PLAN.md — Update documentation: README, CONTRIBUTING, CLAUDE.md (Wave 2, 3 tasks)
+- [ ] 09-03-PLAN.md — Version bump to 1.0.0, GitHub rename, npm publish (Wave 3, 3 tasks + checkpoint)
 
 **Details:**
-[To be added during planning]
+- Comprehensive rename of all 'gsd-tui' references to 'gsd-console'
+- Update package.json with npm publishing metadata
+- Create professional README with ASCII logo and badges
+- Create CONTRIBUTING.md for new contributors
+- Version bump to v1.0.0 with git tag
+- GitHub repository rename (manual step)
+- Publish to npm registry
 
 ## Progress
 
@@ -225,4 +233,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 6. Additional UI Polish | 4/6 | In Progress (gap closure) | - |
 | 7. Work Queue Removal | 2/2 | Complete | 2026-01-26 |
 | 8. Comprehensive Fix For Broken Background Tasks | 2/2 | Complete | 2026-01-27 |
-| 9. Name Change And Public Readiness | 0/0 | Not planned | - |
+| 9. Name Change And Public Readiness | 0/3 | Planned | - |
