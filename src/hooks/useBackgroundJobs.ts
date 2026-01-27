@@ -116,8 +116,15 @@ function startPendingJob(
 				promptToSend.slice(0, 200) + (promptToSend.length > 200 ? '...' : ''),
 			);
 
-			// Mark job as running before sending prompt
-			debugLog(`[startPendingJob] Marking job ${jobId} as running`);
+			// Mark job as running AFTER sendPrompt succeeds
+			// This ensures failed sendPrompt doesn't leave jobs stuck in running state
+			debugLog(`[startPendingJob] Calling sendPrompt for job ${jobId}`);
+
+			// Send to OpenCode with opencode/big-pickle model
+			await sendPrompt(jobSessionId, promptToSend, 'opencode/big-pickle');
+
+			// Only mark as running after successful send
+			debugLog(`[startPendingJob] Marking job ${jobId} as running (sendPrompt succeeded)`);
 			setJobs((current) =>
 				current.map((j) =>
 					j.id === jobId
@@ -130,9 +137,7 @@ function startPendingJob(
 				),
 			);
 
-			// Send to OpenCode with opencode/big-pickle model
-			sendPrompt(jobSessionId, promptToSend, 'opencode/big-pickle');
-			debugLog(`[startPendingJob] Prompt sent successfully`);
+			debugLog(`[startPendingJob] Prompt sent successfully, job ${jobId} is running`);
 		} catch (error) {
 			// Handle promise rejection errors
 			debugLog(`[startPendingJob] Error during job ${jobId}:`, error);
