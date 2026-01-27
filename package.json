@@ -1,12 +1,32 @@
 {
 	"name": "gsd-console",
 	"version": "0.1.0",
-	"description": "Terminal UI for viewing GSD project status",
+	"description": "Terminal UI for GSD project status",
 	"license": "MIT",
+	"author": "Dan Nakov",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dnakov/gsd-console.git"
+	},
+	"keywords": [
+		"cli",
+		"terminal",
+		"tui",
+		"gsd",
+		"project-management"
+	],
 	"module": "src/cli.tsx",
 	"type": "module",
 	"bin": {
 		"gsd-console": "./src/cli.tsx"
+	},
+	"files": [
+		"src/**/*",
+		"README.md",
+		"LICENSE"
+	],
+	"engines": {
+		"bun": ">=1.0.0"
 	},
 	"scripts": {
 		"dev": "bun --watch src/cli.tsx",
