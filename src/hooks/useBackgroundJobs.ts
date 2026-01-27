@@ -48,7 +48,7 @@ async function sendPromptWithTimeout(
 	sessionId: string,
 	text: string,
 	model: string | undefined,
-	timeoutMs: number = 30000, // 30 second timeout for sendPrompt
+	timeoutMs: number = 120000, // 2 minute timeout for sendPrompt
 ): Promise<boolean> {
 	try {
 		const timeoutPromise = new Promise<never>((_, reject) =>
@@ -164,7 +164,20 @@ function startPendingJob(
 			debugLog(`[startPendingJob] Marked job ${jobId} as in-progress`);
 
 			const fullCommand = await loadOpencodeCommand(baseCommand);
-			const promptToSend = fullCommand || jobCommand;
+
+			// Extract argument from jobCommand if it exists (e.g., "/gsd-add-todo foo bar" -> "foo bar")
+			const argument = jobCommand
+				.replace(/^\/gsd-/, '')
+				.split(' ')
+				.slice(1)
+				.join(' ');
+
+			// Append argument to command if both exist, otherwise fallback to original
+			const promptToSend = fullCommand
+				? argument
+					? `${fullCommand}\n\nArgument: ${argument}`
+					: fullCommand
+				: jobCommand;
 
 			if (fullCommand) {
 				debugLog(`[startPendingJob] Sending full command instruction for job ${jobId}`);
@@ -191,7 +204,7 @@ function startPendingJob(
 				jobSessionId,
 				promptToSend,
 				'opencode/big-pickle',
-				30000, // 30 second timeout
+				120000, // 2 minute timeout for command execution
 			);
 
 			// Only mark as running after successful send
