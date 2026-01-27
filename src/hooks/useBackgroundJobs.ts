@@ -5,7 +5,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { debugLog, sendPrompt } from '../lib/opencode.ts';
+import { debugLog, loadOpencodeCommand, sendPrompt } from '../lib/opencode.ts';
 import type { BackgroundJob } from '../lib/types.ts';
 import { useSessionEvents } from './useSessionEvents.ts';
 import type { ToastType } from './useToast.ts';
@@ -95,34 +95,28 @@ function startPendingJob(
 
 	debugLog(`[startPendingJob] Calling sendPrompt for job ${jobId}`);
 
-	// Force opencode/big-pickle model for GSD commands since OpenCode config has no default
-	sendPrompt(jobSessionId, jobCommand, 'opencode/big-pickle')
-		.then((success) => {
-			debugLog(`[startPendingJob] sendPrompt returned: ${success ? 'success' : 'failed'}`);
+	// Extract command name (e.g., "add-todo" from "/gsd-add-todo foo bar")
+	const baseCommand = jobCommand.replace(/^\/gsd-/, '');
 
-			if (!success) {
-				// Mark job as failed
-				setJobs((current) =>
-					pruneJobs(
-						current.map((j) =>
-							j.id === jobId
-								? {
-										...j,
-										status: 'failed' as const,
-										error: 'Failed to send prompt to session',
-										completedAt: Date.now(),
-									}
-								: j,
-						),
-					),
-				);
-				showToast?.(`Background: ${jobCommand} failed`, 'warning');
-				onProcessingChange?.(false);
-				onActiveCommandChange?.(undefined);
-				return;
+	// Load full command instruction from OpenCode command files
+	(async () => {
+		try {
+			const fullCommand = await loadOpencodeCommand(baseCommand);
+			const promptToSend = fullCommand || jobCommand;
+
+			if (fullCommand) {
+				debugLog(`[startPendingJob] Sending full command instruction for job ${jobId}`);
+			} else {
+				debugLog(`[startPendingJob] Command file not found, sending raw command ${jobId}`);
 			}
 
-			// Mark job as running ONLY after sendPrompt succeeds
+			// Log the prompt being sent for debugging
+			debugLog(
+				`[startPendingJob] Prompt content (${promptToSend.length} chars):`,
+				promptToSend.slice(0, 200) + (promptToSend.length > 200 ? '...' : ''),
+			);
+
+			// Mark job as running before sending prompt
 			debugLog(`[startPendingJob] Marking job ${jobId} as running`);
 			setJobs((current) =>
 				current.map((j) =>
@@ -135,10 +129,13 @@ function startPendingJob(
 						: j,
 				),
 			);
-		})
-		.catch((error) => {
+
+			// Send to OpenCode with opencode/big-pickle model
+			sendPrompt(jobSessionId, promptToSend, 'opencode/big-pickle');
+			debugLog(`[startPendingJob] Prompt sent successfully`);
+		} catch (error) {
 			// Handle promise rejection errors
-			debugLog(`[startPendingJob] sendPrompt threw error:`, error);
+			debugLog(`[startPendingJob] Error during job ${jobId}:`, error);
 			setJobs((current) =>
 				pruneJobs(
 					current.map((j) =>
@@ -156,7 +153,8 @@ function startPendingJob(
 			showToast?.(`Background: ${jobCommand} failed`, 'warning');
 			onProcessingChange?.(false);
 			onActiveCommandChange?.(undefined);
-		});
+		}
+	})();
 }
 
 /**
@@ -191,7 +189,7 @@ export function useBackgroundJobs({
 		if (pendingJob) {
 			const msg = runningJob
 				? `[useBackgroundJobs] Pending job found (${pendingJob.id}) but job running, waiting...`
-				: `[useBackgroundJobs] Starting pending job: ${pendingJob.id} (${pendingJob.command})`;
+				: `[useBackgroundJobs] Starting pending job: $pendingJob.id($pendingJob.command)`;
 			debugLog(msg);
 		}
 

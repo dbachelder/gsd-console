@@ -79,6 +79,63 @@ export function formatGsdCommand(command: string, target: ExecutionTarget): stri
 	return `${prefix}${command}`;
 }
 
+/**
+ * Load and resolve an OpenCode command file.
+ * Reads command file, resolves file references, and returns full instructions.
+ *
+ * @param commandName - Command name (e.g., "gsd-add-todo" or "add-todo")
+ * @returns Resolved command instructions with file references resolved, or null if not found
+ */
+export async function loadOpencodeCommand(commandName: string): Promise<string | null> {
+	try {
+		// Extract base name from various formats
+		const baseName = commandName.replace(/^gsd-/, '').replace(/^gsd:/, '').replace(/^\//, '');
+
+		// Command file paths (priority order)
+		const commandPaths = [
+			`${process.cwd()}/.opencode/command/gsd-${baseName}.md`, // Project opencode commands
+			`${process.env.HOME}/.config/opencode/command/gsd-${baseName}.md`, // Global opencode commands
+		];
+
+		// Read command file with file system operations
+		const fs = await import('node:fs');
+		let commandContent: string | null = null;
+		for (const cmdPath of commandPaths) {
+			try {
+				commandContent = fs.readFileSync(cmdPath, 'utf-8');
+				debugLog(`Loaded command file: ${cmdPath}`);
+				break;
+			} catch {}
+		}
+
+		if (!commandContent) {
+			debugLog(`Command file not found for: ${commandName}`);
+			return null;
+		}
+
+		// Resolve file references (@path/to/file) to full paths
+		if (commandPaths.length > 0 && commandPaths[0]) {
+			const baseDir = commandPaths[0].split('/command')[0];
+			commandContent = commandContent.replace(
+				/@([^\s\n]+)/g,
+				(_substring: string, ...args: string[]): string => {
+					const resolvedPath = `${baseDir}/${args[0]}`;
+					return `@${args[0]} (resolves to: ${resolvedPath})`;
+				},
+			);
+			debugLog(`Resolved file references in command`);
+		}
+
+		// Wrap in command instruction format for OpenCode
+		return `<command-instruction>
+${commandContent}
+</command-instruction>`;
+	} catch (error) {
+		debugLog('Error loading command file:', error);
+		return null;
+	}
+}
+
 /** Default base URL for OpenCode server */
 const DEFAULT_BASE_URL = `http://127.0.0.1:${DEFAULT_PORT}`;
 
@@ -290,13 +347,19 @@ export async function sendPrompt(
  * Create a new OpenCode session for background jobs.
  * Returns session ID or null on failure.
  */
-export async function createSession(title?: string): Promise<string | null> {
+export async function createSession(title?: string, directory?: string): Promise<string | null> {
 	try {
 		const client = createClient();
+		const query = directory ? { directory } : undefined;
 		const response = await client.session.create({
 			body: { title: title ?? 'GSD Background' },
+			query,
 		});
-		return response.data?.id ?? null;
+		const sessionId = response.data?.id ?? null;
+		if (sessionId && directory) {
+			debugLog(`Created session ${sessionId} in directory: ${directory}`);
+		}
+		return sessionId;
 	} catch {
 		return null;
 	}

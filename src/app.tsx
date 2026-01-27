@@ -213,7 +213,7 @@ export default function App({ flags }: AppProps) {
 					{
 						void (async () => {
 							const formattedCommand = formatGsdCommand(fullCommand, target);
-							const newSessionId = await createSession(formattedCommand);
+							const newSessionId = await createSession(formattedCommand, process.cwd());
 							if (newSessionId) {
 								addBackgroundJob(formattedCommand, newSessionId);
 							} else {
