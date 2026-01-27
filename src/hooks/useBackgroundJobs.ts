@@ -41,6 +41,32 @@ function pruneJobs(jobs: BackgroundJob[]): BackgroundJob[] {
 }
 
 /**
+ * Wrapper around sendPrompt with timeout to prevent hanging jobs.
+ * Returns true if prompt was sent successfully, false if timeout or error.
+ */
+async function sendPromptWithTimeout(
+	sessionId: string,
+	text: string,
+	model: string,
+	timeoutMs: number = 30000, // 30 second timeout for sendPrompt
+): Promise<boolean> {
+	try {
+		const timeoutPromise = new Promise<never>((_, reject) =>
+			setTimeout(() => reject(new Error('sendPrompt timeout')), timeoutMs),
+		);
+
+		const sendPromise = sendPrompt(sessionId, text, model);
+		await Promise.race([sendPromise, timeoutPromise]);
+		return true;
+	} catch (error) {
+		if (error instanceof Error && error.message === 'sendPrompt timeout') {
+			debugLog(`[sendPromptWithTimeout] Timed out after ${timeoutMs}ms`);
+		}
+		return false;
+	}
+}
+
+/**
  * Start a pending job if one exists and no other job is currently running.
  * This is used both by session.idle events and proactive startup for newly created sessions.
  *
@@ -102,27 +128,21 @@ function startPendingJob(
 		return;
 	}
 
-	// Mark job as in-progress to prevent duplicate starts
-	jobsInProgressRef.current.add(pendingJob.id);
-	debugLog(`[startPendingJob] Marked job ${pendingJob.id} as in-progress`);
-
-	// Start the job asynchronously
-	showToast?.(`Background: ${pendingJob.command} started`, 'info');
-	onProcessingChange?.(true);
-	onActiveCommandChange?.(pendingJob.command);
-
 	const jobId = pendingJob.id;
 	const jobCommand = pendingJob.command;
 	const jobSessionId = pendingJob.sessionId;
-
-	debugLog(`[startPendingJob] Calling sendPrompt for job ${jobId}`);
 
 	// Extract command name (e.g., "add-todo" from "/gsd-add-todo foo bar")
 	const baseCommand = jobCommand.replace(/^\/gsd-/, '');
 
 	// Load full command instruction from OpenCode command files
+	// Start the job asynchronously
 	(async () => {
 		try {
+			// Mark job as in-progress BEFORE starting work to prevent duplicate starts
+			jobsInProgressRef.current.add(jobId);
+			debugLog(`[startPendingJob] Marked job ${jobId} as in-progress`);
+
 			const fullCommand = await loadOpencodeCommand(baseCommand);
 			const promptToSend = fullCommand || jobCommand;
 
@@ -138,12 +158,20 @@ function startPendingJob(
 				promptToSend.slice(0, 200) + (promptToSend.length > 200 ? '...' : ''),
 			);
 
-			// Mark job as running AFTER sendPrompt succeeds
-			// This ensures failed sendPrompt doesn't leave jobs stuck in running state
 			debugLog(`[startPendingJob] Calling sendPrompt for job ${jobId}`);
 
-			// Send to OpenCode with opencode/big-pickle model
-			const sendSuccess = await sendPrompt(jobSessionId, promptToSend, 'opencode/big-pickle');
+			// Start the job (show toast before async work)
+			showToast?.(`Background: ${jobCommand} started`, 'info');
+			onProcessingChange?.(true);
+			onActiveCommandChange?.(jobCommand);
+
+			// Send to OpenCode with opencode/big-pickle model, with 30s timeout
+			const sendSuccess = await sendPromptWithTimeout(
+				jobSessionId,
+				promptToSend,
+				'opencode/big-pickle',
+				30000, // 30 second timeout
+			);
 
 			// Only mark as running after successful send
 			if (sendSuccess) {
@@ -164,8 +192,8 @@ function startPendingJob(
 				jobsInProgressRef.current.delete(jobId);
 				debugLog(`[startPendingJob] Prompt sent successfully, job ${jobId} is running`);
 			} else {
-				// sendPrompt failed but didn't throw - mark job as failed
-				debugLog(`[startPendingJob] sendPrompt returned false for job ${jobId}`);
+				// sendPrompt failed or timed out - mark job as failed
+				debugLog(`[startPendingJob] sendPrompt failed or timed out for job ${jobId}`);
 				jobsInProgressRef.current.delete(jobId);
 				setJobs((current) =>
 					pruneJobs(
@@ -174,7 +202,7 @@ function startPendingJob(
 								? {
 										...j,
 										status: 'failed' as const,
-										error: 'Failed to send prompt to session',
+										error: 'Failed to send prompt to session (timed out or error)',
 										completedAt: Date.now(),
 									}
 								: j,
