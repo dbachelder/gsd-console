@@ -168,8 +168,9 @@ Recent decisions affecting current work:
 - rename project to gsd console
 - validate todo capture command functionality
 - Track conversation greeting
+- Test shit
 
-4 pending todos.
+5 pending todos.
 
 ### Quick Tasks Completed
 
