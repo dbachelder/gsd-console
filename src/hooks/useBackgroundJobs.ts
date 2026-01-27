@@ -133,7 +133,27 @@ function startPendingJob(
 	const jobSessionId = pendingJob.sessionId;
 
 	// Extract command name (e.g., "add-todo" from "/gsd-add-todo foo bar")
-	const baseCommand = jobCommand.replace(/^\/gsd-/, '');
+	// Split on space to get just the command name without arguments
+	const baseCommand = jobCommand.replace(/^\/gsd-/, '').split(' ')[0];
+	if (!baseCommand) {
+		debugLog(`[startPendingJob] Failed to extract command name from: ${jobCommand}`);
+		setJobs((prev) =>
+			pruneJobs(
+				prev.map((j) =>
+					j.id === pendingJob.id
+						? {
+								...j,
+								status: 'failed' as const,
+								error: 'Failed to extract command name',
+								completedAt: Date.now(),
+							}
+						: j,
+				),
+			),
+		);
+		showToast?.(`Background: ${jobCommand} failed - invalid command`, 'warning');
+		return;
+	}
 
 	// Load full command instruction from OpenCode command files
 	// Start the job asynchronously
