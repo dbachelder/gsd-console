@@ -185,13 +185,14 @@ Plans:
 ### Phase 8: Comprehensive Fix For Broken Background Tasks
 
 **Goal:** Comprehensive fix for broken background tasks
-**Status:** In Progress - Gap Closure
+**Status:** ✅ Complete
+**Completed:** 2026-01-27
 **Depends on:** Phase 7
 **Plans:** 2 plans
 
 Plans:
 - [x] 08-01-PLAN.md — Fix background jobs stuck in pending state by removing premature handleIdle trigger (Wave 1, 3 tasks)
-- [ ] 08-02-PLAN.md — Add proactive job startup for idle sessions [gap closure] (Wave 1, 3 tasks)
+- [x] 08-02-PLAN.md — Add proactive job startup for idle sessions [gap closure] (Wave 1, 3 tasks)
 
 **Details:**
 Background jobs stuck in pending state due to premature handleIdle() trigger when new sessions are created. The fix waits for session.idle event instead of polling, ensuring jobs execute when sessions are ready.
@@ -223,5 +224,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 5. Test Coverage | 18/18 | Complete | 2026-01-25 |
 | 6. Additional UI Polish | 4/6 | In Progress (gap closure) | - |
 | 7. Work Queue Removal | 2/2 | Complete | 2026-01-26 |
-| 8. Comprehensive Fix For Broken Background Tasks | 1/2 | In Progress (gap closure) | - |
+| 8. Comprehensive Fix For Broken Background Tasks | 2/2 | Complete | 2026-01-27 |
 | 9. Name Change And Public Readiness | 0/0 | Not planned | - |
