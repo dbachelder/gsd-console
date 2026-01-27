@@ -1,4 +1,4 @@
-# GSD Status TUI
+# GSD Console
 
 Terminal UI for viewing GSD project status. Displays roadmap progress, phase details, and todos in a keyboard-navigable interface.
 
@@ -6,7 +6,7 @@ Terminal UI for viewing GSD project status. Displays roadmap progress, phase det
 
 **Works with any GSD `.planning/` directory.** If you have a project using the [GSD workflow](https://github.com/glittercowboy/get-shit-done), this TUI will display its roadmap, phases, and todos with live updates as files change.
 
-**For coding agent integration**, GSD TUI supports [opencode](https://github.com/sst/opencode). With opencode installed, you can:
+**For coding agent integration**, GSD Console supports [opencode](https://github.com/sst/opencode). With opencode installed, you can:
 - Spawn opencode sessions directly from the TUI
 - Queue GSD commands for sequential execution
 - Connect to existing opencode sessions
@@ -17,7 +17,7 @@ Without opencode, the TUI works as a standalone viewer — you can still execute
 
 ### Architecture
 
-GSD TUI integrates with OpenCode for coding agent execution:
+GSD Console integrates with OpenCode for coding agent execution:
 
 | Component | Description |
 |-----------|-------------|
@@ -84,21 +84,21 @@ This is a server-side OpenCode configuration — the TUI uses whatever model Ope
 ### From npm
 
 ```bash
-bun install -g gsd-tui
+bun install -g gsd-console
 ```
 
 ### From Source
 
 ```bash
-git clone https://github.com/dnakov/gsd-tui.git
-cd gsd-tui
+git clone https://github.com/dnakov/gsd-console.git
+cd gsd-console
 bun install
 bun install -g .
 ```
 
 ### For Development
 
-Use `bun link` to run `gsd-tui` from anywhere while using the local source code:
+Use `bun link` to run `gsd-console` from anywhere while using the local source code:
 
 ```bash
 bun link
@@ -113,7 +113,7 @@ To unlink: `bun unlink`
 bun run dev
 
 # Run globally
-gsd-tui
+gsd-console
 
 # Or directly with bun
 bun start
@@ -135,18 +135,18 @@ bun start --help
 
 ```bash
 # Full TUI with tabs
-gsd-tui
+gsd-console
 # or
 bun start
 
 # Roadmap view only (great for tmux panes)
-gsd-tui --only roadmap
+gsd-console --only roadmap
 
 # Phase 2 detail view
-gsd-tui --only phase -p 2
+gsd-console --only phase -p 2
 
 # Todos view only
-gsd-tui --only todos
+gsd-console --only todos
 ```
 
 ## Keyboard Navigation

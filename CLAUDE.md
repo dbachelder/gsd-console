@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-GSD Status TUI - Terminal UI for viewing GSD (Get Shit Done) project status. Displays roadmap progress, phase details, and todos in a keyboard-navigable interface built with Ink (React for terminals).
+GSD Console - Terminal UI for viewing GSD (Get Shit Done) project status. Displays roadmap progress, phase details, and todos in a keyboard-navigable interface built with Ink (React for terminals).
 
 ## Commands
 

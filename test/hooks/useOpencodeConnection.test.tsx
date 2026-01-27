@@ -18,7 +18,7 @@ const mockCreateClient = vi.fn().mockReturnValue({
 				{
 					id: 'session-1',
 					title: 'Test Session',
-					workingDirectory: '/Users/dan/src/gsd-tui',
+					workingDirectory: '/Users/dan/src/gsd-console',
 				},
 			],
 		}),
@@ -42,7 +42,7 @@ describe('useOpencodeConnection', () => {
 						{
 							id: 'session-1',
 							title: 'Test Session',
-							workingDirectory: '/Users/dan/src/gsd-tui',
+							workingDirectory: '/Users/dan/src/gsd-console',
 						},
 					],
 				}),

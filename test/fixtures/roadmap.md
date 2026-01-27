@@ -1,4 +1,4 @@
-# Roadmap: GSD Status TUI
+# Roadmap: GSD Console
 
 ## Overview
 

@@ -1,5 +1,5 @@
 /**
- * GSD TUI Type Definitions
+ * GSD Console Type Definitions
  * Types for parsing and displaying GSD planning documents.
  */
 

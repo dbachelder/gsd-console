@@ -41,7 +41,7 @@ describe('useSessionActivity', () => {
 			const mockActivity: SessionActivity = {
 				sessionId: 'session-123',
 				title: 'Phase 05: Test Coverage',
-				directory: '/Users/dan/src/gsd-tui',
+				directory: '/Users/dan/src/gsd-console',
 				isActive: true,
 				currentActivity: 'gsd-plan-checker: running',
 				lastUpdated: Date.now(),
@@ -92,7 +92,7 @@ describe('useSessionActivity', () => {
 			const inactiveActivity: SessionActivity = {
 				sessionId: 'session-123',
 				title: 'Old session',
-				directory: '/Users/dan/src/gsd-tui',
+				directory: '/Users/dan/src/gsd-console',
 				isActive: false,
 				currentActivity: 'idle',
 				lastUpdated: Date.now() - 120000, // 2 minutes ago
@@ -168,7 +168,7 @@ describe('useSessionActivity', () => {
 			const newActivity: SessionActivity = {
 				sessionId: 'session-456',
 				title: 'New session',
-				directory: '/Users/dan/src/gsd-tui',
+				directory: '/Users/dan/src/gsd-console',
 				isActive: true,
 				currentActivity: 'gsd-execute: running',
 				lastUpdated: Date.now(),
@@ -191,7 +191,7 @@ describe('useSessionActivity', () => {
 			const initialActivity: SessionActivity = {
 				sessionId: 'session-123',
 				title: 'Active session',
-				directory: '/Users/dan/src/gsd-tui',
+				directory: '/Users/dan/src/gsd-console',
 				isActive: true,
 				currentActivity: 'running',
 				lastUpdated: Date.now(),

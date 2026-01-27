@@ -1,12 +1,12 @@
 {
-	"name": "gsd-tui",
+	"name": "gsd-console",
 	"version": "0.1.0",
 	"description": "Terminal UI for viewing GSD project status",
 	"license": "MIT",
 	"module": "src/cli.tsx",
 	"type": "module",
 	"bin": {
-		"gsd-tui": "./src/cli.tsx"
+		"gsd-console": "./src/cli.tsx"
 	},
 	"scripts": {
 		"dev": "bun --watch src/cli.tsx",

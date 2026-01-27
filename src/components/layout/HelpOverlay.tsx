@@ -64,7 +64,7 @@ export function HelpOverlay({ onClose }: HelpOverlayProps) {
 			{/* Title */}
 			<Box justifyContent="center" marginBottom={1}>
 				<Text bold color="cyan">
-					GSD Status TUI - Keyboard Shortcuts
+					GSD Console - Keyboard Shortcuts
 				</Text>
 			</Box>
 

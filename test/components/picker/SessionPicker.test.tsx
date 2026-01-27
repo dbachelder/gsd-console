@@ -8,7 +8,7 @@ const mockSessions: SessionInfo[] = [
 	{
 		id: 's1',
 		lastCommand: 'Working on Phase 1',
-		directory: '/Users/dan/src/gsd-tui',
+		directory: '/Users/dan/src/gsd-console',
 		updatedAt: Date.now() - 1000, // 1 second ago
 	},
 	{
@@ -51,7 +51,7 @@ describe('SessionPicker', () => {
 			/>,
 		);
 
-		expect(lastFrame()).toContain('/Users/dan/src/gsd-tui');
+		expect(lastFrame()).toContain('/Users/dan/src/gsd-console');
 		expect(lastFrame()).toContain('/Users/dan/other');
 		expect(lastFrame()).toContain('/Users/dan/third');
 	});
@@ -221,7 +221,7 @@ describe('SessionPicker', () => {
 			{
 				id: 's1',
 				lastCommand: 'Very long session title that should be truncated at some point because it exceeds the maximum display length',
-				directory: '/Users/dan/src/gsd-tui',
+				directory: '/Users/dan/src/gsd-console',
 				updatedAt: Date.now(),
 			},
 		];

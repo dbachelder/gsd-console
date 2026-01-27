@@ -27,7 +27,7 @@ let cachedDefaultModel: string | null = null;
 
 /** Debug logging to file (enabled via GSD_DEBUG env var) */
 const debugEnabled = process.env.GSD_DEBUG === '1';
-const debugFile = process.env.GSD_DEBUG_FILE ?? '/tmp/gsd-tui-debug.log';
+const debugFile = process.env.GSD_DEBUG_FILE ?? '/tmp/gsd-console-debug.log';
 
 /** Debug logging function - exported for use in other modules */
 export function debugLog(message: string, data?: unknown): void {
@@ -56,7 +56,7 @@ export function debugLog(message: string, data?: unknown): void {
 
 /**
  * Enable debug logging by setting GSD_DEBUG=1 environment variable.
- * Logs will be written to /tmp/gsd-tui-debug.log (or GSD_DEBUG_FILE).
+ * Logs will be written to /tmp/gsd-console-debug.log (or GSD_DEBUG_FILE).
  *
  * Usage:
  *   GSD_DEBUG=1 bun run dev

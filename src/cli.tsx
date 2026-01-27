@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * GSD TUI CLI Entry Point
+ * GSD Console CLI Entry Point
  * Parses command-line arguments and renders the main app.
  */
 
@@ -39,10 +39,10 @@ function parseArgs(): CliFlags {
 
 function showHelp(): void {
 	console.log(`
-GSD Status TUI - View project status in the terminal
+GSD Console - View project status in the terminal
 
 Usage:
-  gsd-tui [options]
+  gsd-console [options]
 
 Options:
   --only, -o <view>    Show only one view (roadmap|phase|todos)
@@ -51,10 +51,10 @@ Options:
   --help, -h           Show this help
 
 Examples:
-  gsd-tui                    # Full TUI with tabs
-  gsd-tui --only roadmap     # Roadmap view only
-  gsd-tui --only phase -p 2  # Phase 2 detail view only
-  gsd-tui --only todos       # Todos view only
+  gsd-console                    # Full TUI with tabs
+  gsd-console --only roadmap     # Roadmap view only
+  gsd-console --only phase -p 2  # Phase 2 detail view only
+  gsd-console --only todos       # Todos view only
 `);
 }
 

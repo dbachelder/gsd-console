@@ -1,5 +1,5 @@
 /**
- * GSD TUI Main App Component
+ * GSD Console Main App Component
  * Root component that loads data and renders the layout.
  */
 

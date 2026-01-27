@@ -1,5 +1,5 @@
 /**
- * GSD TUI Icons and Colors
+ * GSD Console Icons and Colors
  * Status indicators and color mappings for the terminal UI.
  */
 
