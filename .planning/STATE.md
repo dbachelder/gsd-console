@@ -164,16 +164,11 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- 11111
-- bar1
-- baz3
-- foo1
-- foo2
 - Prepare Phase 9 name change implementation
-- test todo from test script
-- tt1
+- rename project to gsd console
+- validate todo capture command functionality
 
-8 pending todos.
+3 pending todos.
 
 ### Quick Tasks Completed
 
