@@ -25,6 +25,9 @@ interface UseBackgroundJobsReturn {
 	error?: Error;
 }
 
+/** Track jobs currently being started (between pending and running) */
+const jobsInProgress = new Set<string>();
+
 /** Generate unique ID for a job */
 function generateJobId(): string {
 	return `job-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -58,15 +61,27 @@ function startPendingJob(
 ): void {
 	// Check if there are any pending jobs
 	const pendingJob = jobs.find((j) => j.status === 'pending');
-	if (!pendingJob) return;
+	if (!pendingJob) {
+		debugLog('[startPendingJob] No pending jobs found');
+		return;
+	}
 
 	debugLog(
 		`[startPendingJob] Found pending job: ${pendingJob.id}, sessionId: ${pendingJob.sessionId}`,
 	);
 
+	// Check if job is already being started (prevent duplicate starts)
+	if (jobsInProgress.has(pendingJob.id)) {
+		debugLog(`[startPendingJob] Job ${pendingJob.id} already in progress, skipping`);
+		return;
+	}
+
 	// Check if any job is currently running (across all sessions)
 	const runningJob = jobs.find((j) => j.status === 'running');
-	if (runningJob) return; // Wait for current job to complete
+	if (runningJob) {
+		debugLog(`[startPendingJob] Job ${runningJob.id} already running, waiting`);
+		return;
+	}
 
 	// Check if the pending job has a session ID
 	if (!pendingJob.sessionId) {
@@ -88,6 +103,10 @@ function startPendingJob(
 		showToast?.(`Background: ${pendingJob.command} failed - no session`, 'warning');
 		return;
 	}
+
+	// Mark job as in-progress to prevent duplicate starts
+	jobsInProgress.add(pendingJob.id);
+	debugLog(`[startPendingJob] Marked job ${pendingJob.id} as in-progress`);
 
 	// Start the job asynchronously
 	showToast?.(`Background: ${pendingJob.command} started`, 'info');
@@ -142,10 +161,14 @@ function startPendingJob(
 				),
 			);
 
+			// Clear in-progress flag since job is now running
+			jobsInProgress.delete(jobId);
 			debugLog(`[startPendingJob] Prompt sent successfully, job ${jobId} is running`);
 		} catch (error) {
 			// Handle promise rejection errors
 			debugLog(`[startPendingJob] Error during job ${jobId}:`, error);
+			jobsInProgress.delete(jobId); // Clear in-progress flag on error
+
 			setJobs((current) =>
 				pruneJobs(
 					current.map((j) =>
@@ -199,7 +222,7 @@ export function useBackgroundJobs({
 		if (pendingJob) {
 			const msg = runningJob
 				? `[useBackgroundJobs] Pending job found (${pendingJob.id}) but job running, waiting...`
-				: `[useBackgroundJobs] Starting pending job: $pendingJob.id($pendingJob.command)`;
+				: `[useBackgroundJobs] Starting pending job: ${pendingJob.id} (${pendingJob.command})`;
 			debugLog(msg);
 		}
 
