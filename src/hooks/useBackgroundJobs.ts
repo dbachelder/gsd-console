@@ -25,9 +25,6 @@ interface UseBackgroundJobsReturn {
 	error?: Error;
 }
 
-/** Track jobs currently being started (between pending and running) */
-const jobsInProgress = new Set<string>();
-
 /** Generate unique ID for a job */
 function generateJobId(): string {
 	return `job-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -55,6 +52,7 @@ function pruneJobs(jobs: BackgroundJob[]): BackgroundJob[] {
 function startPendingJob(
 	jobs: BackgroundJob[],
 	setJobs: (updater: (prev: BackgroundJob[]) => BackgroundJob[]) => void,
+	jobsInProgressRef: React.MutableRefObject<Set<string>>,
 	showToast?: (msg: string, type?: ToastType) => void,
 	onProcessingChange?: (processing: boolean) => void,
 	onActiveCommandChange?: (command?: string) => void,
@@ -71,7 +69,7 @@ function startPendingJob(
 	);
 
 	// Check if job is already being started (prevent duplicate starts)
-	if (jobsInProgress.has(pendingJob.id)) {
+	if (jobsInProgressRef.current.has(pendingJob.id)) {
 		debugLog(`[startPendingJob] Job ${pendingJob.id} already in progress, skipping`);
 		return;
 	}
@@ -105,7 +103,7 @@ function startPendingJob(
 	}
 
 	// Mark job as in-progress to prevent duplicate starts
-	jobsInProgress.add(pendingJob.id);
+	jobsInProgressRef.current.add(pendingJob.id);
 	debugLog(`[startPendingJob] Marked job ${pendingJob.id} as in-progress`);
 
 	// Start the job asynchronously
@@ -162,12 +160,12 @@ function startPendingJob(
 			);
 
 			// Clear in-progress flag since job is now running
-			jobsInProgress.delete(jobId);
+			jobsInProgressRef.current.delete(jobId);
 			debugLog(`[startPendingJob] Prompt sent successfully, job ${jobId} is running`);
 		} catch (error) {
 			// Handle promise rejection errors
 			debugLog(`[startPendingJob] Error during job ${jobId}:`, error);
-			jobsInProgress.delete(jobId); // Clear in-progress flag on error
+			jobsInProgressRef.current.delete(jobId); // Clear in-progress flag on error
 
 			setJobs((current) =>
 				pruneJobs(
@@ -209,6 +207,10 @@ export function useBackgroundJobs({
 	// Track timeout for running job to detect stuck jobs
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+	// Track jobs currently being started (between pending and running)
+	// This prevents duplicate starts when effect re-runs during async job startup
+	const jobsInProgressRef = useRef<Set<string>>(new Set());
+
 	/**
 	 * Proactive job startup - check for pending jobs and start them if no job is running.
 	 * This ensures jobs execute immediately for newly created sessions that are already idle,
@@ -218,15 +220,26 @@ export function useBackgroundJobs({
 		const pendingJob = jobs.find((j) => j.status === 'pending');
 		const runningJob = jobs.find((j) => j.status === 'running');
 
-		// Debug log for proactive startup
-		if (pendingJob) {
-			const msg = runningJob
-				? `[useBackgroundJobs] Pending job found (${pendingJob.id}) but job running, waiting...`
-				: `[useBackgroundJobs] Starting pending job: ${pendingJob.id} (${pendingJob.command})`;
-			debugLog(msg);
+		// Don't start if a job is already running
+		if (runningJob) {
+			debugLog('[useBackgroundJobs] Job already running, skipping proactive startup');
+			return;
 		}
 
-		startPendingJob(jobs, setJobs, showToast, setIsProcessing, setActiveCommand);
+		// Don't start if no pending jobs
+		if (!pendingJob) {
+			return;
+		}
+
+		// Don't start if this job is already being started (prevent duplicate starts)
+		if (jobsInProgressRef.current.has(pendingJob.id)) {
+			debugLog(`[useBackgroundJobs] Job ${pendingJob.id} already being started, skipping`);
+			return;
+		}
+
+		// Safe to start the pending job
+		debugLog(`[useBackgroundJobs] Starting pending job: ${pendingJob.id} (${pendingJob.command})`);
+		startPendingJob(jobs, setJobs, jobsInProgressRef, showToast, setIsProcessing, setActiveCommand);
 	}, [jobs, showToast]);
 
 	/**
