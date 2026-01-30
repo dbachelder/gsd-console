@@ -169,13 +169,9 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- Prepare Phase 9 name change implementation
-- rename project to gsd console
-- validate todo capture command functionality
-- Track conversation greeting
-- Test shit
+None - all todos completed.
 
-5 pending todos.
+0 pending todos.
 
 ### Quick Tasks Completed
 
