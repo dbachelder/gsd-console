@@ -358,7 +358,7 @@ function readRoadmapPlans(roadmapPath: string, phaseId: string): Map<string, str
 		// Find the phase section (handles both integer and decimal phases like "03.1")
 		// Need to match across multiple lines between "Phase X:" and "Plans:" and then content until next ###
 		const sectionRegex = new RegExp(
-			`### Phase ${escapedPhaseId}:[\\s\\S]*?\\*\\*Plans\\*\\*:[\\s\\S]*?(?=###|$)`,
+			`### Phase ${escapedPhaseId}:[\\s\\S]*?\\*\\*Plans:?\\*\\*:?[\\s\\S]*?(?=###|$)`,
 			'i',
 		);
 		const section = roadmapContent.match(sectionRegex)?.[0] ?? '';
