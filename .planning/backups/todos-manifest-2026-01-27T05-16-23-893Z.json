@@ -1,0 +1,145 @@
+{
+  "version": "1.0",
+  "created": "2026-01-27T05:16:23.894Z",
+  "totalTodos": 16,
+  "pendingTodos": 2,
+  "doneTodos": 14,
+  "todos": [
+    {
+      "title": "Rename project to GSD Console",
+      "area": "general",
+      "created": "2026-01-26T10:18",
+      "files": [],
+      "status": "pending",
+      "path": ".planning/todos/pending/2026-01-26-rename-project-to-gsd-console.md"
+    },
+    {
+      "title": "Prepare Phase 9 name change implementation",
+      "area": "planning",
+      "created": "2026-01-26T21:06",
+      "files": [],
+      "status": "pending",
+      "path": ".planning/todos/pending/2026-01-26-prepare-phase-9-name-change-implementation.md"
+    },
+    {
+      "title": "Move session status in footer to its own line",
+      "area": "ui",
+      "created": "2026-01-25T21:45",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-25-move-session-status-in-footer-to-its-own-line.md"
+    },
+    {
+      "title": "Display actual plan files in TUI",
+      "area": "ui",
+      "created": "2026-01-24T18:48",
+      "files": [
+        ""
+      ],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-display-actual-plan-files-in-tui.md"
+    },
+    {
+      "title": "Success criteria on phase tab never checked off",
+      "area": "ui",
+      "created": "2026-01-24T21:46",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-success-criteria-never-checked-off.md"
+    },
+    {
+      "title": "Pin help bar to bottom and improve styling",
+      "area": "ui",
+      "created": "2026-01-24T18:06",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-pin-help-bar-to-bottom.md"
+    },
+    {
+      "title": "Remove duplicate keybinding hints from footer",
+      "area": "ui",
+      "created": "2026-01-25T21:49",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-25-remove-duplicate-keybinding-hints-from-footer.md"
+    },
+    {
+      "title": "Improve tab styling",
+      "area": "ui",
+      "created": "2026-01-24T18:12",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-improve-tab-styling.md"
+    },
+    {
+      "title": "Remove detail toggle from roadmap",
+      "area": "ui",
+      "created": "2026-01-24T20:16",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-remove-detail-toggle-from-roadmap.md"
+    },
+    {
+      "title": "Add arrow key and fuzzy navigation to file picker",
+      "area": "ui",
+      "created": "2026-01-24T21:44",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-file-picker-arrow-key-navigation.md"
+    },
+    {
+      "title": "Fix UI shift on first navigation",
+      "area": "ui",
+      "created": "2026-01-24T21:20",
+      "files": [
+        ""
+      ],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-fix-ui-shift-on-first-navigation.md"
+    },
+    {
+      "title": "Make phase tab content scrollable with sticky footer",
+      "area": "ui",
+      "created": "2026-01-25T21:48",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-25-make-phase-tab-content-scrollable-with-sticky-footer.md"
+    },
+    {
+      "title": "Fix inconsistent header sizing",
+      "area": "ui",
+      "created": "2026-01-24T19:56",
+      "files": [
+        ""
+      ],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-fix-inconsistent-header-sizing.md"
+    },
+    {
+      "title": "Add spacing between progress bars",
+      "area": "ui",
+      "created": "2026-01-25T20:42",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-25-add-spacing-between-progress-bars.md"
+    },
+    {
+      "title": "Preserve tab state when switching views",
+      "area": "ui",
+      "created": "2026-01-24T19:54",
+      "files": [
+        ""
+      ],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-preserve-tab-state-when-switching-views.md"
+    },
+    {
+      "title": "Remove project progress bar from roadmap screen",
+      "area": "ui",
+      "created": "2026-01-24T21:45",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-remove-project-progress-bar-from-roadmap.md"
+    }
+  ]
+}

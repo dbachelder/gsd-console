@@ -1,0 +1,161 @@
+{
+  "version": "1.0",
+  "created": "2026-01-27T05:21:41.094Z",
+  "totalTodos": 15,
+  "pendingTodos": 1,
+  "doneTodos": 14,
+  "todos": [
+    {
+      "title": "Prepare Phase 9 name change implementation",
+      "area": "planning",
+      "created": "2026-01-26T21:06",
+      "files": [],
+      "status": "pending",
+      "path": ".planning/todos/pending/2026-01-26-prepare-phase-9-name-change-implementation.md",
+      "content": "---\ncreated: 2026-01-26T21:06\ntitle: Prepare Phase 9 name change implementation\narea: planning\nfiles:\n  - .planning/\n---\n\n## Problem\n\nPhase 9 is planned as \"Name Change And Public Readiness\" but currently has 0/0 plans. The project needs to prepare for the final phase which involves changing the project name and making it ready for public release.\n\n## Solution\n\nResearch and plan the specific name changes required for public release, including:\n- New project name selection and validation\n- Documentation updates\n- README and package.json modifications\n- Public readiness checklist\n- Release preparation tasks"
+    },
+    {
+      "title": "Move session status in footer to its own line",
+      "area": "ui",
+      "created": "2026-01-25T21:45",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-25-move-session-status-in-footer-to-its-own-line.md",
+      "content": "---\ncreated: 2026-01-25T21:45\ntitle: Move session status in footer to its own line\narea: ui\nfiles:\n  - src/components/Footer.tsx\n---\n\n## Problem\n\nSession status indicator is displayed inline with keybinding hints in the footer, making it crowded and hard to read.\n\n## Solution\n\nMove session status to its own line above the keybinding hints for better separation and readability.\n"
+    },
+    {
+      "title": "Display actual plan files in TUI",
+      "area": "ui",
+      "created": "2026-01-24T18:48",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-display-actual-plan-files-in-tui.md",
+      "content": "---\ncreated: 2026-01-24T18:48\ntitle: Display actual plan files in TUI\narea: ui\nfiles: []\n---\n\n## Problem\n\nThe TUI currently shows roadmap phases and todos, but doesn't display the actual PLAN.md files. Users can't see the detailed plans (task breakdowns, verification criteria, etc.) within the UI.\n\n## Solution\n\nTBD\n\n"
+    },
+    {
+      "title": "Success criteria on phase tab never checked off",
+      "area": "ui",
+      "created": "2026-01-24T21:46",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-success-criteria-never-checked-off.md",
+      "content": "---\ncreated: 2026-01-24T21:46\ntitle: Success criteria on phase tab never checked off\narea: ui\nfiles:\n  - src/components/phase/PhaseView.tsx\n  - src/lib/parser.ts\n---\n\n## Problem\n\nThe Phase tab displays success criteria from CONTEXT.md but they always appear unchecked, even when the phase is complete. The checkboxes don't reflect actual completion status.\n\nNeed to determine how success criteria completion is tracked (if at all) in GSD files and update the display logic accordingly.\n\n## Solution\n\nTBD - Need to investigate:\n1. How GSD tracks success criteria completion (VERIFICATION.md? SUMMARY.md?)\n2. Whether criteria have individual completion states or just phase-level completion\n3. Update parser and PhaseView to reflect actual status\n"
+    },
+    {
+      "title": "Pin help bar to bottom and improve styling",
+      "area": "ui",
+      "created": "2026-01-24T18:06",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-pin-help-bar-to-bottom.md",
+      "content": "---\ncreated: 2026-01-24T18:06\ntitle: Pin help bar to bottom and improve styling\narea: ui\nfiles:\n  - src/components/layout/Footer.tsx\n---\n\n## Problem\n\nThe help/footer bar floats at the bottom of content rather than being pinned to the bottom of the terminal screen. With fullscreen mode now enabled, the footer should anchor to the absolute bottom of the terminal viewport regardless of content height.\n\nAdditionally, the footer styling could be improved for better visual hierarchy and readability.\n\n## Solution\n\n- Use flexbox layout to push footer to bottom (marginTop: 'auto' or flex container with flexGrow on content area)\n- Review footer styling: consider border, background contrast, or spacing improvements\n- Test with varying content heights to ensure footer stays anchored\n\n\n\n"
+    },
+    {
+      "title": "Remove duplicate keybinding hints from footer",
+      "area": "ui",
+      "created": "2026-01-25T21:49",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-25-remove-duplicate-keybinding-hints-from-footer.md",
+      "content": "---\ncreated: 2026-01-25T21:49\ntitle: Remove duplicate keybinding hints from footer\narea: ui\nfiles:\n  - src/components/Footer.tsx\n  - src/components/PhaseView.tsx\n---\n\n## Problem\n\nFooter on phase tab displays some items multiple times, like `[` and `]` shortcuts, making it cluttered and confusing.\n\n## Solution\n\nDeduplicate keybinding hints in footer so each shortcut appears only once.\n"
+    },
+    {
+      "title": "Improve tab styling",
+      "area": "ui",
+      "created": "2026-01-24T18:12",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-improve-tab-styling.md",
+      "content": "---\ncreated: 2026-01-24T18:12\ntitle: Improve tab styling\narea: ui\nfiles:\n  - src/components/layout/TabLayout.tsx\n---\n\n## Problem\n\nThe tab bar styling could be improved for better visual hierarchy and aesthetics. Current tabs are functional but plain.\n\n## Solution\n\nTBD - consider:\n- Active tab highlighting (background, border, or bold)\n- Better spacing between tabs\n- Visual separator or underline for active tab\n- Consistent styling with overall TUI theme\n"
+    },
+    {
+      "title": "Remove detail toggle from roadmap",
+      "area": "ui",
+      "created": "2026-01-24T20:16",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-remove-detail-toggle-from-roadmap.md",
+      "content": "---\ncreated: 2026-01-24T20:16\ntitle: Remove detail toggle from roadmap\narea: ui\nfiles:\n  - src/views/RoadmapView.tsx\n  - src/hooks/useVimNav.ts\n---\n\n## Problem\n\nThe 'd' key is currently bound to toggling detail levels on the roadmap, but we need to repurpose it for the '/gsd-discuss-phase' command. The detail toggle functionality should be removed from the roadmap view.\n\n## Solution\n\nRemove the detail toggle (d key) from RoadmapView and useVimNav hooks. The 'd' keybinding will be used for /gsd-discuss-phase command instead. Consider whether detail viewing is still needed through a different mechanism or if it can be removed entirely."
+    },
+    {
+      "title": "Add arrow key and fuzzy navigation to file picker",
+      "area": "ui",
+      "created": "2026-01-24T21:44",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-file-picker-arrow-key-navigation.md",
+      "content": "---\ncreated: 2026-01-24T21:44\ntitle: Add arrow key and fuzzy navigation to file picker\narea: ui\nfiles:\n  - src/components/FilePicker.tsx\n---\n\n## Problem\n\nThe file picker overlay (used for 'e' edit command) only supports number key selection (1-9, 0). This breaks down when there are more than 10 files - numbers beyond 10 aren't accessible via single keypress.\n\nAdditionally, there's no way to navigate the list with arrow keys or filter with fuzzy search, which would be more natural for larger file lists.\n\n## Solution\n\nTwo potential enhancements:\n1. **Arrow key navigation** - Add j/k or up/down arrow support to move selection, Enter to confirm\n2. **Fuzzy filtering** - Integrate fuzzy search (project already uses @nozbe/microfuzz) to filter the file list as user types\n\nCould also consider both: arrow keys for navigation + typing to fuzzy filter (like fzf).\n"
+    },
+    {
+      "title": "Fix UI shift on first navigation",
+      "area": "ui",
+      "created": "2026-01-24T21:20",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-fix-ui-shift-on-first-navigation.md",
+      "content": "---\ncreated: 2026-01-24T21:20\ntitle: Fix UI shift on first navigation\narea: ui\nfiles: []\n---\n\n## Problem\n\nThere is a slight shift in the UI the first time you navigate after opening it. This creates a jarring visual inconsistency during initial navigation.\n\n## Solution\n\nTBD - Need to investigate the root cause of the initial navigation shift and implement a fix to prevent it.\n"
+    },
+    {
+      "title": "Make phase tab content scrollable with sticky footer",
+      "area": "ui",
+      "created": "2026-01-25T21:48",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-25-make-phase-tab-content-scrollable-with-sticky-footer.md",
+      "content": "---\ncreated: 2026-01-25T21:48\ntitle: Make phase tab content scrollable with sticky footer\narea: ui\nfiles:\n  - src/components/PhaseView.tsx\n  - src/components/TabLayout.tsx\n---\n\n## Problem\n\nPhase tab content pushes footer off the screen when it gets long instead of becoming scrollable.\n\n## Solution\n\nMake content area scrollable while keeping footer visible and stuck to bottom of screen.\n"
+    },
+    {
+      "title": "Fix inconsistent header sizing",
+      "area": "ui",
+      "created": "2026-01-24T19:56",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-fix-inconsistent-header-sizing.md",
+      "content": "---\ncreated: 2026-01-24T19:56\ntitle: Fix inconsistent header sizing\narea: ui\nfiles: []\n---\n\n## Problem\n\nThe header changes size based on the content of the main content area, creating visual inconsistency and a jarring user experience. When main content changes, the header expands or contracts unpredictably.\n\n## Solution\n\nTBD - Need to investigate layout and positioning. May require fixed header height or proper flex/grid layout configuration.\n\n"
+    },
+    {
+      "title": "Add spacing between progress bars",
+      "area": "ui",
+      "created": "2026-01-25T20:42",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-25-add-spacing-between-progress-bars.md",
+      "content": "---\ncreated: 2026-01-25T20:42\ntitle: Add spacing between progress bars\narea: ui\n---\n\n## Problem\n\nProgress bars are too close together and need visual separation between rows.\n\n## Solution\n\nAdd one pixel of space between rows to make progress bars distinct from each other.\n"
+    },
+    {
+      "title": "Preserve tab state when switching views",
+      "area": "ui",
+      "created": "2026-01-24T19:54",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-preserve-tab-state-when-switching-views.md",
+      "content": "---\ncreated: 2026-01-24T19:54\ntitle: Preserve tab state when switching views\narea: ui\nfiles: []\n---\n\n## Problem\n\nWhen navigating from the phase tab back to the roadmap tab, the selected phase and toggle state are lost. Users lose their context and must re-select the phase and toggle options each time they switch between tabs.\n\n## Solution\n\nTBD - Need to persist phase selection and toggle state across tab navigation, likely via state management or local storage pattern.\n"
+    },
+    {
+      "title": "Remove project progress bar from roadmap screen",
+      "area": "ui",
+      "created": "2026-01-24T21:45",
+      "files": [],
+      "status": "done",
+      "path": ".planning/todos/done/2026-01-24-remove-project-progress-bar-from-roadmap.md",
+      "content": "---\ncreated: 2026-01-24T21:45\ntitle: Remove project progress bar from roadmap screen\narea: ui\nfiles:\n  - src/components/roadmap/RoadmapView.tsx\n---\n\n## Problem\n\nThe roadmap screen displays a project progress bar that calculates completion based on plans. This metric is misleading because most phases won't have plans initially - plans are created just before execution.\n\nThe committed phases progress bar (showing how many phases are complete) is useful and should remain. The plan-based progress bar should be removed.\n\n## Solution\n\nRemove the project progress bar component from RoadmapView. Keep the phase completion indicators.\n"
+    }
+  ],
+  "files": {
+    ".planning/todos/pending/2026-01-26-prepare-phase-9-name-change-implementation.md": "---\ncreated: 2026-01-26T21:06\ntitle: Prepare Phase 9 name change implementation\narea: planning\nfiles:\n  - .planning/\n---\n\n## Problem\n\nPhase 9 is planned as \"Name Change And Public Readiness\" but currently has 0/0 plans. The project needs to prepare for the final phase which involves changing the project name and making it ready for public release.\n\n## Solution\n\nResearch and plan the specific name changes required for public release, including:\n- New project name selection and validation\n- Documentation updates\n- README and package.json modifications\n- Public readiness checklist\n- Release preparation tasks",
+    ".planning/todos/done/2026-01-25-move-session-status-in-footer-to-its-own-line.md": "---\ncreated: 2026-01-25T21:45\ntitle: Move session status in footer to its own line\narea: ui\nfiles:\n  - src/components/Footer.tsx\n---\n\n## Problem\n\nSession status indicator is displayed inline with keybinding hints in the footer, making it crowded and hard to read.\n\n## Solution\n\nMove session status to its own line above the keybinding hints for better separation and readability.\n",
+    ".planning/todos/done/2026-01-24-display-actual-plan-files-in-tui.md": "---\ncreated: 2026-01-24T18:48\ntitle: Display actual plan files in TUI\narea: ui\nfiles: []\n---\n\n## Problem\n\nThe TUI currently shows roadmap phases and todos, but doesn't display the actual PLAN.md files. Users can't see the detailed plans (task breakdowns, verification criteria, etc.) within the UI.\n\n## Solution\n\nTBD\n\n",
+    ".planning/todos/done/2026-01-24-success-criteria-never-checked-off.md": "---\ncreated: 2026-01-24T21:46\ntitle: Success criteria on phase tab never checked off\narea: ui\nfiles:\n  - src/components/phase/PhaseView.tsx\n  - src/lib/parser.ts\n---\n\n## Problem\n\nThe Phase tab displays success criteria from CONTEXT.md but they always appear unchecked, even when the phase is complete. The checkboxes don't reflect actual completion status.\n\nNeed to determine how success criteria completion is tracked (if at all) in GSD files and update the display logic accordingly.\n\n## Solution\n\nTBD - Need to investigate:\n1. How GSD tracks success criteria completion (VERIFICATION.md? SUMMARY.md?)\n2. Whether criteria have individual completion states or just phase-level completion\n3. Update parser and PhaseView to reflect actual status\n",
+    ".planning/todos/done/2026-01-24-pin-help-bar-to-bottom.md": "---\ncreated: 2026-01-24T18:06\ntitle: Pin help bar to bottom and improve styling\narea: ui\nfiles:\n  - src/components/layout/Footer.tsx\n---\n\n## Problem\n\nThe help/footer bar floats at the bottom of content rather than being pinned to the bottom of the terminal screen. With fullscreen mode now enabled, the footer should anchor to the absolute bottom of the terminal viewport regardless of content height.\n\nAdditionally, the footer styling could be improved for better visual hierarchy and readability.\n\n## Solution\n\n- Use flexbox layout to push footer to bottom (marginTop: 'auto' or flex container with flexGrow on content area)\n- Review footer styling: consider border, background contrast, or spacing improvements\n- Test with varying content heights to ensure footer stays anchored\n\n\n\n",
+    ".planning/todos/done/2026-01-25-remove-duplicate-keybinding-hints-from-footer.md": "---\ncreated: 2026-01-25T21:49\ntitle: Remove duplicate keybinding hints from footer\narea: ui\nfiles:\n  - src/components/Footer.tsx\n  - src/components/PhaseView.tsx\n---\n\n## Problem\n\nFooter on phase tab displays some items multiple times, like `[` and `]` shortcuts, making it cluttered and confusing.\n\n## Solution\n\nDeduplicate keybinding hints in footer so each shortcut appears only once.\n",
+    ".planning/todos/done/2026-01-24-improve-tab-styling.md": "---\ncreated: 2026-01-24T18:12\ntitle: Improve tab styling\narea: ui\nfiles:\n  - src/components/layout/TabLayout.tsx\n---\n\n## Problem\n\nThe tab bar styling could be improved for better visual hierarchy and aesthetics. Current tabs are functional but plain.\n\n## Solution\n\nTBD - consider:\n- Active tab highlighting (background, border, or bold)\n- Better spacing between tabs\n- Visual separator or underline for active tab\n- Consistent styling with overall TUI theme\n",
+    ".planning/todos/done/2026-01-24-remove-detail-toggle-from-roadmap.md": "---\ncreated: 2026-01-24T20:16\ntitle: Remove detail toggle from roadmap\narea: ui\nfiles:\n  - src/views/RoadmapView.tsx\n  - src/hooks/useVimNav.ts\n---\n\n## Problem\n\nThe 'd' key is currently bound to toggling detail levels on the roadmap, but we need to repurpose it for the '/gsd-discuss-phase' command. The detail toggle functionality should be removed from the roadmap view.\n\n## Solution\n\nRemove the detail toggle (d key) from RoadmapView and useVimNav hooks. The 'd' keybinding will be used for /gsd-discuss-phase command instead. Consider whether detail viewing is still needed through a different mechanism or if it can be removed entirely.",
+    ".planning/todos/done/2026-01-24-file-picker-arrow-key-navigation.md": "---\ncreated: 2026-01-24T21:44\ntitle: Add arrow key and fuzzy navigation to file picker\narea: ui\nfiles:\n  - src/components/FilePicker.tsx\n---\n\n## Problem\n\nThe file picker overlay (used for 'e' edit command) only supports number key selection (1-9, 0). This breaks down when there are more than 10 files - numbers beyond 10 aren't accessible via single keypress.\n\nAdditionally, there's no way to navigate the list with arrow keys or filter with fuzzy search, which would be more natural for larger file lists.\n\n## Solution\n\nTwo potential enhancements:\n1. **Arrow key navigation** - Add j/k or up/down arrow support to move selection, Enter to confirm\n2. **Fuzzy filtering** - Integrate fuzzy search (project already uses @nozbe/microfuzz) to filter the file list as user types\n\nCould also consider both: arrow keys for navigation + typing to fuzzy filter (like fzf).\n",
+    ".planning/todos/done/2026-01-24-fix-ui-shift-on-first-navigation.md": "---\ncreated: 2026-01-24T21:20\ntitle: Fix UI shift on first navigation\narea: ui\nfiles: []\n---\n\n## Problem\n\nThere is a slight shift in the UI the first time you navigate after opening it. This creates a jarring visual inconsistency during initial navigation.\n\n## Solution\n\nTBD - Need to investigate the root cause of the initial navigation shift and implement a fix to prevent it.\n",
+    ".planning/todos/done/2026-01-25-make-phase-tab-content-scrollable-with-sticky-footer.md": "---\ncreated: 2026-01-25T21:48\ntitle: Make phase tab content scrollable with sticky footer\narea: ui\nfiles:\n  - src/components/PhaseView.tsx\n  - src/components/TabLayout.tsx\n---\n\n## Problem\n\nPhase tab content pushes footer off the screen when it gets long instead of becoming scrollable.\n\n## Solution\n\nMake content area scrollable while keeping footer visible and stuck to bottom of screen.\n",
+    ".planning/todos/done/2026-01-24-fix-inconsistent-header-sizing.md": "---\ncreated: 2026-01-24T19:56\ntitle: Fix inconsistent header sizing\narea: ui\nfiles: []\n---\n\n## Problem\n\nThe header changes size based on the content of the main content area, creating visual inconsistency and a jarring user experience. When main content changes, the header expands or contracts unpredictably.\n\n## Solution\n\nTBD - Need to investigate layout and positioning. May require fixed header height or proper flex/grid layout configuration.\n\n",
+    ".planning/todos/done/2026-01-25-add-spacing-between-progress-bars.md": "---\ncreated: 2026-01-25T20:42\ntitle: Add spacing between progress bars\narea: ui\n---\n\n## Problem\n\nProgress bars are too close together and need visual separation between rows.\n\n## Solution\n\nAdd one pixel of space between rows to make progress bars distinct from each other.\n",
+    ".planning/todos/done/2026-01-24-preserve-tab-state-when-switching-views.md": "---\ncreated: 2026-01-24T19:54\ntitle: Preserve tab state when switching views\narea: ui\nfiles: []\n---\n\n## Problem\n\nWhen navigating from the phase tab back to the roadmap tab, the selected phase and toggle state are lost. Users lose their context and must re-select the phase and toggle options each time they switch between tabs.\n\n## Solution\n\nTBD - Need to persist phase selection and toggle state across tab navigation, likely via state management or local storage pattern.\n",
+    ".planning/todos/done/2026-01-24-remove-project-progress-bar-from-roadmap.md": "---\ncreated: 2026-01-24T21:45\ntitle: Remove project progress bar from roadmap screen\narea: ui\nfiles:\n  - src/components/roadmap/RoadmapView.tsx\n---\n\n## Problem\n\nThe roadmap screen displays a project progress bar that calculates completion based on plans. This metric is misleading because most phases won't have plans initially - plans are created just before execution.\n\nThe committed phases progress bar (showing how many phases are complete) is useful and should remain. The plan-based progress bar should be removed.\n\n## Solution\n\nRemove the project progress bar component from RoadmapView. Keep the phase completion indicators.\n"
+  }
+}

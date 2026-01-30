@@ -1,8 +1,8 @@
-# GSD Status Panel for OpenCode
+# GSD Status TUI
 
 ## What This Is
 
-A sidebar or panel integrated with opencode that displays GSD project status in real-time. It watches `.planning/` files and renders roadmap progress, phase status, and todos — updating live as the main agent works. It can also trigger GSD workflows via a secondary agent without interrupting the primary coding session.
+A standalone terminal UI application that displays GSD project status in real-time. It watches `.planning/` files and renders roadmap progress, phase status, and todos — updating live as work happens. Designed to run alongside OpenCode (or any AI coding tool) in a split terminal pane. Can trigger GSD workflows via CLI commands or optionally coordinate with OpenCode via its SDK.
 
 ## Core Value
 
@@ -22,47 +22,48 @@ See and manage GSD project state without leaving the coding context.
 - [ ] Update in real-time as `.planning/` files change
 - [ ] Allow reading planning docs inline
 - [ ] Allow light editing of planning docs
-- [ ] Trigger GSD workflows (add-todo, add-phase, etc.) via secondary agent
-- [ ] Secondary agent runs without interrupting main agent's work
+- [ ] Trigger GSD workflows (add-todo, add-phase, etc.)
+- [ ] Keyboard-driven navigation
 
 ### Out of Scope
 
-- Full GSD workflow engine reimplementation — use existing GSD commands
-- Standalone app — must integrate with opencode
-- Mobile interface — desktop TUI/web only
+- Native OpenCode sidebar (plugin API doesn't support UI extensions)
+- Full GSD workflow engine reimplementation — use existing GSD CLI
+- Mobile interface — desktop TUI only
+- Forking/patching OpenCode
 
 ## Context
 
 **Repos available locally:**
-- GSD: `../get-shit-done/` — the workflow system this integrates with
-- OpenCode: `../opencode/` — the AI coding tool to extend
+- GSD: `../get-shit-done/` — the workflow system this displays status for
+- OpenCode: `../opencode/` — reference for optional SDK coordination
 
-**OpenCode resources:**
-- API docs: https://opencode.ai/docs
-- Plugin system: https://opencode.ai/docs/plugins/
+**Research findings (.planning/research/):**
+- OpenCode plugin system does NOT support UI extensions
+- Plugins can: define tools, watch files, spawn agents, execute commands
+- Plugins cannot: add sidebars, panels, or custom UI components
+- GitHub issue #5971 proposes sidebar API but is NOT implemented
+- Standalone TUI is the recommended approach
 
-**Key unknowns (require research):**
-- What extension points does opencode provide?
-- Is the TUI extensible (add panels/sidebars)?
-- Is the plugin system UI-capable or backend-only?
-- What can we do via the API (file watching, agent spawning)?
-- Is web UI more extensible than TUI?
-
-**User preference:** TUI if extensible, web UI as fallback.
+**TUI framework options:**
+- Ratatui (Rust) — proven, fast, good docs
+- Bubble Tea (Go) — popular, good UX patterns
+- Ink (TypeScript/React) — familiar if staying in TS ecosystem
 
 ## Constraints
 
-- **Platform**: Must work within opencode's extension model — can't fork/patch opencode itself
-- **Architecture**: Use existing GSD commands rather than reimplementing logic
-- **Preference**: TUI over web UI if both are viable
+- **Architecture**: Standalone TUI, not an OpenCode plugin
+- **Integration**: Use existing GSD CLI commands rather than reimplementing logic
+- **Coordination**: Optional OpenCode SDK integration for enhanced UX
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Research opencode extensibility first | Can't scope requirements without knowing what's possible | — Pending |
-| Prefer TUI over web UI | User preference, but flexible based on feasibility | — Pending |
-| Secondary agent for GSD commands | Keeps main agent focused, maintains GSD workflow guarantees | — Pending |
+| Standalone TUI over OpenCode plugin | Research confirmed plugins cannot add UI extensions | ✓ Good |
+| Watch .planning/ files for state | GSD already writes state to files, just need to read/parse | — Pending |
+| GSD CLI for workflows | Maintains GSD guarantees, no reimplementation | — Pending |
+| TUI framework choice | Need to evaluate Ratatui vs Bubble Tea vs Ink | — Pending |
 
 ---
-*Last updated: 2025-01-24 after initialization*
+*Last updated: 2025-01-24 after research phase*
