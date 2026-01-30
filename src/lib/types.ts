@@ -51,6 +51,7 @@ export interface GsdData {
 	loading: boolean;
 	error: Error | null;
 	changedFiles: string[]; // Files that changed in last refresh
+	planningDirExists: boolean; // Whether the .planning directory exists
 }
 
 // CLI flags for the TUI

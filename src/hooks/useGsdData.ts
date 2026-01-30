@@ -25,6 +25,7 @@ const defaultData: GsdData = {
 	loading: true,
 	error: null,
 	changedFiles: [],
+	planningDirExists: true,
 };
 
 /**
@@ -59,6 +60,7 @@ export function useGsdData(
 						...defaultData,
 						loading: false,
 						error: new Error(`Planning directory not found: ${planningDir}`),
+						planningDirExists: false,
 					});
 					return;
 				}
@@ -117,6 +119,7 @@ export function useGsdData(
 					loading: false,
 					error: null,
 					changedFiles: changedFilesRef.current,
+					planningDirExists: true,
 				});
 			} catch (error) {
 				setData({

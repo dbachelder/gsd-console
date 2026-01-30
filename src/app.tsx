@@ -15,6 +15,7 @@ import { CommandPalette } from './components/palette/CommandPalette.tsx';
 import { FilePicker } from './components/picker/FilePicker.tsx';
 import { SessionPicker } from './components/picker/SessionPicker.tsx';
 import { ToastContainer } from './components/toast/ToastContainer.tsx';
+import { NoPlanningView } from './components/views/NoPlanningView.tsx';
 import { useBackgroundJobs } from './hooks/useBackgroundJobs.ts';
 import { useChangeHighlight } from './hooks/useChangeHighlight.ts';
 import { useCommandPalette } from './hooks/useCommandPalette.ts';
@@ -327,7 +328,16 @@ export default function App({ flags }: AppProps) {
 		);
 	}
 
-	// Error state
+	// No planning directory - show setup instructions
+	if (!data.planningDirExists) {
+		return (
+			<Box flexDirection="column">
+				<NoPlanningView currentDir={process.cwd()} />
+			</Box>
+		);
+	}
+
+	// Error state (other errors)
 	if (data.error) {
 		return (
 			<Box flexDirection="column" padding={1}>
