@@ -12,7 +12,6 @@ Terminal UI for viewing GSD project status
 
 ![GSD Console](assets/screenshot.png)
 
-[![npm version](https://img.shields.io/npm/v/gsd-console.svg)](https://www.npmjs.com/package/gsd-console)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Features
@@ -41,14 +40,6 @@ Without OpenCode, the TUI works as a standalone viewer -- you can still execute 
 
 - **Bun** (required) -- [install Bun](https://bun.sh/)
 - **OpenCode** (optional) -- [install OpenCode](https://opencode.ai/) for coding agent integration
-
-### From npm
-
-```bash
-bun install -g gsd-console
-```
-
-### From GitHub
 
 ```bash
 bun install -g github:dbachelder/gsd-console
