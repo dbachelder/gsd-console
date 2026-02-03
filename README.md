@@ -45,7 +45,7 @@ Without OpenCode, the TUI works as a standalone viewer -- you can still execute 
 ### From npm
 
 ```bash
-bun install -g gsd-console
+bun install -g dbachdlder/gsd-console
 ```
 
 ### From Source
